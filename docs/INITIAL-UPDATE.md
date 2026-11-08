@@ -19,7 +19,7 @@ the initial update pending. Retry with `dwm-initial-update`; use DNF's normal
 recovery tools if an RPM transaction was interrupted.
 
 Successful completion is recorded system-wide in
-`/var/lib/dwm-titus/initial-update/complete.json`. Subsequent logins, reconnects
+`/var/lib/dwm-s/initial-update/complete.json`. Subsequent logins, reconnects
 and other users do not repeat the offer. Only fresh image provisioning creates
 `pending.json`; updating an existing desktop from source does not opt it in.
 The watcher reacts to NetworkManager changes and performs one bounded retry
@@ -59,11 +59,11 @@ the original repository settings. A failed transaction remains retryable, and
 the temporary selection is removed when the helper exits.
 
 Sample measurements are saved without URLs or credentials in
-`/var/lib/dwm-titus/initial-update/measurements.json`. These are short metadata
+`/var/lib/dwm-s/initial-update/measurements.json`. These are short metadata
 samples, not a promise of sustained package speed. For read-only measurements:
 
 ```sh
-/usr/local/libexec/dwm-titus/dwm-initial-update-root measure
+/usr/local/libexec/dwm-s/dwm-initial-update-root measure
 ```
 
 ## DNF configuration audit
@@ -76,7 +76,7 @@ overrides were present. Effective `assumeyes=False`, `max_parallel_downloads=3`,
 `minrate=1000`, and `timeout=30` matched defaults. Fedora's distribution drop-in
 set `best=False`, `pkg_gpgcheck=True`, and `skip_if_unavailable=True`.
 
-The installer provisions `/usr/share/dnf5/libdnf.conf.d/40-dwm-titus.conf` only
+The installer provisions `/usr/share/dnf5/libdnf.conf.d/40-dwm-s.conf` only
 when that path does not exist. The chosen defaults are:
 
 | Setting | Shipped value | Reason |
@@ -103,10 +103,10 @@ settings and repository-specific overrides remain intact. To change the prompt:
 defaultyes=False
 ```
 
-To mask all dwm-titus DNF defaults without changing the installed file:
+To mask all dwm-s DNF defaults without changing the installed file:
 
 ```sh
-sudo install -Dm644 /dev/null /etc/dnf/libdnf5.conf.d/40-dwm-titus.conf
+sudo install -Dm644 /dev/null /etc/dnf/libdnf5.conf.d/40-dwm-s.conf
 dnf5 --dump-main-config
 ```
 
@@ -158,7 +158,7 @@ does not suppress an otherwise reachable repository.
 Uninstall removes an unchanged DNF defaults file only when the installer created
 it and recorded ownership. Preexisting files, administrator modifications, and
 symlink replacements are preserved. The ownership record lives under
-`/var/lib/dwm-titus/dnf-defaults/`.
+`/var/lib/dwm-s/dnf-defaults/`.
 
 HTTP intranet mirrors, local file repositories, and custom transports use a
 bounded native DNF connectivity probe with their configured policy. They remain
@@ -170,5 +170,5 @@ the shared deadline, including mixed lists with a reachable HTTP fallback.
 The 45-second probe budget is shared across the remaining repositories so a
 stalled first repository cannot consume every later repository's opportunity.
 The defaults lifecycle helper is installed under the configured prefix's
-`libexec/dwm-titus/` directory before elevation. Defaults and their ownership
+`libexec/dwm-s/` directory before elevation. Defaults and their ownership
 record are staged completely before publication; failed writes roll back.

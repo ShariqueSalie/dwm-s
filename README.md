@@ -1,5 +1,5 @@
 <div align="center">
-  <img alt="dwm-titus logo" src="./branding/anaconda/usr/share/anaconda/pixmaps/ctt-logo.png" />
+  <img alt="dwm-s logo" src="./branding/anaconda/usr/share/anaconda/pixmaps/ctt-logo.png" />
   <p><strong>A fast, focused Fedora X11 desktop built for keyboard-driven work.</strong></p>
   <p>
     <a href="https://dwm.christitus.com">Documentation</a> |
@@ -9,14 +9,14 @@
   </p>
 </div>
 
-![The dwm-titus desktop with its Quickshell panel](./dwm-titus-qs-4x.webp)
+![The dwm-s desktop with its Quickshell panel](./dwm-s-qs-4x.webp)
 
-dwm-titus is a complete, lightweight X11 desktop with sensible defaults,
+dwm-s is a complete, lightweight X11 desktop with sensible defaults,
 guided installation, and powerful customization. It is designed for people who
 want a responsive keyboard-first workflow without having to assemble every
 part themselves.
 
-**dwm-titus is a Fedora-only distribution.** Fedora Linux is the sole supported
+**dwm-s is a Fedora-only distribution.** Fedora Linux is the sole supported
 platform for installation, runtime behavior, package resolution, testing, and
 release qualification. Use either the Fedora desktop image or the
 existing-system installer on Fedora Linux. The 0.8 release images target Fedora 45 x86_64, with Fedora 44 compatibility
@@ -39,7 +39,7 @@ MIME preferences remain preserved.
 | **Personal configuration** | Visual layout, per-tag gap and scale controls, optional floating titlebars, plus live-reloading hotkeys, themes, and window rules, with local configuration preserved across upgrades. |
 | **Two installation paths** | A ready-to-install Fedora image or an installer for an existing Fedora system. |
 
-> dwm-titus is an X11 desktop. A Wayland-native session is not currently part
+> dwm-s is an X11 desktop. A Wayland-native session is not currently part
 > of the project scope.
 
 ## Install
@@ -60,8 +60,8 @@ Download the **current 0.8.0 offline images** for Fedora 45 x86_64:
 
 | Image | Download |
 | --- | --- |
-| Standard | [Standard ISO](https://downloads.christitus.com/iso/dwm-titus.iso) |
-| NVIDIA | [NVIDIA ISO](https://downloads.christitus.com/iso/dwm-titus-nvidia.iso) |
+| Standard | [Standard ISO](https://downloads.christitus.com/iso/dwm-s.iso) |
+| NVIDIA | [NVIDIA ISO](https://downloads.christitus.com/iso/dwm-s-nvidia.iso) |
 | Verification | [SHA256SUMS](https://downloads.christitus.com/iso/SHA256SUMS) and [release notes](https://github.com/ChrisTitusTech/dwm-titus/releases/latest) |
 
 These stable URLs always serve the current builds. The [build manifest](https://downloads.christitus.com/iso/BUILD-MANIFEST.json)
@@ -160,16 +160,16 @@ startx
 Most personal settings live under:
 
 ```text
-${XDG_CONFIG_HOME:-$HOME/.config}/dwm-titus/
+${XDG_CONFIG_HOME:-$HOME/.config}/dwm-s/
 ```
 
 Hotkeys, themes, and window rules reload when their TOML files are saved.
 Advanced compile-time preferences live in the user-owned `config.h`, which the
 installer and future upgrades preserve. `${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/` is managed
-by dwm-titus and replaced on every update, so don't keep local edits there.
+by dwm-s and replaced on every update, so don't keep local edits there.
 
 The installer also provides `dwm-settings-display` and its root-owned
-`libexec/dwm-titus/dwm-settings-display-root` persistence helper. Live display
+`libexec/dwm-s/dwm-settings-display-root` persistence helper. Live display
 discovery and previews require `xrandr`; hotplug watching requires `udevadm`;
 only persistent Xorg install and rollback require `pkexec`. Named profiles live
 under the `display-profiles/` directory in the XDG path above.
@@ -202,7 +202,7 @@ also listed in those tools from `${DATADIR}/qt5ct/colors` and
 `${DATADIR}/qt6ct/colors`;
 Alacritty and Kitty continue to receive the active terminal colors. Restart
 Qt applications if they do not reload their platform theme dynamically.
-These are dwm-titus palette adaptations of GTK's built-in widgets, not the
+These are dwm-s palette adaptations of GTK's built-in widgets, not the
 upstream third-party theme packages. Libadwaita and sandboxed applications may
 follow only the light/dark preference rather than the custom palette.
 
@@ -232,7 +232,7 @@ safe customization paths.
 - [Control Center](https://dwm.christitus.com/control-center.html)
 - [Updates](https://dwm.christitus.com/updates.html)
 - [Settings](https://dwm.christitus.com/settings.html)
-- [How dwm-titus Works](https://dwm.christitus.com/patches.html)
+- [How dwm-s Works](https://dwm.christitus.com/patches.html)
 - [Troubleshooting](https://dwm.christitus.com/troubleshooting.html)
 
 The technical guide explains the project architecture, what dwm is, and how
@@ -281,7 +281,7 @@ dwm-diagnostics
 
 You can also run **Control Center -> Quick Actions -> Self-Heal** to execute a
 configured workstation repair script (`dwm-self-heal` on `$PATH` or referenced in
-`${XDG_CONFIG_HOME:-$HOME/.config}/dwm-titus/self-heal.path`) inside an interactive
+`${XDG_CONFIG_HOME:-$HOME/.config}/dwm-s/self-heal.path`) inside an interactive
 terminal with visible output and authorization prompts.
 
 You can also open **Control Center -> System Health** for a graphical overview.

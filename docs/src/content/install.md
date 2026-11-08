@@ -1,13 +1,13 @@
 ---
 title: Fedora Installation
-description: Install the complete dwm-titus Fedora X11 desktop from an image or onto an existing Fedora system.
+description: Install the complete dwm-s Fedora X11 desktop from an image or onto an existing Fedora system.
 navLabel: Installation
 eyebrow: Start here
 ---
 
 # Fedora Installation
 
-> **dwm-titus is Fedora-only.** Fedora Linux with Xorg is required for every
+> **dwm-s is Fedora-only.** Fedora Linux with Xorg is required for every
 > supported installation, package, test, and release path.
 
 The 0.8 release targets Fedora 45 x86_64, while retaining Fedora 44 support for
@@ -32,8 +32,8 @@ works without an Internet connection or software selection.
 
 | Image | Download |
 | --- | --- |
-| Standard | [Download standard ISO](https://downloads.christitus.com/iso/dwm-titus.iso) |
-| NVIDIA | [Download NVIDIA ISO](https://downloads.christitus.com/iso/dwm-titus-nvidia.iso) |
+| Standard | [Download standard ISO](https://downloads.christitus.com/iso/dwm-s.iso) |
+| NVIDIA | [Download NVIDIA ISO](https://downloads.christitus.com/iso/dwm-s-nvidia.iso) |
 | Checksums | [Download SHA256SUMS](https://downloads.christitus.com/iso/SHA256SUMS) |
 
 The download URLs always serve the current builds. Download a fresh checksum
@@ -63,7 +63,7 @@ resumable standard-image download from the command line:
 
 ```sh
 curl --fail --location --continue-at - --remote-name \
-  https://downloads.christitus.com/iso/dwm-titus.iso
+  https://downloads.christitus.com/iso/dwm-s.iso
 curl --fail --location --remote-name \
   https://downloads.christitus.com/iso/SHA256SUMS
 sha256sum --ignore-missing -c SHA256SUMS
@@ -117,7 +117,7 @@ run:
 install-herdr
 ```
 
-![The dwm-titus applications menu in Linutil](/images/linutil-applications.png)
+![The dwm-s applications menu in Linutil](/images/linutil-applications.png)
 
 ## Manual Install
 
@@ -356,7 +356,7 @@ session so its effective XDG roots are recorded:
 
 ```bash
 repo_dir=$(pwd -P)
-backup_dir=$(mktemp -d "$HOME/dwm-titus-backup.XXXXXX") || exit 1
+backup_dir=$(mktemp -d "$HOME/dwm-s-backup.XXXXXX") || exit 1
 chmod 700 "$backup_dir" || exit 1
 tar -C "$repo_dir" -cpf "$backup_dir/source.tar" . || exit 1
 state_home=${XDG_STATE_HOME:-$HOME/.local/state}
@@ -455,7 +455,7 @@ failed checkout available for inspection:
 ```bash
 test -f "$backup_dir/source.tar" && test -f "$backup_dir/user.tar" \
     && test -f "$backup_dir/themes.tar" || exit 1
-restore_dir=$(mktemp -d "$HOME/dwm-titus-restored.XXXXXX") || exit 1
+restore_dir=$(mktemp -d "$HOME/dwm-s-restored.XXXXXX") || exit 1
 tar -C "$restore_dir" -xpf "$backup_dir/source.tar" || exit 1
 tar -C / --keep-directory-symlink -xpf "$backup_dir/user.tar" || exit 1
 source "$backup_dir/xdg.env"
@@ -466,10 +466,10 @@ cd "$restore_dir" || exit 1
 # This uses the same source-hash suppression as Settings theme rollback.
 state_home=${XDG_STATE_HOME:-$HOME/.local/state}
 case "$state_home" in /*) ;; *) state_home=$HOME/.local/state ;; esac
-appearance_state=$state_home/dwm-titus/appearance
+appearance_state=$state_home/dwm-s/appearance
 mkdir -p -- "$appearance_state" || exit 1
 chmod 700 -- "$appearance_state" || exit 1
-theme_hash=$(sha256sum -- "$XDG_CONFIG_HOME/dwm-titus/themes.toml") || exit 1
+theme_hash=$(sha256sum -- "$XDG_CONFIG_HOME/dwm-s/themes.toml") || exit 1
 suppression=$(umask 077; mktemp "$appearance_state/.integration-suppress.XXXXXX") || exit 1
 printf '%s\n' "${theme_hash%% *}" >"$suppression" || exit 1
 mv -f -- "$suppression" "$appearance_state/integration-suppress" || exit 1
@@ -520,9 +520,9 @@ dwm-settings-display rollback-system
 
 Discovery and live previews require `xrandr`, and the hotplug watch requires
 `udevadm`. Persistent install and rollback additionally require `pkexec` plus
-the root-owned helper installed at `${PREFIX}/libexec/dwm-titus/`. Profiles are
+the root-owned helper installed at `${PREFIX}/libexec/dwm-s/`. Profiles are
 stored under
-`${XDG_CONFIG_HOME:-$HOME/.config}/dwm-titus/display-profiles/`. No move is
+`${XDG_CONFIG_HOME:-$HOME/.config}/dwm-s/display-profiles/`. No move is
 needed for profiles created by `dwm-display-profile`, which uses the same
 directory. If `DWM_DISPLAY_PROFILE_DIR` previously pointed elsewhere, either
 keep that environment override or move those `.conf` files into the default
@@ -547,7 +547,7 @@ modifier operations also require `setxkbmap`; session-wide XKB accessibility
 controls require `xkbset`; stable hardware identity and hotplug watching use
 `udevadm`, and the session watcher uses `flock` from `util-linux` to prevent
 duplicate replay workers. Kept values default to
-`${XDG_CONFIG_HOME:-$HOME/.config}/dwm-titus/input-settings.conf`. Set
+`${XDG_CONFIG_HOME:-$HOME/.config}/dwm-s/input-settings.conf`. Set
 `DWM_INPUT_SETTINGS_FILE` to use a different file. The normal session startup
 invokes `apply-saved` idempotently and runs `watch-apply` to debounce input
 hotplug events before replaying saved values for returning devices.

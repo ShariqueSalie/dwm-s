@@ -32,7 +32,7 @@ done
 [[ -f $config_home/starship/starship.toml ]]
 cat >>"$bashrc" <<'BASH'
 
-# dwm-titus image: initialize the prompt only in interactive Bash sessions.
+# dwm-s image: initialize the prompt only in interactive Bash sessions.
 case $- in
 *i*)
 	if command -v starship >/dev/null && ! declare -F starship_precmd >/dev/null; then

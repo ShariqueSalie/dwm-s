@@ -83,16 +83,16 @@ expect_status() {
 expect_status crash-notifications on
 expect_status hang-detection off
 run_agent set hang-detection on
-test -e "$work/config/dwm-titus/hang-detection"
+test -e "$work/config/dwm-s/hang-detection"
 expect_status hang-detection on
 run_agent set crash-notifications off
-test -e "$work/config/dwm-titus/crash-notifications-off"
+test -e "$work/config/dwm-s/crash-notifications-off"
 expect_status crash-notifications off
 run_agent set hang-detection off
-test ! -e "$work/config/dwm-titus/hang-detection"
+test ! -e "$work/config/dwm-s/hang-detection"
 expect_status hang-detection off
 run_agent set crash-notifications on
-test ! -e "$work/config/dwm-titus/crash-notifications-off"
+test ! -e "$work/config/dwm-s/crash-notifications-off"
 expect_status crash-notifications on
 if run_agent set hang-detection maybe 2>/dev/null; then
 	printf 'dwm-agent set accepted an invalid value\n' >&2

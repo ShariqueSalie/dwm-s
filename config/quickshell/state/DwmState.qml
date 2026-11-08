@@ -231,7 +231,7 @@ Scope {
         root.batteryPercent = 0;
         root.batteryStatus = "";
 
-        if (text.length === 0 || text.indexOf("dwm-titus:") === 0) {
+        if (text.length === 0 || text.indexOf("dwm-s:") === 0) {
             root.statusSegments = [];
             return;
         }

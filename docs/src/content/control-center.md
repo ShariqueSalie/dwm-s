@@ -1,6 +1,6 @@
 ---
 title: Control Center
-description: Use the dwm-titus Control Center for system health, quick actions, appearance, defaults, startup apps, and panel widgets.
+description: Use the dwm-s Control Center for system health, quick actions, appearance, defaults, startup apps, and panel widgets.
 navLabel: Control Center
 eyebrow: Everyday controls
 ---
@@ -58,7 +58,7 @@ paired device, and disconnect a connected device through `bluetoothctl`.
 The Bar Widgets page can show or hide the workspace, volume, Bluetooth,
 network, power, and keyboard layout widgets. The keyboard layout pill only
 appears when two or more layouts are set (Settings > Input). Those choices are stored in the project-owned
-`~/.config/dwm-titus/panel-widgets.conf` state and apply to every monitor and
+`~/.config/dwm-s/panel-widgets.conf` state and apply to every monitor and
 future Quickshell session. The Clock seconds row adds seconds to the panel
 clock; it is off by default. Settings Appearance exposes the same shared
 controls; its **Show all widgets** button turns every widget back on and
@@ -123,7 +123,7 @@ make
 sudo make install-system
 ```
 
-The managed copy under `~/.local/share/dwm-titus` is never elevated itself. If
+The managed copy under `~/.local/share/dwm-s` is never elevated itself. If
 the installed helper is unavailable, cached or `NOPASSWD` sudo can still run
 the validated root-owned system commands. Polkit authorization requires the
 root-owned installed helper.
@@ -192,7 +192,7 @@ dwm-controlcenter
 The script is a compatibility wrapper around the Quickshell IPC target:
 
 ```bash
-quickshell ipc --path "${XDG_DATA_HOME:-$HOME/.local/share}/dwm-titus/config/quickshell/shell.qml" call controlcenter toggle
+quickshell ipc --path "${XDG_DATA_HOME:-$HOME/.local/share}/dwm-s/config/quickshell/shell.qml" call controlcenter toggle
 ```
 
 Open or refresh System Health directly through its IPC target:

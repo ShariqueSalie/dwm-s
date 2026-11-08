@@ -58,7 +58,7 @@ with tempfile.TemporaryDirectory(dir=os.environ["TMPDIR"]) as directory:
             "-D_XOPEN_SOURCE=700L", '-DVERSION="layout-capability-test"', "-DXINERAMA", "-I", str(build),
             *[str(build / source) for source in ("dwm.c", "drw.c", "util.c", "tomlparser.c")],
             "-o", str(build / "dwm"), *flags], check=True)
-        config = build / "config/dwm-titus"
+        config = build / "config/dwm-s"
         config.mkdir(parents=True)
         for item in ("hotkeys.toml", "themes.toml", "window-rules.toml"):
             shutil.copy(repo / "config" / item, config / item)

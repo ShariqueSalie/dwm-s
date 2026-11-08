@@ -10,9 +10,9 @@ pid=${3:-0}
 class=${4:-}
 title=${5:-}
 
-config_dir=${XDG_CONFIG_HOME:-$HOME/.config}/dwm-titus
+config_dir=${XDG_CONFIG_HOME:-$HOME/.config}/dwm-s
 ignore_file=$config_dir/hang-ignore
-runtime=${XDG_RUNTIME_DIR:-/run/user/$UID}/dwm-titus/hang/$(printf %s "${DISPLAY:-}" | sha256sum | cut -d' ' -f1)
+runtime=${XDG_RUNTIME_DIR:-/run/user/$UID}/dwm-s/hang/$(printf %s "${DISPLAY:-}" | sha256sum | cut -d' ' -f1)
 
 [[ $window =~ ^0x[0-9a-f]+$ ]] || exit 2
 [[ $pid =~ ^[0-9]+$ ]] || pid=0
@@ -122,7 +122,7 @@ fi
 # handler blocked.
 out=$runtime/$window.$self_start.out
 : >"$out"
-notify-send --app-name=dwm-titus --urgency=critical --print-id \
+notify-send --app-name=dwm-s --urgency=critical --print-id \
 	--action=diagnose="$diagnose_label" --action=kill="Force quit" --action=wait=Wait \
 	"$name is not responding" \
 	"It has not answered for 10 seconds. It may still recover." >"$out" 2>/dev/null 9>&- &
@@ -165,6 +165,6 @@ kill)
 	# dwm verifies both the current generation and the X window identity
 	# before closing its connection. Per-window requests cannot overwrite
 	# another window's pending action. Never kill a recycled XID here.
-	xprop -id "$window" -f _DWM_TITUS_HANG_KILL 8s -set _DWM_TITUS_HANG_KILL "$window $self_start" 2>/dev/null || exit 0
+	xprop -id "$window" -f _DWM_S_HANG_KILL 8s -set _DWM_S_HANG_KILL "$window $self_start" 2>/dev/null || exit 0
 	;;
 esac

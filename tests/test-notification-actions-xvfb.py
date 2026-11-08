@@ -94,7 +94,7 @@ ShellRoot {
            "XDG_DATA_HOME": str(work / "data"), "XDG_CACHE_HOME": str(work / "cache"),
            "XDG_STATE_HOME": str(work / "state"), "XDG_RUNTIME_DIR": str(work / "r"),
            "QT_QPA_PLATFORMTHEME": "", "QT_QUICK_BACKEND": "software", "QSG_RHI_BACKEND": "software"}
-    managed = Path(env["XDG_DATA_HOME"]) / "dwm-titus/scripts"
+    managed = Path(env["XDG_DATA_HOME"]) / "dwm-s/scripts"
     managed.mkdir(parents=True)
     agent_calls = work / "agent-calls"
     slow_list = work / "slow-list"
@@ -197,7 +197,7 @@ elif action == 'set':
         processes.append(old_client)
         wait_for(lambda: len(state()["keys"]) == 1)
         old_key = state()["keys"][0]
-        history_path = Path(env["XDG_CACHE_HOME"]) / "dwm-titus/notification-history.json"
+        history_path = Path(env["XDG_CACHE_HOME"]) / "dwm-s/notification-history.json"
         wait_for(lambda: history_path.exists() and old_key in history_path.read_text())
         shell.terminate()
         shell.wait(timeout=5)
@@ -315,7 +315,7 @@ elif action == 'set':
         env["PATH"] = str(binary) + ":" + env["PATH"]
         capture = work / "prompt.json"
         env["PROMPT_CAPTURE"] = str(capture)
-        config = Path(env["XDG_CONFIG_HOME"]) / "dwm-titus"
+        config = Path(env["XDG_CONFIG_HOME"]) / "dwm-s"
         config.mkdir(parents=True, exist_ok=True)
         for source in (repo / "config").glob("*.toml"):
             shutil.copy(source, config)
@@ -350,20 +350,20 @@ elif action == 'set':
         # Even a matching dwm record must not kill a window whose server-side
         # identity is missing/replaced (as when an XID is recycled).
         generation_output = subprocess.check_output(["xprop", "-id", app_window,
-            "_DWM_TITUS_HANG_GENERATION"], env=env, text=True, timeout=5)
+            "_DWM_S_HANG_GENERATION"], env=env, text=True, timeout=5)
         low, high = [int(v.strip()) for v in generation_output.split("=", 1)[1].split(",")]
         generation = low + (high << 32)
         def request_kill(value):
-            subprocess.run(["xprop", "-id", app_window, "-f", "_DWM_TITUS_HANG_KILL", "8s", "-set",
-                            "_DWM_TITUS_HANG_KILL", app_window + " " + str(value)], env=env, check=True, timeout=5)
+            subprocess.run(["xprop", "-id", app_window, "-f", "_DWM_S_HANG_KILL", "8s", "-set",
+                            "_DWM_S_HANG_KILL", app_window + " " + str(value)], env=env, check=True, timeout=5)
             wait_for(lambda: "not found" in subprocess.check_output(["xprop", "-id", app_window,
-                "_DWM_TITUS_HANG_KILL"], env=env, text=True, timeout=5))
+                "_DWM_S_HANG_KILL"], env=env, text=True, timeout=5))
             subprocess.run(["xwininfo", "-id", app_window], env=env, check=True, capture_output=True, timeout=5)
         request_kill(generation + 1)
-        subprocess.run(["xprop", "-id", app_window, "-remove", "_DWM_TITUS_HANG_GENERATION"], env=env, check=True, timeout=5)
+        subprocess.run(["xprop", "-id", app_window, "-remove", "_DWM_S_HANG_GENERATION"], env=env, check=True, timeout=5)
         request_kill(generation)
-        subprocess.run(["xprop", "-id", app_window, "-f", "_DWM_TITUS_HANG_GENERATION", "32c",
-                        "-set", "_DWM_TITUS_HANG_GENERATION", str(low) + ", " + str(high)], env=env, check=True, timeout=5)
+        subprocess.run(["xprop", "-id", app_window, "-f", "_DWM_S_HANG_GENERATION", "32c",
+                        "-set", "_DWM_S_HANG_GENERATION", str(low) + ", " + str(high)], env=env, check=True, timeout=5)
         ipc("invoke", state()["keys"][0], "kill")
         time.sleep(0.5)
         app.send_signal(signal.SIGCONT)
@@ -386,10 +386,10 @@ elif action == 'set':
             # Hold the consumer so both requests are pending simultaneously.
             for _, window in pair:
                 value = subprocess.check_output(["xprop", "-id", window,
-                    "_DWM_TITUS_HANG_GENERATION"], env=env, text=True, timeout=5)
+                    "_DWM_S_HANG_GENERATION"], env=env, text=True, timeout=5)
                 low, high = [int(v.strip()) for v in value.split("=", 1)[1].split(",")]
-                subprocess.run(["xprop", "-id", window, "-f", "_DWM_TITUS_HANG_KILL", "8s",
-                    "-set", "_DWM_TITUS_HANG_KILL", window + " " + str(low + (high << 32))],
+                subprocess.run(["xprop", "-id", window, "-f", "_DWM_S_HANG_KILL", "8s",
+                    "-set", "_DWM_S_HANG_KILL", window + " " + str(low + (high << 32))],
                     env=env, check=True, timeout=5)
         finally:
             wm.send_signal(signal.SIGCONT)

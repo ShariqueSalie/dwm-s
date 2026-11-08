@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping improve dwm-titus. Changes should preserve the small X11
+Thanks for helping improve dwm-s. Changes should preserve the small X11
 window-manager core, existing user workflows, and the Fedora-only desktop
 target. Fedora Linux is the sole supported distribution.
 
@@ -80,7 +80,7 @@ scripts/run-tests-podman
 
 The SDK includes the shared required, Wi-Fi, terminal and desktop capabilities
 so full runtime tests have their actual X11/input and command prerequisites.
-The runner builds `localhost/dwm-titus-tests:fedora-45` from the shared package
+The runner builds `localhost/dwm-s-tests:fedora-45` from the shared package
 map and delegates to `scripts/run-tests`. Fedora 45 is the default. Set
 `DWM_TEST_FEDORA_RELEASE=44` to run the same gates with the retained Fedora 44
 Containerfile. Other release values fail before building. Package versions

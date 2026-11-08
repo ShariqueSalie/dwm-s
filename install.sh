@@ -46,7 +46,7 @@ fedora)
 	;;
 *)
 	err "Unsupported distribution: $DISTRO_NAME"
-	err "dwm-titus supports Fedora only."
+	err "dwm-s supports Fedora only."
 	exit 1
 	;;
 esac
@@ -463,7 +463,7 @@ install_supported_terminal() {
 
 configure_quickshell_picom_opacity() {
 	local config="/etc/xdg/picom.conf"
-	local backup="${config}.dwm-titus.bak"
+	local backup="${config}.dwm-s.bak"
 	local tooltip_rule="^([[:space:]]*\"[0-9]+([.][0-9]+)?:window_type = 'tooltip')(\"[[:space:]]*,?[[:space:]]*)$"
 	local configured_rule="^[[:space:]]*\"[0-9]+([.][0-9]+)?:window_type = 'tooltip' && name != 'quickshell'\"[[:space:]]*,?[[:space:]]*$"
 	local tmp
@@ -580,14 +580,14 @@ install_lightdm_config() {
 		sudo restorecon \
 			"$lightdm_config" \
 			/etc/lightdm/slick-greeter.conf \
-			/usr/share/pixmaps/dwm-titus.jpg \
-			/usr/share/pixmaps/dwm-titus-logo.png
+			/usr/share/pixmaps/dwm-s.jpg \
+			/usr/share/pixmaps/dwm-s-logo.png
 	fi
 }
 
 echo ""
 echo "╔═══════════════════════════════════════════╗"
-echo "║             dwm-titus Installer           ║"
+echo "║             dwm-s Installer           ║"
 echo "╚═══════════════════════════════════════════╝"
 echo ""
 info "Distribution: $DISTRO_NAME"
@@ -621,7 +621,7 @@ if install_recommended_profile; then
 	dwm_install_package_profile system-management
 	if ! env -u DWM_TEST_MODE -u DWM_TEST_QUICKSHELL_VERSION \
 		"$REPO_DIR/scripts/dwm-quickshell-version-check"; then
-		err "The installed Quickshell build is incompatible with dwm-titus."
+		err "The installed Quickshell build is incompatible with dwm-s."
 		exit 1
 	fi
 	if ! dwm_install_available_package_profile screenshot-optional; then
@@ -783,7 +783,7 @@ sudo make install \
 # The main /etc/dnf/dnf.conf and later drop-ins keep precedence.
 info "Installing DNF5 defaults while preserving administrator settings."
 dnf_defaults_helper=$(make -s --no-print-directory print-dnf-defaults-helper)
-sudo /usr/bin/python3 -I "$dnf_defaults_helper" install --source "$REPO_DIR/config/dnf/40-dwm-titus.conf"
+sudo /usr/bin/python3 -I "$dnf_defaults_helper" install --source "$REPO_DIR/config/dnf/40-dwm-s.conf"
 # Seed before Gear Lever creates its AppImage MIME preference file.
 bash "$REPO_DIR/scripts/seed-default-apps.sh"
 if install_recommended_profile; then

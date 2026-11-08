@@ -193,7 +193,7 @@ versions from `config.mk`.
   xprop call.
 
 - Patch the EFI System Partition GRUB menu when building Fedora installer
-  images so UEFI USB boots select the dwm-titus Kickstart and variant options.
+  images so UEFI USB boots select the dwm-s Kickstart and variant options.
 
 - Install `nm-connection-editor` with the recommended profile and both Fedora
   images. The network popover already sends Edit Connections and enterprise
@@ -206,9 +206,9 @@ versions from `config.mk`.
   removes unchanged palette, border and tab lines shipped up to v0.7.2 and the
   `nord.conf` include, makes `include active-theme.conf` the last and only
   copy, keeps every other line, and saves the original as
-  `kitty.conf.dwm-titus.bak` with the same permissions.
+  `kitty.conf.dwm-s.bak` with the same permissions.
 
-- Upload release ISOs with the dwm-titus version in their filenames, including
+- Upload release ISOs with the dwm-s version in their filenames, including
   an explicit NVIDIA variant, and generate checksums using download filenames.
 
 - Require GNOME Keyring and its separate PAM module in every install profile,

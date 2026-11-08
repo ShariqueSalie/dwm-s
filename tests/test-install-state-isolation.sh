@@ -9,9 +9,9 @@ trap 'rm -rf -- "$work"' EXIT
 # The real installation fixture must bind both of its HOME variants elsewhere.
 state=$work/inherited-state
 cache=$work/inherited-cache
-mkdir -p "$state/dwm-titus/desktop-update" "$cache/theme-cache"
-printf '%s\n' '{"sentinel":"installed desktop receipt"}' >"$state/dwm-titus/desktop-update/installed.json"
-printf '%s\n' '/* sentinel live build configuration */' >"$state/dwm-titus/desktop-update/build-config.h"
+mkdir -p "$state/dwm-s/desktop-update" "$cache/theme-cache"
+printf '%s\n' '{"sentinel":"installed desktop receipt"}' >"$state/dwm-s/desktop-update/installed.json"
+printf '%s\n' '/* sentinel live build configuration */' >"$state/dwm-s/desktop-update/build-config.h"
 printf '%s\n' 'sentinel cache contents' >"$cache/theme-cache/marker"
 cp -a "$state" "$work/expected-state"
 cp -a "$cache" "$work/expected-cache"

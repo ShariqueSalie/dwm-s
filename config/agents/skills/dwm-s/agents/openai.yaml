@@ -1,0 +1,4 @@
+interface:
+  display_name: "dwm-s"
+  short_description: "Customize the dwm-s desktop"
+  default_prompt: "Use $dwm-s to change my dwm-s keybindings, theme, window rules, or panel."

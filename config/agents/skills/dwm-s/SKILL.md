@@ -1,26 +1,26 @@
 ---
-name: dwm-titus
-description: Customize the dwm-titus X11 desktop, including TOML keybindings, themes, window rules, panel widgets, autostart, wallpaper, picom, lock, and LightDM. Use for end-user changes, not diagnosis.
+name: dwm-s
+description: Customize the dwm-s X11 desktop, including TOML keybindings, themes, window rules, panel widgets, autostart, wallpaper, picom, lock, and LightDM. Use for end-user changes, not diagnosis.
 ---
 
-# dwm-titus
+# dwm-s
 
-dwm-titus is Chris Titus Tech's Fedora/X11 desktop: patched dwm plus a managed
+dwm-s is Chris Titus Tech's Fedora/X11 desktop: patched dwm plus a managed
 Quickshell panel and `dwm-*` helpers. Upstream:
 https://github.com/ChrisTitusTech/dwm-titus. Route failures ("X is broken",
-"why did Y stop") to `$dwm-titus-debug`.
+"why did Y stop") to `$dwm-s-debug`.
 
 ## Workflow
 
 1. Identify the owning layer before editing:
-   - keys, mouse, themes, window rules: `~/.config/dwm-titus/*.toml`
+   - keys, mouse, themes, window rules: `~/.config/dwm-s/*.toml`
    - modifier key, fonts, tags, layouts, mfact: `config.h` in the source
      checkout (rebuild required)
    - panel widgets: `dwm-panel-settings`; settings with a helper:
      `dwm-settings-*`, `dwm-xdg-autostart`, `dwm-default-apps`
    - login screen: `/etc/lightdm/slick-greeter.conf` (root)
 2. Read the user file and its packaged default in
-   `~/.local/share/dwm-titus/config/`. Discover helpers with
+   `~/.local/share/dwm-s/config/`. Discover helpers with
    `ls /usr/local/bin/dwm-*` and read a helper's source for its subcommands;
    most helpers have no `--help`.
 3. Prefer a helper or Settings backend when one owns the setting. Otherwise
@@ -46,7 +46,7 @@ https://github.com/ChrisTitusTech/dwm-titus. Route failures ("X is broken",
 
 ```bash
 echo "$XDG_SESSION_TYPE $XDG_CURRENT_DESKTOP"
-ls -la ~/.config/dwm-titus/
+ls -la ~/.config/dwm-s/
 grep 'dwm: ' ~/.xsession-errors | tail -n 8
 xdotool getactivewindow getwindowclassname
 dwm-panel-settings status
@@ -57,12 +57,12 @@ Over SSH, first import `DISPLAY` and `XAUTHORITY` from the running dwm (see
 
 ## Safety Rules
 
-- Never edit `/usr/local/bin`, `/usr/local/libexec/dwm-titus`, or
+- Never edit `/usr/local/bin`, `/usr/local/libexec/dwm-s`, or
   `~/.config/quickshell`; installs replace them.
 - Never overwrite `config.h`, user TOML files, or `~/.xinitrc`; back up first.
 - Never hand-edit generated files such as `theme-env.sh`, `xsettingsd.conf`,
   or `cursor.Xresources`; change the source setting instead.
-- Do not edit `~/.local/share/dwm-titus/scripts/autostart.sh`; installs replace
+- Do not edit `~/.local/share/dwm-s/scripts/autostart.sh`; installs replace
   it. Use XDG autostart entries.
 - Use `dnf` only. Ask before root changes such as LightDM or Xorg files; use
   `$linux-sysadmin` for host-level work when available.

@@ -2,7 +2,7 @@
 
 For Wine applications, older games or other floating windows that need mouse
 controls, add these keys to the existing `[appearance]` section in
-`${XDG_CONFIG_HOME:-$HOME/.config}/dwm-titus/themes.toml`:
+`${XDG_CONFIG_HOME:-$HOME/.config}/dwm-s/themes.toml`:
 
 ```toml
 [appearance]

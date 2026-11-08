@@ -219,7 +219,7 @@ fwupd-plugin-uefi-capsule-data-2.1.1-1.fc44.x86_64
 gamemode-1.8.2-4.fc44.i686
 gamemode-1.8.2-4.fc44.x86_64
 game-music-emu-0.6.4-3.fc44.x86_64
-gamescope-3.16.23-3.dwm_titus.fc44.x86_64
+gamescope-3.16.23-3.dwm_s.fc44.x86_64
 garcon-4.20.0-4.fc44.x86_64
 gawk-5.3.2-3.fc44.x86_64
 gawk-all-langpacks-5.3.2-3.fc44.x86_64

@@ -1,4 +1,4 @@
-# dwm-titus symptoms and evidence
+# dwm-s symptoms and evidence
 
 Collect only the rows that match the symptom. Paths assume the default
 LightDM session on Fedora; confirm them on the target system.
@@ -12,9 +12,9 @@ LightDM session on Fedora; confirm them on the target system.
 | LightDM | `/var/log/lightdm/*.log` | Root-only |
 | Quickshell | `quickshell log --tail 100`, `quickshell list --all` | Needs `DISPLAY`; files in `/run/user/$UID/quickshell/by-id/` (`log.log` covers startup only) |
 | User services | `journalctl --user -b`, `systemctl --user --failed` | XDG autostart entries run as `app-*@autostart.service` |
-| Picom | `~/.local/state/dwm-titus/picom/session.log`, `dwm-settings-picom status` | Log truncates at each picom start |
-| Updates | `~/.local/state/dwm-titus/desktop-update/status.json` | Shows pending or failed desktop updates |
-| Notifications | `~/.cache/dwm-titus/notification-history.json` | Includes "dwm: bad config" alerts |
+| Picom | `~/.local/state/dwm-s/picom/session.log`, `dwm-settings-picom status` | Log truncates at each picom start |
+| Updates | `~/.local/state/dwm-s/desktop-update/status.json` | Shows pending or failed desktop updates |
+| Notifications | `~/.cache/dwm-s/notification-history.json` | Includes "dwm: bad config" alerts |
 | Crashes | `coredumpctl list`, `coredumpctl info <pid>` | gdb may be missing; installing it (`dnf install gdb`) is a change, so ask first |
 
 ## Symptoms
@@ -31,12 +31,12 @@ LightDM session on Fedora; confirm them on the target system.
 | Portal-dependent app fails (file pickers, screen share, Flatpak) | `journalctl --user -b -u xdg-desktop-portal`, `systemctl --user status graphical-session.target` | Early "Dependency failed" at login is expected until `wm-graphical-session.service` starts; persistent failure is not |
 | Tearing, black windows, or transparency problems | `dwm-settings-picom status`, picom log | Backend choice (`xrender` vs `glx`), GPU driver, custom picom config |
 | Screen never locks | `dwm-quickshell-controlcenter power-status`, `pgrep -a light-locker`, `xset q` | Idle lock and DPMS are off by default; suspend from the power menu does not lock first |
-| Monitor layout wrong after login | `xrandr --listmonitors`, `dwm-display-setup status`, `/etc/X11/xorg.conf.d/90-dwm-titus-display.conf` | Stale Xorg fragment; `dwm-display-setup rollback` restores (root) |
+| Monitor layout wrong after login | `xrandr --listmonitors`, `dwm-display-setup status`, `/etc/X11/xorg.conf.d/90-dwm-s-display.conf` | Stale Xorg fragment; `dwm-display-setup rollback` restores (root) |
 | Process crashed | `coredumpctl info <pid>`, journal around the timestamp, `free -h` and OOM kills | `/usr/local/bin/dwm` is a local build, so Fedora debuginfod has no symbols for it; other Fedora packages resolve through `DEBUGINFOD_URLS` |
 
 ## Reporting upstream
 
-Bugs in dwm-titus itself go to https://github.com/ChrisTitusTech/dwm-titus/issues
+Bugs in dwm-s itself go to https://github.com/ChrisTitusTech/dwm-titus/issues
 with `dwm-diagnostics` output, the relevant log lines, the Fedora version, and
 whether the install is a git checkout (`git -C <checkout> rev-parse HEAD`). A
 screenshot or the exact error text helps. Read that repository's

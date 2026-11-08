@@ -1,4 +1,4 @@
-# dwm-titus 0.8.0 - Fedora 45
+# dwm-s 0.8.0 - Fedora 45
 
 Release: https://github.com/ChrisTitusTech/dwm-titus/releases/tag/v0.8.0
 
@@ -31,8 +31,8 @@ before tagging and are not represented as newly built from the tag.
 
 | Image | Bytes | SHA-256 |
 | --- | ---: | --- |
-| dwm-titus.iso | 4,169,138,176 | `941d6a57915982d4c53f48d1f44a31d8b52faaa3db796f78359acd86f9630d7f` |
-| dwm-titus-nvidia.iso | 4,875,681,792 | `133d8cb30666574c4248c734fb4855b221ceaa050f73482eeae01a24a008aee2` |
+| dwm-s.iso | 4,169,138,176 | `941d6a57915982d4c53f48d1f44a31d8b52faaa3db796f78359acd86f9630d7f` |
+| dwm-s-nvidia.iso | 4,875,681,792 | `133d8cb30666574c4248c734fb4855b221ceaa050f73482eeae01a24a008aee2` |
 
 Download a fresh SHA256SUMS alongside the ISO and run
 `sha256sum --ignore-missing -c SHA256SUMS`. Restart older partial downloads.

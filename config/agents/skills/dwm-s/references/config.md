@@ -1,21 +1,21 @@
-# dwm-titus runtime configuration
+# dwm-s runtime configuration
 
-Facts below were read from dwm-titus `dwm.c`, `tomlparser.c`, and the shipped
+Facts below were read from dwm-s `dwm.c`, `tomlparser.c`, and the shipped
 `config/*.toml`. When an installed system disagrees, trust its source copy in
-`~/.local/share/dwm-titus/` (or the user's checkout) over this file.
+`~/.local/share/dwm-s/` (or the user's checkout) over this file.
 
 ## Files and load order
 
-- User files: `${XDG_CONFIG_HOME:-$HOME/.config}/dwm-titus/hotkeys.toml`,
+- User files: `${XDG_CONFIG_HOME:-$HOME/.config}/dwm-s/hotkeys.toml`,
   `themes.toml`, `window-rules.toml`.
-- Defaults: `${XDG_DATA_HOME:-$HOME/.local/share}/dwm-titus/config/`. A default is
+- Defaults: `${XDG_DATA_HOME:-$HOME/.local/share}/dwm-s/config/`. A default is
   used only when the user file does not exist.
 - A user file that parses to zero entries (empty, comments only, unreadable)
   triggers a critical `dwm: bad config` notification and loads nothing from
   that file. Do not leave an empty user file in place.
 - Saving any of the three files (close-write or rename into the directory)
   reloads all three, re-grabs keys, and runs
-  `~/.local/share/dwm-titus/scripts/theme-apply.sh`. `kill -USR1 "$(pidof dwm)"`
+  `~/.local/share/dwm-s/scripts/theme-apply.sh`. `kill -USR1 "$(pidof dwm)"`
   forces the same reload.
 - dwm logs to stderr, which LightDM sends to `~/.xsession-errors`:
   `dwm: loaded N keybinds from hotkeys config`, `... button bindings ...`,
@@ -105,7 +105,7 @@ The parser is a small line parser, not full TOML:
   xsettingsd, and cursors.
 - Switch themes with `dwm-settings-theme apply <name>` or the Control Center
   rather than by editing `[active]`. List the theme names with
-  `grep '^\[theme\.' ~/.config/dwm-titus/themes.toml`.
+  `grep '^\[theme\.' ~/.config/dwm-s/themes.toml`.
 - For a custom theme, copy an existing `[theme.<name>]` block under a new name
   and keep every key.
 
@@ -122,7 +122,7 @@ The parser is a small line parser, not full TOML:
 
 ## Generated files: do not hand-edit
 
-`~/.config/dwm-titus/` also holds files written by helpers:
+`~/.config/dwm-s/` also holds files written by helpers:
 
 - `theme-env.sh`, `xsettingsd.conf`, `cursor.Xresources`: `theme-apply.sh`
 - `personalization.conf`: `dwm-settings-theme personalize`

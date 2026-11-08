@@ -109,7 +109,7 @@ def main():
             XDG_DATA_HOME=str(work / "data"), XDG_STATE_HOME=str(work / "state"),
             XDG_CACHE_HOME=str(work / "cache"), XDG_RUNTIME_DIR=runtime,
             QT_QUICK_BACKEND="software", QSG_RHI_BACKEND="software")
-        config = work / "config/dwm-titus"
+        config = work / "config/dwm-s"
         config.mkdir(parents=True)
         for name in ("hotkeys.toml", "themes.toml", "window-rules.toml"):
             shutil.copy(repo / "config" / name, config / name)
@@ -176,7 +176,7 @@ def main():
             if args.reverse_order:
                 variants.reverse()
             for name, source in variants:
-                helpers = work / "data/dwm-titus/scripts"
+                helpers = work / "data/dwm-s/scripts"
                 helpers.mkdir(parents=True, exist_ok=True)
                 helper = helpers / "dwm-window-overview"
                 helper.unlink(missing_ok=True)

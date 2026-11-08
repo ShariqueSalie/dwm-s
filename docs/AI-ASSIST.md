@@ -1,6 +1,6 @@
 # AI assistance
 
-dwm-titus ships the `dwm-titus` customization and `dwm-titus-debug` diagnosis
+dwm-s ships the `dwm-s` customization and `dwm-s-debug` diagnosis
 skills from [titstack](https://github.com/ChrisTitusTech/titstack), adapted to
 the current desktop. Each skill includes its MIT license. The imported source
 revision is `bd3a1dbe9c33d7066dfe0e3561445472edcbe107`.
@@ -25,17 +25,17 @@ or browser flow. Reopen Settings or press Refresh after it finishes.
 Missing agents can be installed with `dwm-install-ai-agent NAME`, or explicitly
 requested through `install.sh --install-ai-agent NAME`. Installation downloads
 third-party software through an existing mise installation and changes its
-user configuration. Install mise separately first; dwm-titus does not add a
+user configuration. Install mise separately first; dwm-s does not add a
 system package repository for it. `dwm-install-ai-agent --dry-run NAME` prints the
 plan without installing. Agent versions resolve through mise when requested;
 they are not pinned desktop dependencies.
 
-Skills live in `${XDG_DATA_HOME:-$HOME/.local/share}/dwm-titus/config/agents/skills/`.
+Skills live in `${XDG_DATA_HOME:-$HOME/.local/share}/dwm-s/config/agents/skills/`.
 Desktop installation links them into `~/.agents/skills`, `~/.claude/skills`,
 `~/.cursor/skills`, and `~/.hermes/skills`. Existing files, directories, and
 custom symlinks are preserved. Links already targeting the managed desktop or
 system skill trees follow package installation/removal. Run `dwm-agent link-skills` to retry missing links.
-A separately installed `/usr/share/dwm-titus/agents/skills` tree takes priority.
+A separately installed `/usr/share/dwm-s/agents/skills` tree takes priority.
 An optional [noarch RPM recipe](../packaging/rpm/README.md) lets packagers ship
 skill updates separately; building it does not enable a COPR or install anything.
 If your agent uses another skills location, point it at the packaged `SKILL.md`
@@ -61,7 +61,7 @@ dwm-agent-diagnose window
 dwm pings windows advertising `_NET_WM_PING` every five seconds and reports a
 reply overdue by ten seconds. Windows without that protocol cannot be checked.
 Games, VMs and busy applications can produce false alarms. Add exact window
-classes, one per line, to `~/.config/dwm-titus/hang-ignore` to suppress their
+classes, one per line, to `~/.config/dwm-s/hang-ignore` to suppress their
 offers. Recovery, closing the window, or disabling detection withdraws the
 notification. **Wait** dismisses the offer; **Force quit** closes the client's
 X connection and can lose unsaved work. Each window has its own request property,
@@ -99,7 +99,7 @@ agent discovering these skills; retain unrelated skill directories. Existing
 custom skills are never replaced by desktop setup.
 
 Optional agent downloads use your existing mise and its registry verification;
-they are not pinned or checksum-reviewed by dwm-titus. Existing global Node and
+they are not pinned or checksum-reviewed by dwm-s. Existing global Node and
 uv selections are preserved. Repeating setup preserves the current alert
 preferences when you accept its defaults. Setup and sign-in terminals retain
 helper errors until you press Enter. Diagnosis launch errors use the same

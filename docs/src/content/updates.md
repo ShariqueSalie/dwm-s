@@ -1,13 +1,13 @@
 ---
 title: Updates
-description: Keep dwm-titus, Fedora packages, Flatpak applications, and mise tools current from the panel Update Center or Settings.
+description: Keep dwm-s, Fedora packages, Flatpak applications, and mise tools current from the panel Update Center or Settings.
 navLabel: Updates
 eyebrow: Stay current
 ---
 
 # Updates
 
-dwm-titus has two update surfaces: the **Update Center** in the panel and the
+dwm-s has two update surfaces: the **Update Center** in the panel and the
 **Desktop updates** card in Settings > System. Both report failures instead of
 claiming success. Settings previews desktop changes before starting, and the
 Fedora flow shows DNF's transaction plan for confirmation after the terminal
@@ -19,7 +19,7 @@ Click the update indicator beside the clock to open the Update Center popup.
 It lists the providers that are available on the machine:
 
 - Fedora packages
-- the managed dwm-titus desktop
+- the managed dwm-s desktop
 - Flatpak applications
 - mise-managed tools, when mise is installed
 
@@ -89,7 +89,7 @@ The helper requests authorization, measures mirrors, validates the enabled
 repositories, and shows DNF's proposed upgrade. Enter accepts the `[Y/n]` prompt
 and `n` cancels. It does not enable repositories, change image variants, or
 reboot automatically. Completion is recorded in
-`/var/lib/dwm-titus/initial-update/complete.json`; retry with `dwm-initial-update`
+`/var/lib/dwm-s/initial-update/complete.json`; retry with `dwm-initial-update`
 after a repository, authorization, download, or transaction failure.
 
 Updating an existing desktop from source does not opt it into the initial-update

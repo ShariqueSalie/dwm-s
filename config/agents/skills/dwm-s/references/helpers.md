@@ -1,7 +1,7 @@
-# dwm-titus helpers
+# dwm-s helpers
 
 Helpers install to `/usr/local/bin` (privileged parts to
-`/usr/local/libexec/dwm-titus/`). Read the source before running one: most have
+`/usr/local/libexec/dwm-s/`). Read the source before running one: most have
 no `--help`, and several subcommands change state. List the installed set with
 `ls /usr/local/bin/dwm-* /usr/local/bin/*.sh`.
 
@@ -38,7 +38,7 @@ Not read-only despite the name: plain `dwm-settings-wallpaper status` and
 | `dwm-settings-font` | `apply <family> <scale>`, `reset` |
 | `dwm-settings-picom` | `start`, `restart`, `reload`, `stop`, `toggle`, `set-opacity`, `set-backend`, `copy-config` (mutations take the `revision` from `status`); JSON output |
 | `dwm-settings-input` | per-device xinput settings; Settings UI is the normal front end |
-| `dwm-settings-display`, `dwm-display-profile` | xrandr layouts and saved profiles in `~/.config/dwm-titus/display-profiles/` |
+| `dwm-settings-display`, `dwm-display-profile` | xrandr layouts and saved profiles in `~/.config/dwm-s/display-profiles/` |
 | `dwm-display-setup` | Xorg display fragment wizard; `install` and `rollback` use sudo |
 | `dwm-accessibility-settings` | `set contrast standard\|high`, `set motion full\|reduced`, `reset` |
 | `dwm-default-apps` | `set-browser <id.desktop>`, `set-role <browser\|terminal\|file-manager> <id>`, `set-mime <mime> <id>`, `browsers`, `open [url]` |

@@ -50,7 +50,7 @@ def wait(f):
         time.sleep(0.05)
     raise AssertionError('Probe condition timed out')
 with tempfile.TemporaryDirectory(dir=os.environ['TMPDIR']) as t:
-    cfg = Path(t) / 'config/dwm-titus'
+    cfg = Path(t) / 'config/dwm-s'
     cfg.mkdir(parents=True)
     for name in ('hotkeys.toml', 'window-rules.toml'):
         shutil.copy(repo / 'config' / name, cfg / name)

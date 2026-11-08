@@ -1,12 +1,12 @@
 ---
-name: dwm-titus-debug
-description: Diagnose broken apps or desktop parts on dwm-titus, including startup, Quickshell panel, keybindings, window rules, autostart, portals, picom, lock, and crashes. Read-only unless asked; not host services.
+name: dwm-s-debug
+description: Diagnose broken apps or desktop parts on dwm-s, including startup, Quickshell panel, keybindings, window rules, autostart, portals, picom, lock, and crashes. Read-only unless asked; not host services.
 ---
 
-# dwm-titus-debug
+# dwm-s-debug
 
 Diagnosis authorizes inspection and reporting only. Apply a fix only when the
-user asks for one; then prepare rollback first and use `$dwm-titus` for the
+user asks for one; then prepare rollback first and use `$dwm-s` for the
 change itself.
 
 ## Workflow
@@ -25,7 +25,7 @@ change itself.
    `AGENTS.md`.
 4. Gather evidence only for that layer, over the complete relevant time
    window. Compare the user config with the defaults in
-   `~/.local/share/dwm-titus/config/` and with recent file mtimes.
+   `~/.local/share/dwm-s/config/` and with recent file mtimes.
 5. Report what the evidence proves separately from what it suggests, the
    smallest fix, and its rollback. Say plainly when the cause is unknown and
    which test would settle it.

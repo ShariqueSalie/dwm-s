@@ -23,7 +23,7 @@ def wait_for(predicate, seconds=22):
 with tempfile.TemporaryDirectory(dir=os.environ.get("TMPDIR")) as directory:
     work = Path(directory)
     processes = []
-    config = work / "config/dwm-titus"
+    config = work / "config/dwm-s"
     config.mkdir(parents=True)
     for path in (repo / "config").glob("*.toml"):
         shutil.copy(path, config)

@@ -115,7 +115,7 @@ Standard candidate ISO: 3,901,816,832 bytes, SHA-256
 `6f7db6fd52195e9e18c4c5285a1cdbc8926d324523499b5aaec121bb7ea9d9c0`.
 NVIDIA candidate ISO: 4,543,479,808 bytes, SHA-256
 `24137139f7eac60b26f0e9590a706b73291fdc7ecc376261f2e4d622b139f531`.
-Files are `artifacts/dwm-titus-{standard,nvidia}-p8-rc2.iso` in the evidence
+Files are `artifacts/dwm-s-{standard,nvidia}-p8-rc2.iso` in the evidence
 workspace's parent directory. Earlier p8/p8-final/rc prototypes are not release candidates. Portable
 SHA256SUMS, ISO JSON manifests and RPM/Flatpak inventories accompany RC2. New packages and refreshed libraries contribute to the size change;
 compression comparisons use identical tar data separately. Anaconda scans the

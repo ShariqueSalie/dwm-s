@@ -1,6 +1,6 @@
 ---
 title: Theming
-description: Change dwm-titus colors, borders, wallpaper, fonts, text scale, cursor, icons, and application appearance.
+description: Change dwm-s colors, borders, wallpaper, fonts, text scale, cursor, icons, and application appearance.
 navLabel: Theming
 eyebrow: Personalization
 ---
@@ -194,7 +194,7 @@ dwm-settings-font apply "Noto Sans" 1.10
 dwm-settings-font reset
 ```
 
-The setting owns only `font.conf` under the dwm-titus XDG configuration
+The setting owns only `font.conf` under the dwm-s XDG configuration
 directory. A malformed file falls back to the existing Meslo family at 100
 percent without preventing shell startup.
 
@@ -228,8 +228,8 @@ Settings exposes **Repair personalization state**. The equivalent
 overrides to follow-source preferences; it does not silently rewrite current
 desktop settings. Apply or reset the desired choices afterward.
 Files carrying a reserved newer personalization protocol are left untouched;
-use a compatible newer dwm-titus version rather than repairing them.
+use a compatible newer dwm-s version rather than repairing them.
 
 The apply and reset paths share the theme transaction and integration locks.
 If rollback cannot safely restore a changed output, recovery data remains under
-the dwm-titus appearance state directory for the existing theme recovery flow.
+the dwm-s appearance state directory for the existing theme recovery flow.

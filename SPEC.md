@@ -1,8 +1,8 @@
-# dwm-titus Project Specification
+# dwm-s Project Specification
 
 ## 1. Product Definition
 
-dwm-titus is a Fedora-only desktop environment for X11. It combines a small,
+dwm-s is a Fedora-only desktop environment for X11. It combines a small,
 maintained fork of suckless dwm with runtime-configurable hotkeys, themes, and
 window rules, a managed Quickshell shell and Settings layer, and supporting
 desktop services and helpers.
@@ -20,7 +20,7 @@ distributions are outside the supported product and validation contract.
 - Provide one cohesive Settings experience for common display, input,
   connectivity, audio, power, appearance, default-application, update, and
   system-information workflows.
-- Build and run the complete dwm-titus desktop on supported Fedora releases.
+- Build and run the complete dwm-s desktop on supported Fedora releases.
 - Provide safe, idempotent dependency installation and system integration.
 - Preserve the speed, simplicity, and direct configuration model of dwm.
 - Provide consistent defaults and complete Settings behavior on Fedora.
@@ -162,7 +162,7 @@ The installed session must provide:
 The product must load user configuration from:
 
 ```text
-${XDG_CONFIG_HOME:-$HOME/.config}/dwm-titus/
+${XDG_CONFIG_HOME:-$HOME/.config}/dwm-s/
 ```
 
 The supported runtime files are:
@@ -178,19 +178,19 @@ an actionable error and retain safe defaults or the last valid state.
 Compile-time defaults remain in `config.def.h`. An existing `config.h` is user
 owned and must not be overwritten during installation or upgrade.
 
-Quickshell configuration is a managed shell-layer artifact owned by dwm-titus.
+Quickshell configuration is a managed shell-layer artifact owned by dwm-s.
 During installation, `${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/` must be
 replaced from the tracked `config/quickshell/` directory so the running shell
 does not fall behind repository behavior. User-owned dwm TOML files remain
 preserved, but users should not place unrelated personal configuration under
-the dwm-titus-managed Quickshell directory. Quickshell integrations must use
+the dwm-s-managed Quickshell directory. Quickshell integrations must use
 event-driven updates whenever a state source provides a signal, subscription,
 watch mode, IPC stream, or service API. Polling timers are acceptable only for
 inherently sampled values, such as a clock or CPU load, or as documented
 fallbacks when no event source exists. The managed Quickshell shell must remain
 low overhead while idle: hidden launcher UI must not continuously filter or
 render application models, timer-triggered helper processes must not overlap,
-and only one shell provider should run in the dwm-titus session. On X11, the
+and only one shell provider should run in the dwm-s session. On X11, the
 managed shell must create one `PanelWindow` for every active screen so each
 monitor has a bar. The per-screen Quickshell `Variants` design must share its
 state providers and be explicitly profiled to show that it remains near idle.
@@ -324,7 +324,7 @@ A source-checkout update of an existing live installation must use the complete
 supported install path. Updating only the `dwm` executable is not a supported
 upgrade because it can leave installed helpers, session scripts, the managed
 Quickshell tree, and the user data copy at a different repository revision.
-When development is performed on a machine running dwm-titus, the
+When development is performed on a machine running dwm-s, the
 repository-owned `scripts/dev-sync-install.sh` command must synchronize the
 checkout to that machine's local live installation before the work is handed
 off or considered complete. The command is idempotent and must enforce this
@@ -333,7 +333,7 @@ contract for every developer deployment. Every live update must:
 1. Build the checked-out revision successfully before replacing installed
    files.
 2. Install the system files and refresh
-   `${XDG_DATA_HOME:-$HOME/.local/share}/dwm-titus/` and the managed
+   `${XDG_DATA_HOME:-$HOME/.local/share}/dwm-s/` and the managed
    `${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/` tree from that same
    revision while preserving the user-owned dwm TOML files.
 3. Verify the installed binary and the managed Quickshell, data, and script
@@ -525,10 +525,10 @@ The snapshot must provide an overall state and categorized details for:
 - Current-boot journal and kernel errors, with `journalctl` preferred and
   privileged `dmesg` used as a fallback.
 - Failed system and user services, time synchronization, networking, audio,
-  and the dwm-titus desktop session.
+  and the dwm-s desktop session.
 - Memory, pressure, load, swap, local filesystem capacity, inode use,
   read-only mounts, and available battery, thermal, and drive-health data.
-- Required and optional dwm-titus commands, libraries, configuration, and the
+- Required and optional dwm-s commands, libraries, configuration, and the
   distribution package database.
 
 The dashboard must begin user-readable checks immediately and request a
@@ -701,7 +701,7 @@ authorization, and transaction integrity before replacement.
 
 A root-owned installed helper accepts existing managed destinations and additions
 within its desktop-owned namespaces: dwm-prefixed commands and helpers, Dwm
-application themes and Qt palettes, Capitaine cursors, and dwm-titus licenses.
+application themes and Qt palettes, Capitaine cursors, and dwm-s licenses.
 New files must not overwrite an unmanaged destination. Retired files are removed
 only if they still match the previous receipt. Missing trusted directories are
 created as root-owned 0755 directories; recovery may leave empty directories.
@@ -864,8 +864,8 @@ ${PREFIX}/share/man/man1/dwm.1
 Default user locations:
 
 ```text
-${XDG_CONFIG_HOME:-$HOME/.config}/dwm-titus/
-${XDG_DATA_HOME:-$HOME/.local/share}/dwm-titus/
+${XDG_CONFIG_HOME:-$HOME/.config}/dwm-s/
+${XDG_DATA_HOME:-$HOME/.local/share}/dwm-s/
 ```
 
 System paths must be overridable for packaging and staged installs. User data
@@ -917,7 +917,7 @@ configuration and unrelated application configuration by default.
 - The explicitly requested optional AI agent path in Section 5.5.1 is an
   exception to the preceding download/checksum requirements: the desktop user
   delegates installation to their existing mise and its registry verification.
-  These agent artifacts are not pinned or checksum-reviewed by dwm-titus.
+  These agent artifacts are not pinned or checksum-reviewed by dwm-s.
   This exception adds no system repositories and never runs as root.
 - Do not run user configuration or desktop helpers as root.
 - Quote paths and arguments that may contain whitespace.
@@ -1054,7 +1054,7 @@ A roadmap feature is complete when:
 - Installation attempts without `ID=fedora` fail clearly before making
   changes.
 - Relevant automated and manual validation is recorded.
-- On a development machine running dwm-titus, the checkout has been
+- On a development machine running dwm-s, the checkout has been
   synchronized to the local live installation with
   `scripts/dev-sync-install.sh`, including the post-relogin check when one is
   required.

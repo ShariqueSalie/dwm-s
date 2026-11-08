@@ -1,7 +1,7 @@
-Name:           dwm-titus-ai-skills
+Name:           dwm-s-ai-skills
 Version:        0.1.0
 Release:        1%{?dist}
-Summary:        AI agent skills for customizing and debugging dwm-titus
+Summary:        AI agent skills for customizing and debugging dwm-s
 License:        MIT
 URL:            https://github.com/ChrisTitusTech/dwm-titus
 Source0:        %{name}-%{version}.tar.gz
@@ -9,12 +9,12 @@ BuildArch:      noarch
 
 %description
 Agent skills that teach AI coding agents (Codex, OpenCode, Gemini CLI and
-others that read ~/.agents/skills) how dwm-titus is put together: where the
+others that read ~/.agents/skills) how dwm-s is put together: where the
 runtime configuration lives, which helpers own which settings, and how to
 diagnose crashes, hung windows and broken desktop parts without guessing.
 
 dwm-agent links these skills into each user's ~/.agents/skills on setup, and
-prefers this system copy over the one in the dwm-titus data directory, so the
+prefers this system copy over the one in the dwm-s data directory, so the
 skills can be updated as a package, independently of the desktop.
 
 %prep
@@ -32,16 +32,16 @@ for skill in skills/*/; do
 done
 
 %install
-install -d %{buildroot}%{_datadir}/dwm-titus/agents/skills
-cp -a skills/. %{buildroot}%{_datadir}/dwm-titus/agents/skills/
+install -d %{buildroot}%{_datadir}/dwm-s/agents/skills
+cp -a skills/. %{buildroot}%{_datadir}/dwm-s/agents/skills/
 
 %files
 %license LICENSE
 %doc README.md
-%dir %{_datadir}/dwm-titus
-%dir %{_datadir}/dwm-titus/agents
-%{_datadir}/dwm-titus/agents/skills/
+%dir %{_datadir}/dwm-s
+%dir %{_datadir}/dwm-s/agents
+%{_datadir}/dwm-s/agents/skills/
 
 %changelog
 * Sun Oct 11 2026 Lef <me@lefteros.com> - 0.1.0-1
-- First package: dwm-titus and dwm-titus-debug skills
+- First package: dwm-s and dwm-s-debug skills

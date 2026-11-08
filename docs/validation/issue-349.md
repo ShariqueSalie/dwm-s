@@ -20,7 +20,7 @@ After:
 ![Solarized Light after the fix](issue-349/shell-after.png)
 
 All 15 shipped presets now have offline GTK 2/3/4 assets and a Qt palette.
-These are dwm-titus palette adaptations over GTK's built-in widgets, not copies
+These are dwm-s palette adaptations over GTK's built-in widgets, not copies
 of the upstream theme projects. Thunar with the installed Dracula palette:
 
 ![Thunar with Dracula](issue-349/thunar-dracula.png)

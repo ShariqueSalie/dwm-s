@@ -1,13 +1,13 @@
 ---
 title: Desktop Dependencies
-description: The packages and services behind each part of the dwm-titus desktop, including install profiles, build tools, and image-specific components.
+description: The packages and services behind each part of the dwm-s desktop, including install profiles, build tools, and image-specific components.
 navLabel: Dependencies
 eyebrow: Start here
 ---
 
 # Dependencies
 
-dwm-titus combines **dwm, Quickshell, and Xorg** with services for audio,
+dwm-s combines **dwm, Quickshell, and Xorg** with services for audio,
 networking, power, authentication, and application integration. Fedora is the
 only supported distribution; the 0.8 image target is Fedora 45 x86_64; Fedora 44 compatibility is retained.
 

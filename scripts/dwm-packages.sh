@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Shared package capability map for dwm-titus installers and diagnostics.
+# Shared package capability map for dwm-s installers and diagnostics.
 
 # Resolve the image override first, then installer detection, then host identity.
 dwm_fedora_release() {

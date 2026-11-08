@@ -30,10 +30,10 @@ def main():
         config = work / "config"
         data = work / "data"
         shutil.copytree(REPO / "config/quickshell", config / "quickshell")
-        (config / "dwm-titus").mkdir()
+        (config / "dwm-s").mkdir()
         for source in (REPO / "config").glob("*.toml"):
-            shutil.copy(source, config / "dwm-titus")
-        helpers = data / "dwm-titus/scripts"
+            shutil.copy(source, config / "dwm-s")
+        helpers = data / "dwm-s/scripts"
         helpers.mkdir(parents=True)
         # This fixture starts and owns its panel explicitly. Exposing the real
         # session hooks also starts host XDG apps (including light-locker) on

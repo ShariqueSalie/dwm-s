@@ -1,4 +1,4 @@
-# dwm-titus v0.7.0
+# dwm-s v0.7.0
 
 A Fedora-only X11 desktop built around dwm and a managed Quickshell shell.
 This release completes the planned desktop and image qualification phases.
@@ -15,7 +15,7 @@ This release completes the planned desktop and image qualification phases.
   corrected BIOS/UEFI Kickstart boot menus and verified embedded media checksums.
 - Recommended image provisioning includes Meslo icons and Gear Lever.
   Existing-system updates preserve user-owned configuration
-  (`${XDG_CONFIG_HOME:-$HOME/.config}/dwm-titus`, application configs, `.xinitrc`, `config.h`); the
+  (`${XDG_CONFIG_HOME:-$HOME/.config}/dwm-s`, application configs, `.xinitrc`, `config.h`); the
   managed Quickshell tree is replaced. Backup, retry and restoration
   procedures cover custom XDG locations and symlinked user paths.
 - Small-display Settings sizing and stale user-autostart recovery fixes found
@@ -28,10 +28,10 @@ for all changes since v0.6.1.
 
 | Asset | Use |
 | --- | --- |
-| `dwm-titus.iso` | Standard Fedora 44 x86_64 network installer. |
-| `dwm-titus-nvidia.iso` | NVIDIA variant with proprietary driver packages and boot configuration. |
-| `dwm-titus-0.7.0.tar.gz` | Portable x86_64 desktop bundle: dwm binary, configuration, helpers and assets. Fedora dependencies are still required; this is not a standalone installer. |
-| `dwm-titus-0.7.0-SHA256SUMS` | SHA-256 hashes for all three assets above. |
+| `dwm-s.iso` | Standard Fedora 44 x86_64 network installer. |
+| `dwm-s-nvidia.iso` | NVIDIA variant with proprietary driver packages and boot configuration. |
+| `dwm-s-0.7.0.tar.gz` | Portable x86_64 desktop bundle: dwm binary, configuration, helpers and assets. Fedora dependencies are still required; this is not a standalone installer. |
+| `dwm-s-0.7.0-SHA256SUMS` | SHA-256 hashes for all three assets above. |
 
 GitHub also provides source archives for the `v0.7.0` tag. Both ISOs are network
 installers based on Fedora Server Network Install 44-1.7 and require internet
@@ -40,7 +40,7 @@ access for packages. Use the standard image unless you need the NVIDIA variant.
 After downloading the checksum file and your selected assets into one directory:
 
 ```sh
-sha256sum --ignore-missing -c dwm-titus-0.7.0-SHA256SUMS
+sha256sum --ignore-missing -c dwm-s-0.7.0-SHA256SUMS
 ```
 
 Check that every asset you downloaded reports `OK`. The embedded media check is

@@ -50,12 +50,12 @@ scripts/build-dwm-fedora-system-image.py \
 scripts/build-dwm-fedora-installer-iso.sh \
   --input "$HOME/tmp/dwm-compressed/Fedora-Server-netinst-x86_64-45-1.4.iso" \
   --system-image "$HOME/tmp/dwm-compressed/artifacts/standard.tar.zst" \
-  --output "$HOME/tmp/dwm-compressed/artifacts/dwm-titus.iso" \
+  --output "$HOME/tmp/dwm-compressed/artifacts/dwm-s.iso" \
   --variant standard
 ```
 
 Repeat both commands with `--variant nvidia` and distinct `nvidia.tar.zst` and
-`dwm-titus-nvidia.iso` outputs. Standard and NVIDIA archives are not
+`dwm-s-nvidia.iso` outputs. Standard and NVIDIA archives are not
 interchangeable. Keep each archive's `.json` manifest beside it: the ISO builder
 checks the platform, variant, size and SHA-256 before embedding the payload.
 The ISO9660 volume ID must identify the same Fedora release as the payload.
@@ -89,7 +89,7 @@ its home, temporary sudo access, machine identifiers and storage configuration.
 The capture includes `/boot` and the EFI filesystem. The ISO supplies the offline account-setup helper, so installer fixes do not
 require downloading all factory packages again. The finished image contains
 system-wide fonts, themes and Gear Lever with its Flatpak runtimes, plus the
-RPM and Flatpak manifests under `/usr/share/dwm-titus-image/`.
+RPM and Flatpak manifests under `/usr/share/dwm-s-image/`.
 Offline account setup creates the standard XDG directories and seeds
 `Pictures/backgrounds` with the bundled default wallpaper. It does not need to
 download a wallpaper collection on the installed machine.

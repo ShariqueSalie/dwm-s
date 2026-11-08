@@ -27,7 +27,7 @@ fi
 # See systemd.journal-fields(7).
 readonly COREDUMP_MESSAGE_ID=fc2e22bc6ee647b6b90729ab34a250b1
 
-config_dir=${XDG_CONFIG_HOME:-$HOME/.config}/dwm-titus
+config_dir=${XDG_CONFIG_HOME:-$HOME/.config}/dwm-s
 crash_off_toggle=$config_dir/crash-notifications-off
 # Crash loops dump core again and again; announce each program once a window.
 dedupe_seconds=${DWM_CRASH_DEDUPE_SECONDS:-60}
@@ -50,7 +50,7 @@ announce() {
 		label="Set up AI diagnosis"
 	fi
 	(
-		action=$(notify-send --app-name=dwm-titus --urgency=critical \
+		action=$(notify-send --app-name=dwm-s --urgency=critical \
 			--action=diagnose="$label" --action=ignore=Ignore \
 			"Process crashed: $name" "Signal $signal. Click to diagnose with AI." 2>/dev/null) || exit 0
 		[[ $action == diagnose ]] || exit 0

@@ -27,7 +27,7 @@ weather alerting or background monitoring.
 The managed helper `dwm-weather status` only reads saved state.
 `dwm-weather fetch 'Salt Lake City' c` explicitly requests and saves a report
 (`f` selects Fahrenheit). State is private mode 0600 in
-`${XDG_CONFIG_HOME:-$HOME/.config}/dwm-titus/weather-state.json`. Unsafe or
+`${XDG_CONFIG_HOME:-$HOME/.config}/dwm-s/weather-state.json`. Unsafe or
 malformed state is preserved; move it aside to recover, then fetch again.
 A checked process protocol keeps failed output from replacing a valid report.
 No optional component is elevated and no package dependency is added.

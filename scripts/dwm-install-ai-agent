@@ -76,7 +76,7 @@ if [[ $(id -u) -eq 0 ]]; then
 	die "run as the desktop user, not as root"
 fi
 
-# Package installation is for Fedora only, like the rest of dwm-titus.
+# Package installation is for Fedora only, like the rest of dwm-s.
 os_id=''
 [[ -r /etc/os-release ]] && os_id=$(sed -n 's/^ID=//p' /etc/os-release | tr -d "\"'")
 [[ $os_id == fedora ]] || die "supported on Fedora only (found '${os_id:-unknown}')"

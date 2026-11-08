@@ -1,6 +1,6 @@
 # Desktop updates
 
-The first card in **Settings > System** checks the dwm-titus desktop against
+The first card in **Settings > System** checks the dwm-s desktop against
 official `main`. It covers the managed Quickshell configuration, dwm, installed
 commands, managed data, and cursor assets. Fedora package updates below it
 continue to manage the Quickshell application and other RPM packages.
@@ -124,7 +124,7 @@ files; expand Details to read the reason.
 
 The installed manifest fixes the installation roots. Updates can add files in
 the desktop-owned namespaces for dwm-prefixed commands/helpers, Dwm themes and
-Qt palettes, Capitaine cursors, and dwm-titus licenses. They can also remove
+Qt palettes, Capitaine cursors, and dwm-s licenses. They can also remove
 retired files that still match the old receipt. Unmanaged file collisions,
 unsafe paths and modes, and modified retired files stop the transaction before
 replacement. New cursor aliases must resolve to a regular payload file in the same directory;
@@ -170,13 +170,13 @@ Quickshell IPC before clearing restart guidance. The updater never logs you out.
 
 ## Records
 
-- `${PREFIX}/share/dwm-titus/desktop-install.json`: root-owned revision,
+- `${PREFIX}/share/dwm-s/desktop-install.json`: root-owned revision,
   system-file hashes, destinations, and dependency allowlist.
-- `${XDG_STATE_HOME:-$HOME/.local/state}/dwm-titus/desktop-update/installed.json`:
+- `${XDG_STATE_HOME:-$HOME/.local/state}/dwm-s/desktop-update/installed.json`:
   user-managed tree hashes and source/build configuration provenance.
 - `desktop-update/status.json` and `desktop-update/operations/<id>/`: operation
   status, preview, log, and recovery inventory under that same state directory.
-- `/var/lib/dwm-titus/desktop-updates/<id>/`: private root-owned system backup
+- `/var/lib/dwm-s/desktop-updates/<id>/`: private root-owned system backup
   and write-ahead installation journal.
 - `.dwm-update-<id>-*` beside each managed user directory: retained recovery
   copies, restricted to mode `0700`. They can contain Git history and private

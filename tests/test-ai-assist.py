@@ -30,7 +30,7 @@ class AgentTests(unittest.TestCase):
                     "XDG_RUNTIME_DIR": str(self.work / "runtime"), "DISPLAY": ":fixture",
                     "MISE_DATA_DIR": str(self.work / "mise"),
                     "PATH": str(self.bin) + ":/usr/bin:/bin", "ARGS": str(self.work / "args")}
-        self.source = self.work / "data/dwm-titus/config/agents/skills"
+        self.source = self.work / "data/dwm-s/config/agents/skills"
         shutil.copytree(REPO / "config/agents/skills", self.source)
 
     def run_helper(self, name, *args, check=True):
@@ -45,27 +45,27 @@ class AgentTests(unittest.TestCase):
     def test_preserve_existing_skill_entries(self):
         skills = self.home / ".agents/skills"
         skills.mkdir(parents=True)
-        custom = skills / "dwm-titus"
+        custom = skills / "dwm-s"
         custom.mkdir()
         (custom / "SKILL.md").write_text("personal skill")
-        link = skills / "dwm-titus-debug"
+        link = skills / "dwm-s-debug"
         link.symlink_to(self.work / "missing-user-target")
         self.run_helper("dwm-agent", "link-skills")
         self.run_helper("dwm-agent", "link-skills")
         self.assertEqual((custom / "SKILL.md").read_text(), "personal skill")
         self.assertEqual(os.readlink(link), str(self.work / "missing-user-target"))
-        self.assertTrue((self.home / ".claude/skills/dwm-titus/SKILL.md").is_file())
+        self.assertTrue((self.home / ".claude/skills/dwm-s/SKILL.md").is_file())
 
     def test_managed_system_link_follows_package_removal(self):
         skills = self.home / ".agents/skills"
         skills.mkdir(parents=True)
-        link = skills / "dwm-titus-debug"
-        link.symlink_to("/usr/share/dwm-titus/agents/skills/dwm-titus-debug")
+        link = skills / "dwm-s-debug"
+        link.symlink_to("/usr/share/dwm-s/agents/skills/dwm-s-debug")
         self.run_helper("dwm-agent", "link-skills")
-        expected = Path("/usr/share/dwm-titus/agents/skills")
+        expected = Path("/usr/share/dwm-s/agents/skills")
         if not expected.is_dir():
             expected = self.source
-        self.assertEqual(link.resolve(), expected / "dwm-titus-debug")
+        self.assertEqual(link.resolve(), expected / "dwm-s-debug")
 
     def test_launch_preserves_prompt_as_one_argument_and_approvals(self):
         capture = '#!/usr/bin/python3\nimport json,os,sys\nopen(os.environ["ARGS"], "w").write(json.dumps(sys.argv[1:]))\n'
@@ -105,7 +105,7 @@ class AgentTests(unittest.TestCase):
     def test_invalid_selection_cannot_write_configuration(self):
         result = self.run_helper("dwm-agent", "default", "../../bad", check=False)
         self.assertNotEqual(result.returncode, 0)
-        self.assertFalse((self.work / "config/dwm-titus/agent").exists())
+        self.assertFalse((self.work / "config/dwm-s/agent").exists())
 
     def test_mise_shims_follow_xdg_data_home(self):
         self.env.pop("MISE_DATA_DIR")
@@ -157,7 +157,7 @@ class AgentTests(unittest.TestCase):
 
     def test_ignore_classes_preserve_spaces_and_final_line(self):
         self.fake("notify-send", '#!/bin/sh\necho notified > "$ARGS"\n')
-        config = self.work / "config/dwm-titus"
+        config = self.work / "config/dwm-s"
         config.mkdir(parents=True)
         (config / "hang-ignore").write_text("  VirtualBox Machine  # comment\nsteam")
         for index, name in enumerate(("VirtualBox Machine", "steam")):
@@ -393,7 +393,7 @@ int main(void) {
         self.fake("codex", '#!/bin/sh\necho launched\n')
         self.run_helper("dwm-agent", "default", "codex")
         self.run_helper("dwm-agent", "link-skills")
-        missing = self.home / ".hermes/skills/dwm-titus"
+        missing = self.home / ".hermes/skills/dwm-s"
         missing.unlink()
         self.assertIn("skills\tmissing", self.run_helper("dwm-agent", "status").stdout)
         self.assertIn("launched", self.run_helper("dwm-agent", "--inline").stdout)

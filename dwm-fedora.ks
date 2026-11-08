@@ -1,7 +1,7 @@
-# Fedora mutable installer profile for dwm-titus.
+# Fedora mutable installer profile for dwm-s.
 #
 # Build an installer ISO with scripts/build-dwm-fedora-installer-iso.sh so the
-# local checkout is available at /run/install/repo/dwm-titus during install.
+# local checkout is available at /run/install/repo/dwm-s during install.
 # Drive selection, erasure confirmation, locale, keyboard layout, timezone,
 # hostname, root password, and user creation remain in the Anaconda UI.
 
@@ -26,16 +26,16 @@ repo --name="rpmfusion-nonfree-updates" --metalink="https://mirrors.rpmfusion.or
 repo --name="rpmfusion-nonfree-tainted" --metalink="https://mirrors.rpmfusion.org/metalink?repo=nonfree-fedora-tainted-$releasever&arch=$basearch" --install
 repo --name="brave-browser" --baseurl="https://brave-browser-rpm-release.s3.brave.com/$basearch" --install
 repo --name="mwt-packages" --baseurl="https://mirror.mwt.me/shiftkey-desktop/rpm" --install
-%include /tmp/dwm-titus-gaming-repo
+%include /tmp/dwm-s-gaming-repo
 
 bootloader --location=mbr
 services --enabled=NetworkManager,systemd-timesyncd
 
 %pre --interpreter=/bin/sh
-gaming_repo=/tmp/dwm-titus-gaming-repo
-gaming_packages=/tmp/dwm-titus-gaming-packages
-path_packages=/tmp/dwm-titus-path-packages
-legacy_themes=/tmp/dwm-titus-legacy-theme-packages
+gaming_repo=/tmp/dwm-s-gaming-repo
+gaming_packages=/tmp/dwm-s-gaming-packages
+path_packages=/tmp/dwm-s-path-packages
+legacy_themes=/tmp/dwm-s-legacy-theme-packages
 : >"$legacy_themes"
 : >"$gaming_repo"
 : >"$path_packages"
@@ -110,7 +110,7 @@ sxiv
 desktop-file-utils
 brave-origin
 flatpak
-%include /tmp/dwm-titus-gaming-packages
+%include /tmp/dwm-s-gaming-packages
 quickshell
 bubblewrap
 libseccomp
@@ -159,7 +159,7 @@ adwaita-icon-theme
 papirus-icon-theme
 arc-theme
 adw-gtk3-theme
-%include /tmp/dwm-titus-legacy-theme-packages
+%include /tmp/dwm-s-legacy-theme-packages
 yaru-gtk3-theme
 yaru-gtk4-theme
 bluebird-gtk3-theme
@@ -173,7 +173,7 @@ wpa_supplicant
 wireless-regdb
 nm-connection-editor
 rsync
-%include /tmp/dwm-titus-path-packages
+%include /tmp/dwm-s-path-packages
 Thunar
 gvfs
 gvfs-smb
@@ -186,19 +186,19 @@ gnome-keyring
 gnome-keyring-pam
 %end
 
-%post --nochroot --erroronfail --log=/mnt/sysimage/root/dwm-titus-copy.log
+%post --nochroot --erroronfail --log=/mnt/sysimage/root/dwm-s-copy.log
 set -eu
 
 install -d -m 0755 /mnt/sysimage/opt
-rm -rf /mnt/sysimage/opt/dwm-titus
-cp -a /run/install/repo/dwm-titus /mnt/sysimage/opt/dwm-titus
+rm -rf /mnt/sysimage/opt/dwm-s
+cp -a /run/install/repo/dwm-s /mnt/sysimage/opt/dwm-s
 %end
 
-%post --erroronfail --log=/root/dwm-titus-kickstart.log
+%post --erroronfail --log=/root/dwm-s-kickstart.log
 set -eu
 
-repo_dir=/opt/dwm-titus
-install_sudoers=/etc/sudoers.d/90-dwm-titus-install
+repo_dir=/opt/dwm-s
+install_sudoers=/etc/sudoers.d/90-dwm-s-install
 # Never leave installer-only authorization behind after a failed setup.
 trap 'rm -f "$install_sudoers"' EXIT
 trap 'exit 1' HUP INT TERM
@@ -221,7 +221,7 @@ done
 
 target_home=$(getent passwd "$target_user" | cut -d: -f6)
 target_group=$(id -gn "$target_user")
-target_repo_dir="$target_home/.local/share/dwm-titus"
+target_repo_dir="$target_home/.local/share/dwm-s"
 
 for xdg_dir in \
 	"$target_home/.local" \
@@ -247,7 +247,7 @@ printf '%s ALL=(ALL) NOPASSWD: ALL\n' "$target_user" > "$install_sudoers"
 # and Gear Lever setup. Do not query the installer's host AccountsService from
 # this target chroot: it cannot resolve the newly created target user. This
 # private provisioning bus does not change the installed session's policy.
-su - "$target_user" -c 'cd "$HOME/.local/share/dwm-titus" && dbus-run-session -- sh -c "export DBUS_SYSTEM_BUS_ADDRESS=\$DBUS_SESSION_BUS_ADDRESS; exec ./install.sh --non-interactive --profile recommended"'
+su - "$target_user" -c 'cd "$HOME/.local/share/dwm-s" && dbus-run-session -- sh -c "export DBUS_SYSTEM_BUS_ADDRESS=\$DBUS_SESSION_BUS_ADDRESS; exec ./install.sh --non-interactive --profile recommended"'
 
 if getent group gamemode >/dev/null 2>&1; then
 	usermod -aG gamemode "$target_user"
@@ -266,6 +266,6 @@ systemctl enable power-profiles-daemon.service
 systemctl enable lightdm.service
 systemctl set-default graphical.target
 # Arm only fresh image installations, never existing-system source updates.
-install -d -m 0755 /var/lib/dwm-titus/initial-update
-printf '{ "variant": "standard", "schema": 1 }\n' > /var/lib/dwm-titus/initial-update/pending.json
+install -d -m 0755 /var/lib/dwm-s/initial-update
+printf '{ "variant": "standard", "schema": 1 }\n' > /var/lib/dwm-s/initial-update/pending.json
 %end

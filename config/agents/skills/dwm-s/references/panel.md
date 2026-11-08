@@ -1,4 +1,4 @@
-# dwm-titus panel (Quickshell)
+# dwm-s panel (Quickshell)
 
 The bar, launcher, notifications, Control Center, Settings, network,
 Bluetooth, power menu, and tray are one Quickshell instance loaded from
@@ -10,7 +10,7 @@ Bluetooth, power menu, and tray are one Quickshell instance loaded from
   `dev-sync-install.sh`. Edits there are lost. Tell the user this before any
   QML change.
 - The supported user customization is per-widget on/off, stored in
-  `~/.config/dwm-titus/panel-widgets.conf`:
+  `~/.config/dwm-s/panel-widgets.conf`:
 
   ```bash
   dwm-panel-settings status
@@ -20,7 +20,7 @@ Bluetooth, power menu, and tray are one Quickshell instance loaded from
 
 - There is no supported way to change panel layout, widget order, or add
   custom widgets. Changes like that are upstream work in
-  `config/quickshell/` of the dwm-titus repository; use `$quickshell` for the
+  `config/quickshell/` of the dwm-s repository; use `$quickshell` for the
   QML and follow that repository's `AGENTS.md`.
 
 ## IPC

@@ -1,4 +1,4 @@
-# DWM-Titus compressed installers - 2026-09-11
+# DWM-S compressed installers - 2026-09-11
 
 This is a historical qualification record. Those ISO objects have been retired;
 use the [current downloads](../README.md#fedora-iso) and
@@ -12,8 +12,8 @@ The installed systems remain ordinary, updatable Fedora installations.
 
 | Image | Size | Verification |
 | --- | --- | --- |
-| dwm-titus-fedora44-x86_64-20260911.iso | 3.39 GiB | Offline UEFI and BIOS installation, LVM first boot, LightDM and desktop |
-| dwm-titus-fedora44-x86_64-20260911-nvidia.iso | 3.96 GiB | Offline UEFI installation and desktop using a virtual GPU; physical NVIDIA validation outstanding |
+| dwm-s-fedora44-x86_64-20260911.iso | 3.39 GiB | Offline UEFI and BIOS installation, LVM first boot, LightDM and desktop |
+| dwm-s-fedora44-x86_64-20260911-nvidia.iso | 3.96 GiB | Offline UEFI installation and desktop using a virtual GPU; physical NVIDIA validation outstanding |
 
 Both variants reached dwm and Quickshell with a new administrator account,
 Meslo fonts, the default wallpaper and Gear Lever running offline. The standard
@@ -68,8 +68,8 @@ remaining actionable code findings, including the final offline user-setup fix.
 
 ## Exact artifacts and local gates
 
-- `dwm-titus-fedora44-x86_64-20260911.iso`: 3635675136 bytes; SHA-256 `fe8340bb9ce6a1731e21f88e39efe9ec72d3593d1e797817a96a4d316f8d7763`.
-- `dwm-titus-fedora44-x86_64-20260911-nvidia.iso`: 4252237824 bytes; SHA-256 `cedd84e952e2b96e713d211e95530fdc6960dd7a1a15d170231f3c8585f59e5e`.
+- `dwm-s-fedora44-x86_64-20260911.iso`: 3635675136 bytes; SHA-256 `fe8340bb9ce6a1731e21f88e39efe9ec72d3593d1e797817a96a4d316f8d7763`.
+- `dwm-s-fedora44-x86_64-20260911-nvidia.iso`: 4252237824 bytes; SHA-256 `cedd84e952e2b96e713d211e95530fdc6960dd7a1a15d170231f3c8585f59e5e`.
 
 Fedora Server netinst base SHA-256: `ae20c06bea746913cadea7d80463e13f4bf55bee4df2918111c921c674b70283`.
 

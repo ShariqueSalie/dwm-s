@@ -1,11 +1,11 @@
-# dwm-titus session, login, and lock
+# dwm-s session, login, and lock
 
 ## Startup chain
 
 1. LightDM starts `/usr/share/xsessions/dwm.desktop` (`/usr/local/bin/dwm`)
    through the Fedora Xsession wrapper; stdout and stderr go to
    `~/.xsession-errors`. `~/.xinitrc` is only for `startx`.
-2. dwm runs `~/.local/share/dwm-titus/scripts/autostart.sh` on start and
+2. dwm runs `~/.local/share/dwm-s/scripts/autostart.sh` on start and
    `autostop.sh` on exit.
 3. autostart applies power and input settings, theme env, xsettingsd, starts
    Quickshell, then starts `wm-graphical-session.service` (user unit), which
@@ -30,24 +30,24 @@
   `/etc/xdg`. With no file, picom runs on defaults. To seed a user copy, read
   `revision` from `dwm-settings-picom status` (JSON) and pass it to
   `dwm-settings-picom copy-config <revision>`; then `reload` or `restart`.
-  Log: `~/.local/state/dwm-titus/picom/session.log`.
+  Log: `~/.local/state/dwm-s/picom/session.log`.
 
 ## Display and input
 
 - Session layouts: `dwm-display-profile list|apply <name>|template`; profiles
-  in `~/.config/dwm-titus/display-profiles/`.
+  in `~/.config/dwm-s/display-profiles/`.
 - Persistent Xorg layout (root): `dwm-display-setup wizard`, writes
-  `/etc/X11/xorg.conf.d/90-dwm-titus-display.conf`; undo with
+  `/etc/X11/xorg.conf.d/90-dwm-s-display.conf`; undo with
   `dwm-display-setup rollback`.
 - Input devices: Settings > Input, backed by `dwm-settings-input` and
-  `~/.config/dwm-titus/input-settings.conf`.
+  `~/.config/dwm-s/input-settings.conf`.
 
 ## Lock, idle, and DPMS
 
 - `dwm-lock` locks now (light-locker first, then fallbacks). `dwm-lock-watch`
   turns logind Lock requests (`loginctl lock-session`) into `dwm-lock`.
 - Idle lock and DPMS are off by default. Settings live in
-  `~/.config/dwm-titus/power.conf`; each setter writes the file and applies it:
+  `~/.config/dwm-s/power.conf`; each setter writes the file and applies it:
 
   ```bash
   dwm-quickshell-controlcenter power-status
@@ -64,10 +64,10 @@
 
 - Installed by the repository's `lightdm/Makefile`: `/etc/lightdm/lightdm.conf`
   (generated), `/etc/lightdm/slick-greeter.conf`, and images in
-  `/usr/share/pixmaps/dwm-titus*`.
+  `/usr/share/pixmaps/dwm-s*`.
 - To change the background or theme, edit `/etc/lightdm/slick-greeter.conf`
   (`background=`, `theme-name=`, `font-name=`) with root after a backup. Put a
-  custom image outside `/usr/share/pixmaps/dwm-titus.jpg`. `install.sh` runs
+  custom image outside `/usr/share/pixmaps/dwm-s.jpg`. `install.sh` runs
   `make -C lightdm install`, which overwrites `slick-greeter.conf` and that
   image without a backup; tell the user that edits must be re-applied after a
   reinstall. Restore SELinux labels with `restorecon` on changed

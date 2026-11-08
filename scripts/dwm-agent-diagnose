@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Open the default agent on a crashed process, a window that stopped
 # responding, or a window the user clicks. The method is in the
-# dwm-titus-debug skill; this only gathers the facts and points at it.
+# dwm-s-debug skill; this only gathers the facts and points at it.
 set -euo pipefail
 
-data_dir=${XDG_DATA_HOME:-$HOME/.local/share}/dwm-titus
-skill=$data_dir/config/agents/skills/dwm-titus-debug/SKILL.md
-system_skill=/usr/share/dwm-titus/agents/skills/dwm-titus-debug/SKILL.md
+data_dir=${XDG_DATA_HOME:-$HOME/.local/share}/dwm-s
+skill=$data_dir/config/agents/skills/dwm-s-debug/SKILL.md
+system_skill=/usr/share/dwm-s/agents/skills/dwm-s-debug/SKILL.md
 [[ -f $system_skill ]] && skill=$system_skill
 
 usage() {
@@ -64,7 +64,7 @@ Start by collecting the evidence yourself; I opened this from a notification
 and may not be watching. Ask me only what the evidence cannot answer, after
 you have looked.
 
-Use the dwm-titus-debug skill: it covers what evidence to collect, how to
+Use the dwm-s-debug skill: it covers what evidence to collect, how to
 report what is proven versus suspected, and when to suggest reporting a bug
 upstream. If your harness has no skill mechanism, read and follow:
 
@@ -81,7 +81,7 @@ crash_prompt() {
 	timestamp=$(number "${5:-}")
 	boot=$(ident "${6:-}")
 	cat <<EOF
-A process crashed on this dwm-titus desktop and I want to know why.
+A process crashed on this dwm-s desktop and I want to know why.
 
 What systemd-coredump recorded:
   process: ${comm:-unknown}
@@ -104,7 +104,7 @@ hang_prompt() {
 	[[ $pid =~ ^0+$ ]] && pid=
 	class=$(ident "${3:-}")
 	cat <<EOF
-A window on this dwm-titus desktop stopped responding and I want to know why.
+A window on this dwm-s desktop stopped responding and I want to know why.
 dwm pings windows with _NET_WM_PING; this one stopped answering.
 
   window: ${window:-unknown}
@@ -123,13 +123,13 @@ EOF
 window_prompt() {
 	local window pid class
 	command -v xdotool >/dev/null 2>&1 || die "xdotool is required"
-	notify-send -a dwm-titus "Diagnose a window" "Click the window to diagnose" 2>/dev/null || true
+	notify-send -a dwm-s "Diagnose a window" "Click the window to diagnose" 2>/dev/null || true
 	window=$(xdotool selectwindow) || die "no window selected"
 	pid=$(xdotool getwindowpid "$window" 2>/dev/null) || pid=
 	class=$(xdotool getwindowclassname "$window" 2>/dev/null) || class=''
 	window=$(printf '0x%x' "$window")
 	cat <<EOF
-I picked this window on my dwm-titus desktop because something is wrong with
+I picked this window on my dwm-s desktop because something is wrong with
 it. Ask me what I see if it is not clear from the evidence.
 
   window: $(window_id "$window")

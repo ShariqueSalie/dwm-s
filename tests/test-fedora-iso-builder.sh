@@ -110,7 +110,7 @@ while (($# > 0)); do
 		/dwm-fedora.ks) ks_map=${2:-} ;;
 		/EFI/BOOT/grub.cfg) grub_map=${2:-} ;;
 		/boot/grub2/grub.cfg) bios_grub_map=${2:-} ;;
-		/dwm-titus) payload_map=${2:-} ;;
+		/dwm-s) payload_map=${2:-} ;;
 		/images/product.img) product_map=${2:-} ;;
 		/images/dwm-rootfs.tar) rootfs_map=${2:-} ;;
 		esac
@@ -209,8 +209,8 @@ chmod +x "$work/bin/mcopy"
 export DWM_TEST_ESP_MENU="$work/esp-menu"
 
 input_iso="$work/Fedora-Server-netinst.iso"
-standard_iso="$work/dwm-titus.iso"
-nvidia_iso="$work/dwm-titus-nvidia.iso"
+standard_iso="$work/dwm-s.iso"
+nvidia_iso="$work/dwm-s-nvidia.iso"
 touch "$input_iso"
 
 run_builder() {
@@ -360,7 +360,7 @@ for failure in implant check; do
 	[[ $failure != check ]] || expected_status=42
 	[[ $status == "$expected_status" ]]
 	[[ $(cat "$standard_iso") == 'previous image' ]]
-	if compgen -G "$work/.dwm-titus.iso.tmp.*" >/dev/null; then
+	if compgen -G "$work/.dwm-s.iso.tmp.*" >/dev/null; then
 		printf 'failed media check left a temporary output\n' >&2
 		exit 1
 	fi
@@ -518,16 +518,16 @@ profile = (repo / 'dwm-fedora-image.ks').read_text()
 body = profile.split('\nset -euo pipefail\n', 1)[1].split('\n%end', 1)[0]
 for modern in (False, True):
     root = work / ('modern-root' if modern else 'legacy-root')
-    scripts = root / 'usr/share/dwm-titus-image/scripts'
+    scripts = root / 'usr/share/dwm-s-image/scripts'
     (scripts / 'image').mkdir(parents=True)
     (root / 'etc').mkdir()
-    (root / 'etc/dwm-titus-image').touch()
+    (root / 'etc/dwm-s-image').touch()
     for helper in ('seed-apps.sh', 'seed-terminal.sh'):
         (scripts / 'image' / helper).write_text('legacy helper\n')
     shared = scripts / 'seed-default-apps.sh'
     if modern:
         shared.write_text('old shared helper\n')
-    test_body = body.replace('/mnt/sysimage', str(root)).replace('/run/install/repo/dwm-titus', str(repo))
+    test_body = body.replace('/mnt/sysimage', str(root)).replace('/run/install/repo/dwm-s', str(repo))
     test_body = test_body.replace('-o 0 -g 0', f'-o {os.getuid()} -g {os.getgid()}')
     subprocess.run(['bash', '-ec', 'set -euo pipefail\n' + test_body], check=True)
     assert (scripts / 'image/finish-install.sh').read_bytes() == (repo / 'scripts/image/finish-install.sh').read_bytes()

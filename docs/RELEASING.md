@@ -15,7 +15,7 @@ use `make native` for published binaries.
 7. Run `npm --prefix docs ci` and `npm --prefix docs run build` when published
    documentation changed.
 8. Run `scripts/run-tests make release-check` and confirm the artifact is named
-   `release/dwm-titus-VERSION.tar.gz`.
+   `release/dwm-s-VERSION.tar.gz`.
 9. Record the tested Fedora release, architectures, X11 environments, known
    limitations, and SHA-256 checksum in the release notes.
 10. Tag the release only after all applicable `SPEC.md` acceptance criteria
@@ -31,7 +31,7 @@ use `/tmp` for ISO or VM qualification.
 To create the GitHub release and bump to the next minor development version:
 
 ```sh
-scripts/dwm-titus-release --version v0.6.1 --iso ~/Downloads/dwm-titus.iso --notes RELEASE_NOTES.md
+scripts/dwm-s-release --version v0.6.1 --iso ~/Downloads/dwm-s.iso --notes RELEASE_NOTES.md
 ```
 
 After publishing `v0.6.1`, the script updates `config.mk` to `VERSION = 0.7.0`
@@ -40,15 +40,15 @@ unless `--no-bump` is provided.
 The helper validates and hashes local artifacts before it creates a remote tag
 or release. `--version` confirms the version already committed in `config.mk`;
 it does not rewrite release source. The supplied ISO is preserved and staged as
-`release/dwm-titus-VERSION.iso` before upload. Add `--iso-variant nvidia` to
-stage `release/dwm-titus-VERSION-nvidia.iso` for the NVIDIA image. The variant
+`release/dwm-s-VERSION.iso` before upload. Add `--iso-variant nvidia` to
+stage `release/dwm-s-VERSION-nvidia.iso` for the NVIDIA image. The variant
 option names the asset; it does not inspect or change the image contents.
 When adding the other variant to an existing release, the helper downloads and
 hashes the retained remote ISO as well, so the shared manifest covers both
 variants even from a fresh checkout. It aborts if that download fails; local
 old images or checksum manifests are not used as substitutes.
 The release checksum file uses these downloadable basenames and can be checked
-with `sha256sum --ignore-missing -c dwm-titus-VERSION-SHA256SUMS` beside the
+with `sha256sum --ignore-missing -c dwm-s-VERSION-SHA256SUMS` beside the
 assets. Confirm that the manifest contains the intended ISO basename and that
 the command reports `OK` for that ISO. `--dry-run` prints the copy, hashing and upload commands without writing
 artifacts or contacting GitHub.
@@ -147,7 +147,7 @@ Build the regular Fedora installer ISO from a Fedora netinst ISO:
 ```sh
 scripts/build-dwm-fedora-installer-iso.sh \
   --input "$HOME/tmp/dwm-release/Fedora-Server-netinst-x86_64-45-1.4.iso" \
-  --output release/dwm-titus.iso
+  --output release/dwm-s.iso
 ```
 
 Build the NVIDIA installer ISO:
@@ -155,7 +155,7 @@ Build the NVIDIA installer ISO:
 ```sh
 scripts/build-dwm-fedora-installer-iso.sh \
   --input "$HOME/tmp/dwm-release/Fedora-Server-netinst-x86_64-45-1.4.iso" \
-  --output release/dwm-titus-nvidia.iso \
+  --output release/dwm-s-nvidia.iso \
   --variant nvidia
 ```
 
@@ -179,16 +179,16 @@ it cannot replace the required boot and first-session VM qualification.
 
 GitHub release ISO assets include the release version in the filename, so saved
 images from different releases remain distinguishable. For example, the helper
-uploads `dwm-titus-0.7.2.iso` for a standard image, or
-`dwm-titus-0.7.2-nvidia.iso` with `--iso-variant nvidia`, even when the supplied
+uploads `dwm-s-0.7.2.iso` for a standard image, or
+`dwm-s-0.7.2-nvidia.iso` with `--iso-variant nvidia`, even when the supplied
 local image has a legacy unversioned name. Download these assets from the
 corresponding GitHub release when retaining a particular release locally.
 Existing historical release assets are not renamed by this change.
 
 ## Stable Cloudflare download names
 
-Publish the standard and NVIDIA images at `iso/dwm-titus.iso` and
-`iso/dwm-titus-nvidia.iso`, with matching `iso/SHA256SUMS`,
+Publish the standard and NVIDIA images at `iso/dwm-s.iso` and
+`iso/dwm-s-nvidia.iso`, with matching `iso/SHA256SUMS`,
 `iso/BUILD-MANIFEST.json` and `iso/BUILD-NOTES.md`. Keep versions, sizes, hashes
 and qualification evidence in the manifest and build notes instead of renaming
 the public URLs. These stable mirror names are separate from the versioned

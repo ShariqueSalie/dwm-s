@@ -13,7 +13,7 @@ with tempfile.TemporaryDirectory(dir=os.environ["TMPDIR"]) as directory:
     work = Path(directory)
     env = {**os.environ, "HOME": str(work / "home"), "XDG_CONFIG_HOME": str(work / "config"),
         "XDG_DATA_HOME": str(work / "data"), "XDG_STATE_HOME": str(work / "state"), "XDG_CACHE_HOME": str(work / "cache")}
-    config = work / "config/dwm-titus"
+    config = work / "config/dwm-s"
     config.mkdir(parents=True)
     for name in ("hotkeys.toml", "themes.toml", "window-rules.toml"):
         shutil.copy(repo / "config" / name, config / name)

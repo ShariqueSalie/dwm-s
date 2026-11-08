@@ -159,7 +159,7 @@ for ks in "$standard_ks" "$nvidia_ks"; do
 from pathlib import Path
 import sys
 text = Path(sys.argv[1]).read_text().split('%pre --interpreter=/bin/sh\n', 1)[1].split('\n%end', 1)[0]
-text = text.replace('/tmp/dwm-titus-', '$DWM_TEST_IMAGE_OUTPUT/')
+text = text.replace('/tmp/dwm-s-', '$DWM_TEST_IMAGE_OUTPUT/')
 text = text.replace('. /etc/os-release', '. "$DWM_TEST_IMAGE_OS_RELEASE"')
 Path(sys.argv[2]).write_text(text)
 PYPRE
@@ -213,8 +213,8 @@ SH
 	fi
 	# shellcheck disable=SC2016 # Match the literal deferred expansion in Kickstart.
 	grep -Fq 'export DBUS_SYSTEM_BUS_ADDRESS=\$DBUS_SESSION_BUS_ADDRESS; exec ./install.sh' "$ks"
-	grep -Fq '%include /tmp/dwm-titus-gaming-repo' "$ks"
-	grep -Fq '%include /tmp/dwm-titus-gaming-packages' "$ks"
+	grep -Fq '%include /tmp/dwm-s-gaming-repo' "$ks"
+	grep -Fq '%include /tmp/dwm-s-gaming-packages' "$ks"
 	# shellcheck disable=SC2016
 	grep -Fq 'fedora-$releasever-$basearch/' "$ks"
 	# shellcheck disable=SC2016

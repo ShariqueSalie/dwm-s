@@ -1,4 +1,4 @@
-# Use terminal palette colors so the prompt follows the dwm-titus theme.
+# Use terminal palette colors so the prompt follows the dwm-s theme.
 add_newline = true
 format = "$directory$git_branch$git_status$character"
 

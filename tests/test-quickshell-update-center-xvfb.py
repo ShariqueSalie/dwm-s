@@ -47,7 +47,7 @@ providers = """[
      providerId: "fedora", action: "update", name: "Package with a deliberately long name " + index,
      current: "1." + index, available: "2." + index, packageId: "package-" + index,
      scope: "system", url: "https://example.test/package/" + index }; }) },
- { id: "dwm-titus", name: "DWM-Titus", status: "available", pending: 0, managed: 1,
+ { id: "dwm-s", name: "DWM-S", status: "available", pending: 0, managed: 1,
    freshness: "fresh", lastSuccess: 90, updateAvailable: false, errorCode: "", detail: "", restart: "none", items: [] },
  { id: "flatpak", name: "Flatpak", status: "partial", pending: 1, managed: 12,
    freshness: "stale", lastSuccess: 4000, updateAvailable: true, errorCode: "network", detail: "Using cached results",
@@ -272,7 +272,7 @@ ShellRoot {{
         }}
         function probeBlockedUpdate(): string {{
             const original = probeRow.provider;
-            probeRow.provider = {{ id: "dwm-titus", name: "DWM-Titus", status: "restricted", pending: 1, managed: 1,
+            probeRow.provider = {{ id: "dwm-s", name: "DWM-S", status: "restricted", pending: 1, managed: 1,
                 freshness: "fresh", lastSuccess: 30, updateAvailable: false, errorCode: "",
                 detail: "Managed system directories are missing. Run the source installer to restore them.", restart: "none", items: [] }};
             const label = probeRow.statusLabel();
@@ -345,7 +345,7 @@ with tempfile.TemporaryDirectory(prefix="update-center-xvfb-", dir=tmp_root) as 
         "QT_QPA_PLATFORM": "xcb",
         "QT_QPA_PLATFORMTHEME": "",
     }
-    rules = config_home / "dwm-titus"
+    rules = config_home / "dwm-s"
     rules.mkdir()
     for name in ("window-rules.toml", "hotkeys.toml", "themes.toml"):
         shutil.copy2(REPO / "config" / name, rules / name)

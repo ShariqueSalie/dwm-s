@@ -1,12 +1,12 @@
-# dwm-titus-ai-skills RPM
+# dwm-s-ai-skills RPM
 
-Sample package for shipping the dwm-titus agent skills on their own, so they
+Sample package for shipping the dwm-s agent skills on their own, so they
 can be updated with dnf without updating the whole desktop.
 
-- Installs to `/usr/share/dwm-titus/agents/skills/`.
+- Installs to `/usr/share/dwm-s/agents/skills/`.
 - `dwm-agent link-skills` (run by `make install-user` and `dwm-agent setup`)
   links each skill into `~/.agents/skills`, preferring this system copy over
-  the copy in `~/.local/share/dwm-titus/config/agents/skills`. Codex,
+  the copy in `~/.local/share/dwm-s/config/agents/skills`. Codex,
   OpenCode and Gemini CLI read skills from there.
 - After installing or removing the package, the links are switched the next
   time `dwm-agent` opens an agent, or right away with `dwm-agent link-skills`.
@@ -24,8 +24,8 @@ build or by desktop installation.
 ## COPR
 
 1. Publish a release tarball that contains `skills/`, `LICENSE` and
-   `README.md` under `dwm-titus-ai-skills-<version>/` (what `build.sh` builds),
+   `README.md` under `dwm-s-ai-skills-<version>/` (what `build.sh` builds),
    and point `Source0` at its URL.
-2. `copr-cli create dwm-titus --chroot fedora-44-x86_64`
-3. `copr-cli build dwm-titus release/dwm-titus-ai-skills-<version>-1.fc44.src.rpm`
-4. Users: `sudo dnf copr enable <owner>/dwm-titus && sudo dnf install dwm-titus-ai-skills`
+2. `copr-cli create dwm-s --chroot fedora-44-x86_64`
+3. `copr-cli build dwm-s release/dwm-s-ai-skills-<version>-1.fc44.src.rpm`
+4. Users: `sudo dnf copr enable <owner>/dwm-s && sudo dnf install dwm-s-ai-skills`

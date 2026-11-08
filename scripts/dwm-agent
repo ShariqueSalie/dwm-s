@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 # Pick, install, log in to, and launch the AI coding agent used for
-# "Diagnose with AI". The diagnosis method itself lives in the dwm-titus-debug
+# "Diagnose with AI". The diagnosis method itself lives in the dwm-s-debug
 # skill so every agent follows the same steps.
 set -euo pipefail
 
 AGENTS=(codex opencode gemini claude cursor-agent hermes)
 
-config_dir=${XDG_CONFIG_HOME:-$HOME/.config}/dwm-titus
-data_dir=${XDG_DATA_HOME:-$HOME/.local/share}/dwm-titus
+config_dir=${XDG_CONFIG_HOME:-$HOME/.config}/dwm-s
+data_dir=${XDG_DATA_HOME:-$HOME/.local/share}/dwm-s
 agent_file=$config_dir/agent
 hang_toggle=$config_dir/hang-detection
 crash_off_toggle=$config_dir/crash-notifications-off
-# The dwm-titus-ai-skills package can ship newer skills than the desktop.
+# The dwm-s-ai-skills package can ship newer skills than the desktop.
 skills_source=$data_dir/config/agents/skills
-[[ -d /usr/share/dwm-titus/agents/skills ]] && skills_source=/usr/share/dwm-titus/agents/skills
+[[ -d /usr/share/dwm-s/agents/skills ]] && skills_source=/usr/share/dwm-s/agents/skills
 # Codex, OpenCode and Gemini CLI read skills from ~/.agents/skills; Claude
 # Code, Cursor CLI and Hermes mainly from their own folders.
 skills_target=$HOME/.agents/skills
@@ -199,7 +199,7 @@ link_skills() {
 			target=$dir/$name
 			if [[ -L $target ]]; then
 				case $(readlink -- "$target") in
-				"$data_dir/config/agents/skills/$name" | "/usr/share/dwm-titus/agents/skills/$name")
+				"$data_dir/config/agents/skills/$name" | "/usr/share/dwm-s/agents/skills/$name")
 					ln -sfn "${skill%/}" "$target"
 					continue
 					;;
@@ -218,13 +218,13 @@ skills_linked() {
 	local dir name target destination
 	[[ -d $skills_source ]] || return 1
 	for dir in "${skills_targets[@]}"; do
-		for name in dwm-titus dwm-titus-debug; do
+		for name in dwm-s dwm-s-debug; do
 			target=$dir/$name
 			[[ -e $target || -L $target ]] || return 1
 			if [[ -L $target ]]; then
 				destination=$(readlink -- "$target")
 				case $destination in
-				"$data_dir/config/agents/skills/$name" | "/usr/share/dwm-titus/agents/skills/$name")
+				"$data_dir/config/agents/skills/$name" | "/usr/share/dwm-s/agents/skills/$name")
 					[[ -f $target/SKILL.md && $destination == "$skills_source/$name" ]] || return 1
 					;;
 				esac
@@ -249,7 +249,7 @@ setup() {
 	local agent=${1:-} choice i state crash_default=yes hang_default=no
 	printf 'Diagnose with AI: setup\n\n'
 	if [[ -z $agent ]]; then
-		printf 'Which agent should dwm-titus open when you ask for a diagnosis?\n'
+		printf 'Which agent should dwm-s open when you ask for a diagnosis?\n'
 		for i in "${!AGENTS[@]}"; do
 			agent=${AGENTS[$i]}
 			state='not installed'
@@ -294,7 +294,7 @@ notification with Diagnose with AI / Force quit / Wait.
 
 It can be wrong: games, virtual machines and apps that are busy on purpose
 (big exports, compiles) can show up as not responding when they are fine.
-You can turn it off again in Settings or with: rm ~/.config/dwm-titus/hang-detection
+You can turn it off again in Settings or with: rm ~/.config/dwm-s/hang-detection
 EOF
 	[[ -e $hang_toggle ]] && hang_default=yes
 	if confirm "Turn on hang detection?" "$hang_default"; then
