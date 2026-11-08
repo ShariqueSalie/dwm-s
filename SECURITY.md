@@ -8,8 +8,10 @@ asked to upgrade before receiving a fix.
 
 ## Reporting a Vulnerability
 
-Do not open a public issue for a suspected vulnerability. Email
-`contact@christitus.com` with the subject `dwm-s security report`.
+Do not open a public issue, pull request, or discussion for a suspected
+vulnerability. Report it privately through GitHub Security Advisories:
+
+https://github.com/ShariqueSalie/dwm-s/security/advisories/new
 
 Include affected versions or commits, reproduction steps, impact, relevant
 logs, and any proposed mitigation. Do not include credentials, private keys,
@@ -17,7 +19,7 @@ tokens, or unrelated personal data.
 
 The maintainer will assess severity and scope, then coordinate a fix and
 disclosure when the report is confirmed. Please allow a reasonable remediation
-window before public disclosure.
+window before public disclosure. An initial response is expected within 7 days.
 
 ## Security Boundaries
 
