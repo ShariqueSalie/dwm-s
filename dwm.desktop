@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=dwm-s
+Comment=Dynamic window manager (dwm-s)
+Exec=@PREFIX@/bin/dwm
+Icon=dwm
+Type=Application

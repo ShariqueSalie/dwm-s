@@ -1,0 +1,4 @@
+interface:
+  display_name: "dwm-s Debug"
+  short_description: "Diagnose dwm-s desktop failures"
+  default_prompt: "Use $dwm-s-debug to find out why this dwm-s app or desktop component is broken."

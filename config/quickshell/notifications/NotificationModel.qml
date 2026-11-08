@@ -1,0 +1,482 @@
+import QtQuick
+import Quickshell
+import Quickshell.Io
+import Quickshell.Services.Notifications
+
+pragma ComponentBehavior: Bound
+
+Scope {
+    id: root
+
+    property var notifications: []
+    property var history: []
+    // Notifications that are still open and carry actions, by item key. Kept
+    // out of history because history is saved as JSON.
+    property var actionable: ({})
+    property bool historyVisible: false
+    property int sequence: 0
+    readonly property string sessionKey: Date.now().toString(36) + "-" + Math.random().toString(36).slice(2)
+    property bool doNotDisturb: false
+    property int popupTimeoutMs: 6000
+    property string policyState: "loading"
+    readonly property bool initialLoading: policyState === "loading" || policyState === "defaults" || policySaving
+    property string policyDetail: "Loading notification policy"
+    property bool policySaving: false
+    property bool policyReloadPending: false
+    property bool confirmedDoNotDisturb: false
+    property int confirmedPopupTimeoutMs: 6000
+
+    readonly property int criticalTimeoutMs: 10000
+    readonly property int maxVisible: 4
+    readonly property int maxHistory: 50
+    readonly property var popupTimeoutOptions: [4000, 6000, 10000]
+    readonly property bool popupSuppressed: root.policyState === "loading"
+        || root.policyState === "partial"
+        || root.policyState === "unavailable"
+        || root.policySaving || root.doNotDisturb
+    readonly property bool policyMutationReady: !root.policySaving
+        && (root.policyState === "available" || root.policyState === "defaults")
+    readonly property bool policyResetReady: !root.policySaving
+        && root.policyState !== "loading"
+    readonly property string homeDir: Quickshell.env("HOME") || ""
+    readonly property string configuredConfigHome: Quickshell.env("XDG_CONFIG_HOME") || ""
+    readonly property string configHome: root.configuredConfigHome.startsWith("/")
+        ? root.configuredConfigHome : root.homeDir + "/.config"
+    readonly property string configDir: root.configHome + "/dwm-s"
+    readonly property string policyPath: root.configDir + "/notification-settings.json"
+    readonly property string cacheDir: (Quickshell.env("XDG_CACHE_HOME") || (Quickshell.env("HOME") + "/.cache")) + "/dwm-s"
+    readonly property string historyPath: cacheDir + "/notification-history.json"
+
+    Component.onCompleted: Quickshell.execDetached(["mkdir", "-p", configDir, cacheDir])
+
+    function validPopupTimeout(value) {
+        return root.popupTimeoutOptions.indexOf(value) >= 0;
+    }
+
+    function usePolicyDefaults() {
+        root.doNotDisturb = false;
+        root.popupTimeoutMs = 6000;
+    }
+
+    function dismissNonCriticalPopups() {
+        const current = root.notifications.slice();
+        for (const item of current) {
+            if (item.urgencyName !== "critical") root.closeItem(item, false);
+        }
+    }
+
+    function applyDoNotDisturb(enabled) {
+        root.doNotDisturb = enabled;
+        if (enabled) root.dismissNonCriticalPopups();
+    }
+
+    function beginPolicyReload(dismissExisting) {
+        root.policyState = "loading";
+        root.policyDetail = "Reloading notification policy";
+        if (dismissExisting !== false) root.dismissNonCriticalPopups();
+        policyFile.reload();
+    }
+
+    function loadPolicy() {
+        let policy = null;
+        try {
+            policy = JSON.parse(policyFile.text());
+        } catch (error) {
+            root.usePolicyDefaults();
+            root.dismissNonCriticalPopups();
+            root.policyState = "partial";
+            root.policyDetail = "Saved notification policy could not be parsed; safe defaults are active until reset";
+            return;
+        }
+        if (policy === null || typeof policy !== "object" || Array.isArray(policy)
+                || policy.version !== 1 || typeof policy.doNotDisturb !== "boolean"
+                || !root.validPopupTimeout(policy.popupTimeoutMs)) {
+            root.usePolicyDefaults();
+            root.dismissNonCriticalPopups();
+            root.policyState = "partial";
+            root.policyDetail = "Saved notification policy is invalid; safe defaults are active until reset";
+            return;
+        }
+        root.applyDoNotDisturb(policy.doNotDisturb);
+        root.popupTimeoutMs = policy.popupTimeoutMs;
+        if (root.policySaving) return;
+        root.confirmedDoNotDisturb = root.doNotDisturb;
+        root.confirmedPopupTimeoutMs = root.popupTimeoutMs;
+        root.policyState = "available";
+        root.policyDetail = "Managed notification policy is active";
+    }
+
+    function savePolicy() {
+        root.policySaving = true;
+        root.policyState = "saving";
+        root.policyDetail = "Saving notification policy";
+        policyFile.setText(JSON.stringify({
+            "version": 1,
+            "doNotDisturb": root.doNotDisturb,
+            "popupTimeoutMs": root.popupTimeoutMs
+        }) + "\n");
+    }
+
+    function setDoNotDisturb(enabled) {
+        if (!root.policyMutationReady || root.doNotDisturb === enabled) return;
+        root.applyDoNotDisturb(enabled);
+        root.savePolicy();
+    }
+
+    function setPopupTimeout(value) {
+        if (!root.policyMutationReady || !root.validPopupTimeout(value)
+                || root.popupTimeoutMs === value) return;
+        root.popupTimeoutMs = value;
+        root.savePolicy();
+    }
+
+    function resetPolicy() {
+        if (!root.policyResetReady) return;
+        if ((root.policyState === "available" || root.policyState === "defaults")
+                && !root.doNotDisturb
+                && root.popupTimeoutMs === 6000) return;
+        root.usePolicyDefaults();
+        root.savePolicy();
+    }
+
+    function policyStatus() {
+        return "notification-policy\t1\t" + Quickshell.processId + "\t"
+            + (root.policyMutationReady ? "available" : "unavailable");
+    }
+
+    function urgencyName(urgency) {
+        if (urgency === NotificationUrgency.Critical) {
+            return "critical";
+        }
+        if (urgency === NotificationUrgency.Low) {
+            return "low";
+        }
+        return "normal";
+    }
+
+    function snapshot(notification, key) {
+        const actions = (notification.actions || []).map(action => ({
+            "identifier": action.identifier,
+            "text": action.text
+        }));
+        const critical = notification.urgency === NotificationUrgency.Critical;
+        return {
+            "key": key,
+            "notification": notification,
+            "appName": notification.appName || "Notification",
+            "summary": notification.summary || "",
+            "body": notification.body || "",
+            "urgency": notification.urgency,
+            "urgencyName": root.urgencyName(notification.urgency),
+            "actions": actions,
+            "hasDefaultAction": actions.some(action => action.identifier === "default"),
+            // A critical notification that asks for a decision stays up until
+            // the user answers or dismisses it.
+            "timeoutMs": critical && actions.length > 0 ? 0
+                : critical ? root.criticalTimeoutMs : root.popupTimeoutMs
+        };
+
+    }
+
+    function add(notification) {
+        if (!notification) return;
+        notification.tracked = true;
+        root.sequence += 1;
+        const key = root.sessionKey + "-" + notification.id + "-" + root.sequence;
+        const item = root.snapshot(notification, key);
+        let closed = false;
+        let watchedActions = [];
+        function refresh() {
+            if (closed) return;
+            // Action objects can be reused when only their label changes.
+            const currentActions = notification.actions || [];
+            for (const action of watchedActions) {
+                if (action && action.textChanged && currentActions.indexOf(action) < 0)
+                    action.textChanged.disconnect(scheduleRefresh);
+            }
+            for (const action of currentActions) {
+                if (watchedActions.indexOf(action) < 0) action.textChanged.connect(scheduleRefresh);
+            }
+            watchedActions = currentActions.slice();
+            const updated = root.snapshot(notification, key);
+            const visible = root.notifications.some(n => n.key === key);
+            root.notifications = root.notifications.map(n => n.key === key ? updated : n);
+            if (updated.actions.length > 0) root.rememberActionable(key, notification);
+            else root.forgetActionable(key);
+            root.addHistory(updated);
+            if ((root.popupSuppressed && updated.urgencyName !== "critical")
+                    || (!visible && !root.keepsOpen(updated))) notification.expire();
+        };
+        // Quickshell may emit label signals while it is still replacing the
+        // list. Refresh once after the whole update, not from partial state.
+        function scheduleRefresh() { Qt.callLater(refresh); }
+        notification.actionsChanged.connect(scheduleRefresh);
+        notification.urgencyChanged.connect(scheduleRefresh);
+        notification.appNameChanged.connect(scheduleRefresh);
+        notification.summaryChanged.connect(scheduleRefresh);
+        notification.bodyChanged.connect(scheduleRefresh);
+        watchedActions = (notification.actions || []).slice();
+        for (const action of watchedActions) action.textChanged.connect(scheduleRefresh);
+
+        notification.closed.connect(() => {
+            closed = true;
+            root.remove(item.key);
+            root.forgetActionable(item.key);
+        });
+        if (item.actions.length > 0) root.rememberActionable(item.key, notification);
+        root.addHistory(item);
+
+        if (root.popupSuppressed && item.urgencyName !== "critical") {
+            notification.expire();
+            return;
+        }
+
+        const existing = root.notifications.filter(n => n.notification && n.notification.id !== notification.id);
+        const candidates = [item].concat(existing);
+        const overflow = candidates.slice(root.maxVisible);
+        root.notifications = candidates.slice(0, root.maxVisible);
+
+        for (const overflowItem of overflow) {
+            root.closeItem(overflowItem, root.keepsOpen(overflowItem));
+        }
+    }
+
+    // A critical notification that asks for a decision stays open until it is
+    // answered or dismissed, even when its popup is pushed off screen.
+    function keepsOpen(item) {
+        return item.urgencyName === "critical" && (item.actions || []).length > 0;
+    }
+
+    function rememberActionable(key, notification) {
+        const next = Object.assign({}, root.actionable);
+        next[key] = notification;
+        root.actionable = next;
+    }
+
+    function forgetActionable(key) {
+        if (!(key in root.actionable)) return;
+        const next = Object.assign({}, root.actionable);
+        delete next[key];
+        root.actionable = next;
+    }
+
+    function actionsFor(key) {
+        const notification = root.actionable[key];
+        if (!notification) return [];
+        return (notification.actions || []).map(action => ({
+            "identifier": action.identifier,
+            "text": action.text
+        }));
+    }
+
+    function invokeAction(key, identifier) {
+        const notification = root.actionable[key];
+        if (!notification) return false;
+        const action = (notification.actions || []).find(candidate => candidate.identifier === identifier);
+        if (!action) return false;
+        // A click queued before the coalesced refresh must not run a newly
+        // relabeled action under an old popup label.
+        const popup = root.notifications.find(item => item.key === key);
+        const shown = popup ? popup.actions.find(candidate => candidate.identifier === identifier) : null;
+        if (popup && (!shown || shown.text !== action.text)) return false;
+        root.remove(key);
+        // Quickshell reports ActionInvoked and closes a non-resident
+        // notification, which forgets it through the closed handler.
+        action.invoke();
+        return true;
+    }
+
+    function remove(key) {
+        root.notifications = root.notifications.filter(n => n.key !== key);
+    }
+
+    function clear() {
+        const current = root.notifications.slice();
+        root.notifications = [];
+
+        for (const item of current) {
+            root.closeItem(item, false);
+        }
+    }
+
+    function addHistory(item) {
+        const entry = {
+            "key": item.key,
+            "appName": item.appName,
+            "summary": item.summary,
+            "body": item.body,
+            "urgency": item.urgency,
+            "urgencyName": item.urgencyName,
+            "timestamp": Date.now()
+        };
+
+        const kept = [entry].concat(root.history.filter(previous => previous.key !== item.key));
+        root.history = kept.slice(0, root.maxHistory);
+        // An actionable notification pushed out of the history and not on
+        // screen can no longer be answered, so close it instead of keeping it.
+        for (const evicted of kept.slice(root.maxHistory)) {
+            if (root.notifications.some(n => n.key === evicted.key)) continue;
+            const notification = root.actionable[evicted.key];
+            if (notification) notification.dismiss();
+        }
+        root.saveHistory();
+    }
+
+    function clearHistory() {
+        for (const key of Object.keys(root.actionable)) {
+            const notification = root.actionable[key];
+            if (notification) notification.dismiss();
+        }
+        root.actionable = {};
+        root.history = [];
+        root.saveHistory();
+    }
+
+    function closeHistory() {
+        root.historyVisible = false;
+    }
+
+    function openHistory() {
+        root.historyVisible = true;
+    }
+
+    function toggleHistory() {
+        root.historyVisible = !root.historyVisible;
+    }
+
+    function historyLatestSummary() {
+        return root.history.length > 0 ? root.history[0].summary : "";
+    }
+
+    function loadHistory() {
+        root.history = (historyFile.notifications || []).slice(0, root.maxHistory);
+    }
+
+    function saveHistory() {
+        historyFile.notifications = root.history;
+        historyFile.writeAdapter();
+    }
+
+    function closeItem(item, expired) {
+        if (!item) {
+            return;
+        }
+
+        root.remove(item.key);
+        if (!item.notification) {
+            return;
+        }
+
+        // Leaves the popup list but stays open, so its actions remain
+        // available from the history.
+        if (expired && root.keepsOpen(item)) {
+            if (!root.history.some(entry => entry.key === item.key)) item.notification.dismiss();
+            return;
+        }
+
+        if (expired) {
+            item.notification.expire();
+        } else {
+            item.notification.dismiss();
+        }
+    }
+
+    function dismiss(key) {
+        root.closeItem(root.notifications.find(n => n.key === key), false);
+    }
+
+    function expire(key) {
+        root.closeItem(root.notifications.find(n => n.key === key), true);
+    }
+
+    FileView {
+        id: policyFile
+
+        path: root.policyPath
+        watchChanges: true
+        atomicWrites: true
+        printErrors: false
+        onLoaded: root.loadPolicy()
+        onFileChanged: {
+            if (root.policySaving) root.policyReloadPending = true;
+            else root.beginPolicyReload(false);
+        }
+        onSaved: {
+            root.confirmedDoNotDisturb = root.doNotDisturb;
+            root.confirmedPopupTimeoutMs = root.popupTimeoutMs;
+            root.policySaving = false;
+            if (root.policyReloadPending) {
+                root.policyReloadPending = false;
+                root.policyState = "loading";
+                root.policyDetail = "Reloading notification policy";
+                Qt.callLater(policyFile.reload);
+            } else {
+                root.policyState = "available";
+                root.policyDetail = "Managed notification policy is active";
+            }
+        }
+        onSaveFailed: error => {
+            root.applyDoNotDisturb(root.confirmedDoNotDisturb);
+            root.popupTimeoutMs = root.confirmedPopupTimeoutMs;
+            root.policySaving = false;
+            if (root.policyReloadPending) {
+                root.policyReloadPending = false;
+                root.policyState = "loading";
+                root.policyDetail = "Reloading notification policy after save error " + error;
+                Qt.callLater(policyFile.reload);
+            } else {
+                root.policyState = "unavailable";
+                root.policyDetail = "Notification policy could not be saved (error " + error + ")";
+            }
+        }
+        onLoadFailed: error => {
+            if (error === FileViewError.FileNotFound) {
+                root.usePolicyDefaults();
+                root.policyState = "defaults";
+                root.policyDetail = "Default notification policy is active";
+                Qt.callLater(root.savePolicy);
+            } else {
+                root.applyDoNotDisturb(root.confirmedDoNotDisturb);
+                root.popupTimeoutMs = root.confirmedPopupTimeoutMs;
+                root.dismissNonCriticalPopups();
+                root.policyState = "unavailable";
+                root.policyDetail = "Notification policy could not be loaded";
+            }
+        }
+    }
+
+    FileView {
+        id: historyFile
+
+        property alias notifications: historyAdapter.notifications
+
+        path: root.historyPath
+        printErrors: false
+        onLoaded: root.loadHistory()
+        onLoadFailed: error => {
+            if (error === 2) {
+                root.saveHistory();
+            }
+        }
+
+        // qmllint disable unresolved-type
+        adapter: JsonAdapter {
+            id: historyAdapter
+
+            property var notifications: []
+        }
+    }
+
+    NotificationServer {
+        id: server
+
+        keepOnReload: false
+        actionsSupported: true
+        bodySupported: true
+        bodyMarkupSupported: false
+        imageSupported: false
+        persistenceSupported: true
+
+        onNotification: notification => root.add(notification)
+    }
+}
