@@ -4,9 +4,8 @@ dwm-s ships the `dwm-s` customization and `dwm-s-debug` diagnosis
 skills from [titstack](https://github.com/ChrisTitusTech/titstack), adapted to
 the current desktop. Each skill includes its MIT license. The imported source
 revision is `bd3a1dbe9c33d7066dfe0e3561445472edcbe107`.
-The runtime integration is adapted from
-[Somnius's ai-assist branch](https://github.com/Somnius/dwm-titus/tree/ai-assist)
-at `2f7bf158b7b07bf918e8f32ad9771bb9f3202f80`.
+The runtime integration is adapted from Somnius's ai-assist branch at
+`2f7bf158b7b07bf918e8f32ad9771bb9f3202f80`.
 
 ## Setup
 

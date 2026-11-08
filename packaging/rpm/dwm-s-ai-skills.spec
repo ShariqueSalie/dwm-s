@@ -3,7 +3,7 @@ Version:        0.1.0
 Release:        1%{?dist}
 Summary:        AI agent skills for customizing and debugging dwm-s
 License:        MIT
-URL:            https://github.com/ChrisTitusTech/dwm-titus
+URL:            https://github.com/ShariqueSalie/dwm-s
 Source0:        %{name}-%{version}.tar.gz
 BuildArch:      noarch
 

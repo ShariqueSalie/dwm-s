@@ -12,7 +12,7 @@ eyebrow: Start here
 
 The 0.8 release targets Fedora 45 x86_64, while retaining Fedora 44 support for
 existing-system installation, source updates and desktop runtime. See the
-[0.8 qualification record](https://github.com/ChrisTitusTech/dwm-titus/blob/main/docs/RELEASE-0.8.0.md)
+[0.8 qualification record](https://github.com/ShariqueSalie/dwm-s/blob/main/docs/RELEASE-0.8.0.md)
 for tested paths and hardware limits. The current 0.8.0 offline images install
 Fedora 45 and include the Wi-Fi package/plugin fix from #368. Supported source
 updates also reconcile missing Wi-Fi packages on installed systems. Download
@@ -126,8 +126,8 @@ install-herdr
 For a first-time source install:
 
 ```bash
-git clone https://github.com/ChrisTitusTech/dwm-titus.git
-cd dwm-titus
+git clone https://github.com/ShariqueSalie/dwm-s.git
+cd dwm-s
 ```
 
 If you already have a checkout, enter that directory instead of cloning again.
@@ -346,7 +346,7 @@ Settings > System now offers **Desktop updates** above Fedora updates. It checks
 official `main`, detects stale managed files, and installs a confirmed update
 with progress and recovery records. Existing installations use the source
 procedure below once to install that support. See
-[Desktop updates and recovery](https://github.com/ChrisTitusTech/dwm-titus/blob/main/docs/DESKTOP-UPDATES.md) for the update
+[Desktop updates and recovery](https://github.com/ShariqueSalie/dwm-s/blob/main/docs/DESKTOP-UPDATES.md) for the update
 contract, restart behavior, and interrupted-operation recovery.
 
 Before a source update, save the current checkout and user configuration. Run

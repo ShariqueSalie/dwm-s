@@ -103,5 +103,5 @@ install the desktop updater and its root-owned authorization helper. After that,
 the Update Center and Settings > System can manage later updates.
 
 For the complete contracts, see
-[Desktop updates and recovery](https://github.com/ChrisTitusTech/dwm-titus/blob/main/docs/DESKTOP-UPDATES.md)
-and [Initial update and DNF defaults](https://github.com/ChrisTitusTech/dwm-titus/blob/main/docs/INITIAL-UPDATE.md).
+[Desktop updates and recovery](https://github.com/ShariqueSalie/dwm-s/blob/main/docs/DESKTOP-UPDATES.md)
+and [Initial update and DNF defaults](https://github.com/ShariqueSalie/dwm-s/blob/main/docs/INITIAL-UPDATE.md).

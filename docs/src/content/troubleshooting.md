@@ -187,5 +187,5 @@ activation errors identify a recovery backup and session log.
 
 ## Still Stuck?
 
-- Open an issue: [github.com/ChrisTitusTech/dwm-titus/issues](https://github.com/ChrisTitusTech/dwm-titus/issues)
+- Open an issue: [github.com/ShariqueSalie/dwm-s/issues](https://github.com/ShariqueSalie/dwm-s/issues)
 - Run the full check: `bash scripts/check-deps.sh`

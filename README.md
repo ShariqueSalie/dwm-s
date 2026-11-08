@@ -3,7 +3,7 @@
   <p><strong>A fast, focused Fedora X11 desktop built for keyboard-driven work.</strong></p>
   <p>
     <a href="https://dwm.christitus.com">Documentation</a> |
-    <a href="https://github.com/ChrisTitusTech/dwm-titus/releases/latest">Latest release</a> |
+    <a href="https://github.com/ShariqueSalie/dwm-s/releases/latest">Latest release</a> |
     <a href="./CHANGELOG.md">Changelog</a> |
     <a href="./CONTRIBUTING.md">Contributing</a>
   </p>
@@ -62,7 +62,7 @@ Download the **current 0.8.0 offline images** for Fedora 45 x86_64:
 | --- | --- |
 | Standard | [Standard ISO](https://downloads.christitus.com/iso/dwm-s.iso) |
 | NVIDIA | [NVIDIA ISO](https://downloads.christitus.com/iso/dwm-s-nvidia.iso) |
-| Verification | [SHA256SUMS](https://downloads.christitus.com/iso/SHA256SUMS) and [release notes](https://github.com/ChrisTitusTech/dwm-titus/releases/latest) |
+| Verification | [SHA256SUMS](https://downloads.christitus.com/iso/SHA256SUMS) and [release notes](https://github.com/ShariqueSalie/dwm-s/releases/latest) |
 
 These stable URLs always serve the current builds. The [build manifest](https://downloads.christitus.com/iso/BUILD-MANIFEST.json)
 records the version, sizes and hashes. Download a fresh checksum file with your
@@ -97,8 +97,8 @@ For building images, see [compressed-image builds](docs/COMPRESSED-IMAGES.md).
 ### Existing System
 
 ```bash
-git clone https://github.com/ChrisTitusTech/dwm-titus.git
-cd dwm-titus
+git clone https://github.com/ShariqueSalie/dwm-s.git
+cd dwm-s
 
 ./install.sh --dry-run --non-interactive --profile recommended
 ./install.sh --profile recommended
@@ -106,7 +106,7 @@ cd dwm-titus
 
 The dry run shows the dependency and installation plan before anything changes.
 Run both commands from the cloned directory: `./install.sh` resolves relative to
-the current directory, so a new terminal must `cd dwm-titus` first.
+the current directory, so a new terminal must `cd dwm-s` first.
 The installer requires Fedora, preserves existing personal configuration, and
 installs the managed desktop components. It accepts only Fedora's
 `/etc/os-release` identity and rejects every other operating-system identity
@@ -289,7 +289,7 @@ If the session does not start, run `startx` from a TTY to see its error output.
 The [Troubleshooting Guide](https://dwm.christitus.com/troubleshooting.html)
 covers common session, panel, terminal, theme, display, and NVIDIA issues.
 
-If the problem remains, [open an issue](https://github.com/ChrisTitusTech/dwm-titus/issues)
+If the problem remains, [open an issue](https://github.com/ShariqueSalie/dwm-s/issues)
 and include the relevant diagnostic output. Review it first and remove any
 private system information.
 

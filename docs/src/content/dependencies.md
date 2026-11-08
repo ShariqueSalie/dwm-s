@@ -14,8 +14,8 @@ only supported distribution; the 0.8 image target is Fedora 45 x86_64; Fedora 44
 This guide describes the major direct dependencies selected by the installer,
 not an inventory of your machine or every transitive library. DNF and Flatpak
 resolve additional dependencies, including Quickshell's Qt/QML runtime.
-The [shared package map](https://github.com/ChrisTitusTech/dwm-titus/blob/main/scripts/dwm-packages.sh)
-and [installer](https://github.com/ChrisTitusTech/dwm-titus/blob/main/install.sh)
+The [shared package map](https://github.com/ShariqueSalie/dwm-s/blob/main/scripts/dwm-packages.sh)
+and [installer](https://github.com/ShariqueSalie/dwm-s/blob/main/install.sh)
 are the source of truth for package selection and conditional installation.
 
 ## Installation Profiles
@@ -173,4 +173,4 @@ from the everyday desktop:
 
 For installation steps, return to [Installation](/install.html). For the
 underlying contracts, see the
-[project specification](https://github.com/ChrisTitusTech/dwm-titus/blob/main/SPEC.md).
+[project specification](https://github.com/ShariqueSalie/dwm-s/blob/main/SPEC.md).

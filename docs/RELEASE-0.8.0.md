@@ -1,6 +1,6 @@
 # dwm-s 0.8.0 - Fedora 45
 
-Release: https://github.com/ChrisTitusTech/dwm-titus/releases/tag/v0.8.0
+Release: https://github.com/ShariqueSalie/dwm-s/releases/tag/v0.8.0
 
 Standard and NVIDIA images use Fedora 45 Server Network Install 1.4, x86_64.
 Fedora 44 remains supported for existing-system installation and source updates.

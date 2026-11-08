@@ -6,8 +6,8 @@ description: Customize the dwm-s X11 desktop, including TOML keybindings, themes
 # dwm-s
 
 dwm-s is Chris Titus Tech's Fedora/X11 desktop: patched dwm plus a managed
-Quickshell panel and `dwm-*` helpers. Upstream:
-https://github.com/ChrisTitusTech/dwm-titus. Route failures ("X is broken",
+Quickshell panel and `dwm-*` helpers. Project:
+https://github.com/ShariqueSalie/dwm-s. Route failures ("X is broken",
 "why did Y stop") to `$dwm-s-debug`.
 
 ## Workflow

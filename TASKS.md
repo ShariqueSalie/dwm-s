@@ -8,10 +8,10 @@ Fedora 45 becomes the main ISO base; retain Fedora 44 compatibility.
 
 | Issue | Pull request | Behavior |
 | --- | --- | --- |
-| #297 | [#424](https://github.com/ChrisTitusTech/dwm-titus/pull/424) | Visual layout selection, master sizing and per-tag gaps; scale preview retained. |
-| #350 | [#425](https://github.com/ChrisTitusTech/dwm-titus/pull/425) | Window overview with opening-only static thumbnails; user verified. |
-| #358 | [#422](https://github.com/ChrisTitusTech/dwm-titus/pull/422) | Optional calendar and explicitly fetched weather. |
-| #370 | [#423](https://github.com/ChrisTitusTech/dwm-titus/pull/423) | Opt-in floating-window titlebars with move/close controls. |
+| #297 | [#424](https://github.com/ShariqueSalie/dwm-s/pull/424) | Visual layout selection, master sizing and per-tag gaps; scale preview retained. |
+| #350 | [#425](https://github.com/ShariqueSalie/dwm-s/pull/425) | Window overview with opening-only static thumbnails; user verified. |
+| #358 | [#422](https://github.com/ShariqueSalie/dwm-s/pull/422) | Optional calendar and explicitly fetched weather. |
+| #370 | [#423](https://github.com/ShariqueSalie/dwm-s/pull/423) | Opt-in floating-window titlebars with move/close controls. |
 
 - [x] Implement all four features and publish reviewed PRs with runtime evidence.
 - [x] Complete thumbnail dev sync and receive user acceptance for #425.

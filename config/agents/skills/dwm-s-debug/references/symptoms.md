@@ -36,7 +36,7 @@ LightDM session on Fedora; confirm them on the target system.
 
 ## Reporting upstream
 
-Bugs in dwm-s itself go to https://github.com/ChrisTitusTech/dwm-titus/issues
+Bugs in dwm-s itself go to https://github.com/ShariqueSalie/dwm-s/issues
 with `dwm-diagnostics` output, the relevant log lines, the Fedora version, and
 whether the install is a git checkout (`git -C <checkout> rev-parse HEAD`). A
 screenshot or the exact error text helps. Read that repository's

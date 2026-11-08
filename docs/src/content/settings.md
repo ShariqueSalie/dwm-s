@@ -26,7 +26,7 @@ Static thumbnails refresh only when the overview opens. They require a running
 X11 compositor such as Picom; unavailable captures keep an icon and title.
 You can also run `dwm-window-overview toggle` or bind that command in your own
 `hotkeys.toml`. Existing user hotkey files are preserved; see the
-[overview migration guide](https://github.com/ChrisTitusTech/dwm-titus/blob/main/docs/WINDOW-OVERVIEW.md)
+[overview migration guide](https://github.com/ShariqueSalie/dwm-s/blob/main/docs/WINDOW-OVERVIEW.md)
 to update just the former Previous tag binding.
 
 The Displays section discovers connected outputs and their advertised modes,
