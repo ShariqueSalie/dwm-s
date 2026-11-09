@@ -1,13 +1,4 @@
-<div align="center">
-  <img alt="dwm-s logo" src="./branding/anaconda/usr/share/anaconda/pixmaps/ctt-logo.png" />
-  <p><strong>A fast, focused Fedora X11 desktop built for keyboard-driven work.</strong></p>
-  <p>
-    <a href="./docs/src/content/getting-started.md">Documentation</a> |
-    <a href="https://github.com/ShariqueSalie/dwm-s/releases/latest">Latest release</a> |
-    <a href="./CHANGELOG.md">Changelog</a> |
-    <a href="./CONTRIBUTING.md">Contributing</a>
-  </p>
-</div>
+
 
 ![The dwm-s desktop with its Quickshell panel](./dwm-s-qs-4x.webp)
 
