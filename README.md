@@ -7,8 +7,7 @@ part themselves.
 
 **dwm-s is a Fedora-only distribution.** Fedora Linux is the sole supported
 platform for installation, runtime behavior, package resolution, testing, and
-release qualification. Use either the Fedora desktop image or the
-existing-system installer on Fedora Linux.
+release qualification. Use either the existing-system installer on Fedora Linux.
 Fedora 45 images use Thunar while the optional COPR/Path repository is
 unavailable. Thunar is the fresh-account default on Fedora 44 too, even with
 Path installed. Recommended and full installs provide Thunar; core installs
@@ -30,7 +29,7 @@ MIME preferences remain preserved.
 
 ## Install
 
-This fork supports source installation on an existing Fedora system.
+This supported source installation on an existing Fedora system.
 
 ### Existing System
 
@@ -155,23 +154,6 @@ after changing the shipped palettes.
 
 Cursor theme changes in Settings take effect immediately across running X11
 applications via `dwm-cursor-reload`.
-
-See the [Configuration Guide](./docs/src/content/configuration.md)
-and [Theming Guide](./docs/src/content/theming.md) for examples and
-safe customization paths.
-
-## Documentation
-
-- [Installation](./docs/src/content/install.md)
-- [Getting Started](./docs/src/content/getting-started.md)
-- [Keybindings](./docs/src/content/keybinds.md)
-- [Configuration](./docs/src/content/configuration.md)
-- [Theming](./docs/src/content/theming.md)
-- [Control Center](./docs/src/content/control-center.md)
-- [Updates](./docs/src/content/updates.md)
-- [Settings](./docs/src/content/settings.md)
-- [How dwm-s Works](./docs/src/content/patches.md)
-- [Troubleshooting](./docs/src/content/troubleshooting.md)
 
 The technical guide explains the project architecture, what dwm is, and how
 the maintained enhancements fit together. You do not need to understand or
