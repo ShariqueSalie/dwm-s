@@ -1,6 +1,6 @@
 
 
-dwm-s is a complete, lightweight X11 desktop with sensible defaults,
+Dynamic Window Manager (dwm) dwm-s is a complete, lightweight X11 desktop with sensible defaults,
 guided installation, and powerful customization. It is designed for people who
 want a responsive keyboard-first workflow without having to assemble every
 part themselves.
