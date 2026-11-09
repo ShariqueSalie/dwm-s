@@ -1,0 +1,260 @@
+#!/usr/bin/env bash
+# dwm-s workstation self-heal
+set -uo pipefail
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+
+MODE=repair
+ASSUME_YES=0
+FAILURES=0
+
+usage() {
+	printf '%s\n' \
+		"usage: dwm-self-heal [--check] [--yes]" \
+		"" \
+		"  --check  Report problems without changing the system." \
+		"  --yes    Accept repair prompts without asking." \
+		"  --help   Show this message."
+}
+
+while (($# > 0)); do
+	case $1 in
+	--check) MODE=check ;;
+	-y | --yes) ASSUME_YES=1 ;;
+	-h | --help)
+		usage
+		exit 0
+		;;
+	*)
+		usage
+		exit 2
+		;;
+	esac
+	shift
+done
+
+ok() { printf '  ok       %s\n' "$*"; }
+warn() { printf '  warning  %s\n' "$*"; }
+fail() {
+	printf '  failed   %s\n' "$*"
+	FAILURES=$((FAILURES + 1))
+}
+note() { printf '%s\n' "$*"; }
+
+confirm() {
+	local prompt=$1 answer
+
+	((ASSUME_YES)) && return 0
+	[[ -t 0 ]] || return 1
+	printf '%s [y/N] ' "$prompt"
+	read -r answer || return 1
+	case $answer in
+	[yY] | [yY][eE][sS]) return 0 ;;
+	*) return 1 ;;
+	esac
+}
+
+find_helper() {
+	local name=$1 candidate
+
+	for candidate in "$SCRIPT_DIR/$name" "$SCRIPT_DIR/../scripts/$name"; do
+		if [[ -x $candidate ]]; then
+			printf '%s\n' "$candidate"
+			return 0
+		fi
+	done
+	command -v "$name" 2>/dev/null
+}
+
+failed_user_services() {
+	command -v systemctl >/dev/null 2>&1 || return 0
+	systemctl --user --failed --type=service --no-legend --plain 2>/dev/null |
+		awk 'NF { print $1 }'
+}
+
+failed_system_services() {
+	command -v systemctl >/dev/null 2>&1 || return 0
+	systemctl --failed --type=service --no-legend --plain 2>/dev/null |
+		awk 'NF { print $1 }'
+}
+
+restart_system_service() {
+	local unit=$1
+
+	if ((EUID == 0)); then
+		systemctl restart -- "$unit"
+	elif command -v sudo >/dev/null 2>&1; then
+		sudo systemctl restart -- "$unit"
+	else
+		return 1
+	fi
+}
+
+wait_for_process() {
+	local name=$1
+
+	for _ in {1..20}; do
+		pgrep -x "$name" >/dev/null 2>&1 && return 0
+		sleep 0.25
+	done
+	return 1
+}
+
+check_dependencies() {
+	local checker output updater
+
+	note "== Dependencies =="
+	if ! checker=$(find_helper check-deps.sh); then
+		fail "check-deps.sh is unavailable"
+		return
+	fi
+	if output=$("$checker" --non-interactive 2>&1); then
+		ok "All required dependencies are installed"
+		return
+	fi
+	printf '%s\n' "$output"
+	if [[ $MODE == check ]]; then
+		fail "Some dependencies are missing"
+		return
+	fi
+	if ! grep -Fq 'Package suggestions from the shared dependency map:' <<<"$output"; then
+		warn "Non-package dependencies are missing; run the dwm-s installer to restore fonts"
+		return
+	fi
+	if ! confirm "Install the missing packages now?"; then
+		warn "Dependency installation skipped"
+		return
+	fi
+	if ! updater=$(find_helper dwm-desktop-update); then
+		fail "dwm-desktop-update is unavailable"
+		return
+	fi
+	if ! "$updater" install-dependencies; then
+		fail "Dependency installation failed"
+		return
+	fi
+	if "$checker" --non-interactive >/dev/null 2>&1; then
+		ok "Dependencies repaired"
+	else
+		fail "Dependencies are still missing after repair"
+	fi
+}
+
+restart_user_services() {
+	local -a units=()
+	local unit
+
+	note "== User services =="
+	mapfile -t units < <(failed_user_services)
+	if ((${#units[@]} == 0)); then
+		ok "No failed user services"
+		return
+	fi
+	note "Failed user services: ${units[*]}"
+	if [[ $MODE == check ]]; then
+		fail "Failed user services need a restart"
+		return
+	fi
+	for unit in "${units[@]}"; do
+		if systemctl --user restart -- "$unit"; then
+			ok "Restarted user service: $unit"
+		else
+			fail "Could not restart user service: $unit"
+		fi
+	done
+	mapfile -t units < <(failed_user_services)
+	if ((${#units[@]} > 0)); then
+		fail "User services still failed: ${units[*]}"
+	fi
+}
+
+restart_system_services() {
+	local -a units=()
+	local unit
+
+	note "== System services =="
+	mapfile -t units < <(failed_system_services)
+	if ((${#units[@]} == 0)); then
+		ok "No failed system services"
+		return
+	fi
+	note "Failed system services: ${units[*]}"
+	if [[ $MODE == check ]]; then
+		fail "Failed system services need a restart"
+		return
+	fi
+	if ! confirm "Restart the failed system services (administrator access required)?"; then
+		warn "System service restart skipped"
+		return
+	fi
+	for unit in "${units[@]}"; do
+		if restart_system_service "$unit"; then
+			ok "Restarted system service: $unit"
+		else
+			fail "Could not restart system service: $unit"
+		fi
+	done
+	mapfile -t units < <(failed_system_services)
+	if ((${#units[@]} > 0)); then
+		fail "System services still failed: ${units[*]}"
+	fi
+}
+
+ensure_session_processes() {
+	local helper
+
+	note "== Desktop session =="
+	if pgrep -x quickshell >/dev/null 2>&1; then
+		ok "Quickshell is running"
+	elif [[ $MODE == check ]]; then
+		fail "Quickshell is not running"
+	else
+		if helper=$(find_helper dwm-quickshell-controlcenter); then
+			"$helper" action restart-quickshell >/dev/null 2>&1 || true
+		fi
+		if wait_for_process quickshell; then
+			ok "Quickshell restarted"
+		else
+			fail "Quickshell could not be started"
+		fi
+	fi
+
+	if pgrep -x picom >/dev/null 2>&1; then
+		ok "Picom is running"
+	elif [[ $MODE == check ]]; then
+		fail "Picom is not running"
+	else
+		if helper=$(find_helper dwm-quickshell-controlcenter); then
+			"$helper" action restart-picom >/dev/null 2>&1 || true
+		fi
+		if wait_for_process picom; then
+			ok "Picom restarted"
+		else
+			fail "Picom could not be started"
+		fi
+	fi
+}
+
+printf '═══ dwm-s Self-Heal ═══\n'
+if [[ $MODE == check ]]; then
+	note "Mode: check only (no changes will be made)"
+else
+	note "Mode: repair"
+fi
+note ""
+
+check_dependencies
+note ""
+restart_user_services
+note ""
+restart_system_services
+note ""
+ensure_session_processes
+note ""
+
+if ((FAILURES == 0)); then
+	printf 'Self-heal completed; all checks passed.\n'
+	exit 0
+fi
+printf 'Self-heal completed with %s issue(s).\n' "$FAILURES"
+exit 1

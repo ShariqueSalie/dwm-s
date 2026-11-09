@@ -27,10 +27,12 @@ dwm configuration files and replaces the managed Quickshell directory.
 
 Control Center -> Quick Actions -> Self-Heal runs the workstation's self-heal
 script in a terminal, where its progress, results, and any authorization prompts
-remain visible. Install an executable `dwm-self-heal` on PATH, or put the absolute
-path of the existing script in
+remain visible. dwm-s installs an executable `dwm-self-heal` on PATH; it repairs
+missing dependencies, restarts failed user and system services, and restarts the
+panel or compositor when they are not running. Run `dwm-self-heal --check` for a
+report without changes. To use a different script, put its absolute path in
 `${XDG_CONFIG_HOME:-$HOME/.config}/dwm-s/self-heal.path` (one path, no shell
-arguments). `DWM_SELF_HEAL_SCRIPT` can override that path for the shell session.
+arguments); `DWM_SELF_HEAL_SCRIPT` overrides that path for the shell session.
 The action reports an unavailable script without changing the system; it does
 not download a script or elevate the Quickshell process.
 
