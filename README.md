@@ -2,7 +2,7 @@
   <img alt="dwm-s logo" src="./branding/anaconda/usr/share/anaconda/pixmaps/ctt-logo.png" />
   <p><strong>A fast, focused Fedora X11 desktop built for keyboard-driven work.</strong></p>
   <p>
-    <a href="https://dwm.christitus.com">Documentation</a> |
+    <a href="./docs/src/content/getting-started.md">Documentation</a> |
     <a href="https://github.com/ShariqueSalie/dwm-s/releases/latest">Latest release</a> |
     <a href="./CHANGELOG.md">Changelog</a> |
     <a href="./CONTRIBUTING.md">Contributing</a>
@@ -44,55 +44,7 @@ MIME preferences remain preserved.
 
 ## Install
 
-Choose the path that matches your system:
-
-| Installation | Best for | What it does |
-| --- | --- | --- |
-| [Fedora ISO](#fedora-iso) | A fresh, dedicated installation | Installs the complete Fedora-only desktop from bootable media. |
-| [Existing system](#existing-system) | A Fedora installation you already use | Installs dependencies, the desktop session, and the selected feature set while preserving local configuration. |
-
-For complete requirements and installation details, see the
-[Installation Guide](https://dwm.christitus.com/install.html).
-
-### Fedora ISO
-
-Download the **current 0.8.0 offline images** for Fedora 45 x86_64:
-
-| Image | Download |
-| --- | --- |
-| Standard | [Standard ISO](https://downloads.christitus.com/iso/dwm-s.iso) |
-| NVIDIA | [NVIDIA ISO](https://downloads.christitus.com/iso/dwm-s-nvidia.iso) |
-| Verification | [SHA256SUMS](https://downloads.christitus.com/iso/SHA256SUMS) and [release notes](https://github.com/ShariqueSalie/dwm-s/releases/latest) |
-
-These stable URLs always serve the current builds. The [build manifest](https://downloads.christitus.com/iso/BUILD-MANIFEST.json)
-records the version, sizes and hashes. Download a fresh checksum file with your
-selected ISO; restart partial downloads if the build changes. In that directory, run:
-
-```sh
-sha256sum --ignore-missing -c SHA256SUMS
-```
-
-Confirm your ISO reports `OK`. Write it as a disk image to an 8 GB or larger USB
-drive, boot it, choose your disk, locale and administrator account in Anaconda,
-then install and reboot into the `dwm` session. Writing the USB erases its contents;
-review Anaconda's disk changes before starting installation.
-
-Packages are already included in the compressed system image. Installation needs
-no Internet connection or software selection. The images include Quickshell,
-Gear Lever, `maim`, region capture and clipboard tools. Internet access is needed
-later for updates and additional software.
-
-The images also include `fastfetch` and offer a visible initial
-package update once repositories are reachable. The flow measures mirrors, asks
-for authorization, and preserves DNF confirmation; Enter accepts and No cancels.
-See [initial updates and DNF defaults](docs/INITIAL-UPDATE.md) for retry and
-configuration overrides.
-
-See the [installation guide](https://dwm.christitus.com/install.html#fedora-iso-recommended-for-a-new-installation)
-and [current build qualification](https://downloads.christitus.com/iso/BUILD-NOTES.md)
-for tested firmware modes and hardware limits, including NVIDIA and Secure Boot.
-Use the Cloudflare links above for the current offline installation images.
-For building images, see [compressed-image builds](docs/COMPRESSED-IMAGES.md).
+This fork supports source installation on an existing Fedora system.
 
 ### Existing System
 
@@ -130,7 +82,7 @@ load `pam_gnome_keyring.so` and matching account/keyring passwords.
 
 ## Dependencies
 
-See [Desktop Dependencies](https://dwm.christitus.com/dependencies.html) for the
+See [Desktop Dependencies](./docs/src/content/dependencies.md) for the
 packages behind each desktop component, installation-profile differences, and
 build, gaming, and image-specific dependencies.
 
@@ -218,22 +170,22 @@ after changing the shipped palettes.
 Cursor theme changes in Settings take effect immediately across running X11
 applications via `dwm-cursor-reload`.
 
-See the [Configuration Guide](https://dwm.christitus.com/configuration.html)
-and [Theming Guide](https://dwm.christitus.com/theming.html) for examples and
+See the [Configuration Guide](./docs/src/content/configuration.md)
+and [Theming Guide](./docs/src/content/theming.md) for examples and
 safe customization paths.
 
 ## Documentation
 
-- [Installation](https://dwm.christitus.com/install.html)
-- [Getting Started](https://dwm.christitus.com/getting-started.html)
-- [Keybindings](https://dwm.christitus.com/keybinds.html)
-- [Configuration](https://dwm.christitus.com/configuration.html)
-- [Theming](https://dwm.christitus.com/theming.html)
-- [Control Center](https://dwm.christitus.com/control-center.html)
-- [Updates](https://dwm.christitus.com/updates.html)
-- [Settings](https://dwm.christitus.com/settings.html)
-- [How dwm-s Works](https://dwm.christitus.com/patches.html)
-- [Troubleshooting](https://dwm.christitus.com/troubleshooting.html)
+- [Installation](./docs/src/content/install.md)
+- [Getting Started](./docs/src/content/getting-started.md)
+- [Keybindings](./docs/src/content/keybinds.md)
+- [Configuration](./docs/src/content/configuration.md)
+- [Theming](./docs/src/content/theming.md)
+- [Control Center](./docs/src/content/control-center.md)
+- [Updates](./docs/src/content/updates.md)
+- [Settings](./docs/src/content/settings.md)
+- [How dwm-s Works](./docs/src/content/patches.md)
+- [Troubleshooting](./docs/src/content/troubleshooting.md)
 
 The technical guide explains the project architecture, what dwm is, and how
 the maintained enhancements fit together. You do not need to understand or
@@ -286,7 +238,7 @@ terminal with visible output and authorization prompts.
 
 You can also open **Control Center -> System Health** for a graphical overview.
 If the session does not start, run `startx` from a TTY to see its error output.
-The [Troubleshooting Guide](https://dwm.christitus.com/troubleshooting.html)
+The [Troubleshooting Guide](./docs/src/content/troubleshooting.md)
 covers common session, panel, terminal, theme, display, and NVIDIA issues.
 
 If the problem remains, [open an issue](https://github.com/ShariqueSalie/dwm-s/issues)
