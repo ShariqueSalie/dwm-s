@@ -683,7 +683,11 @@ grep -Fq 'root.controlsModel.volumeDown();' "$repo/config/quickshell/panel/DwmPa
 grep -Fq 'visible: root.controlsModel.volumeText !== "VOL unavailable"' "$repo/config/quickshell/panel/DwmPanel.qml"
 grep -Fq 'root.controlsModel.volumePercent.toString() + "%"' "$repo/config/quickshell/panel/DwmPanel.qml"
 grep -Fq 'trimmed !== "AC"' "$repo/config/quickshell/state/DwmState.qml"
-grep -Fq 'root.powerMenuModel.open("controlcenter")' "$repo/config/quickshell/controlcenter/ControlCenterWindow.qml"
+if grep -Fq 'label: "Power"' "$repo/config/quickshell/controlcenter/ControlCenterWindow.qml"; then
+	printf 'Control Center still duplicates the panel power button\n' >&2
+	exit 1
+fi
+grep -Fq 'label: "Power Settings"' "$repo/config/quickshell/controlcenter/ControlCenterWindow.qml"
 grep -Fq 'powerMenuModel.anchorSource === "controlcenter"' "$repo/config/quickshell/power/PowerMenuWindow.qml"
 if grep -Fq 'danger: modelData.id === "shutdown"' "$repo/config/quickshell/power/PowerMenuWindow.qml"; then
 	exit 1

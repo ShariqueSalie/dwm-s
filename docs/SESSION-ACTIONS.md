@@ -3,9 +3,8 @@
 ## Purpose
 
 The managed Quickshell exposes lock, logout, suspend, reboot, and shutdown
-through one root-scoped `PowerMenuModel`. The panel, Control Center, and
-Settings use the same action inventory, confirmation state, helper process,
-and result state.
+through one root-scoped `PowerMenuModel`. The panel and Settings use the same
+action inventory, confirmation state, helper process, and result state.
 
 QML never owns a system command, shell fragment, D-Bus destination, or
 elevated helper path. It passes one fixed action ID to the existing managed

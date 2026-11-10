@@ -372,7 +372,7 @@ Do Not Disturb keeps every notification in history, suppresses only low and
 normal urgency popups, and never suppresses critical urgency. Reset restores
 Do Not Disturb off and the six-second ordinary duration.
 
-Power settings are managed from Control Center -> Power. The generated
+Power settings are managed from Control Center -> Power Settings. The generated
 `power.conf` is authoritative once created and persists screen DPMS state,
 display-off timing, and automatic idle and suspend locking. Startup reapplies
 this file before background session services are launched. Manual locking

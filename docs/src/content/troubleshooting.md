@@ -159,7 +159,7 @@ Alacritty. The default `Super`+`X` binding remains plain Alacritty.
 ## NVIDIA / Suspend Issues
 
 - Black screen on wake: run `scripts/nvidia-suspend-test.sh` to diagnose
-- DPMS/screensaver issues: use Control Center -> Power, or run
+- DPMS/screensaver issues: use Control Center -> Power Settings, or run
   `scripts/disable-powersaving` to disable blanking and DPMS for the current
   session
 

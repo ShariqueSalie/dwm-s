@@ -65,13 +65,6 @@ ClickAwayPopup {
         });
     }
 
-    function openSessionPower() {
-        root.controlCenterModel.close();
-        Qt.callLater(function() {
-            root.powerMenuModel.open("controlcenter");
-        });
-    }
-
     function openSystemHealth() {
         const targetScreen = root.panelWindow ? root.panelWindow.screen : null;
         root.controlCenterModel.close();
@@ -255,14 +248,6 @@ ClickAwayPopup {
                             Qt.callLater(function() { root.windowOverviewRequested(screen); });
                         }
                     }
-                    MenuRow {
-                        Layout.fillWidth: true
-                        implicitHeight: root.compactRowHeight
-                        label: "Power"
-                        navigates: true
-                        onActivated: root.openSessionPower()
-                    }
-
                     PanelSeparator {
                         Layout.topMargin: Theme.compactSpacing
                         Layout.bottomMargin: Theme.compactSpacing
