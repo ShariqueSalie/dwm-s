@@ -745,7 +745,7 @@ if install_optional_profile; then
 	mkdir -p "$HOME/Pictures"
 	if [ ! -d "$BG_DIR" ]; then
 		info "Downloading Nord wallpapers..."
-		if git clone https://github.com/ChrisTitusTech/nord-background.git "$BG_DIR" 2>/dev/null; then
+		if git clone https://github.com/ShariqueSalie/nord-background.git "$BG_DIR" 2>/dev/null; then
 			ok "Wallpapers downloaded to $BG_DIR"
 		else
 			warn "Failed to download wallpapers. Add your own to $BG_DIR."
