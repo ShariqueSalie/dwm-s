@@ -54,7 +54,6 @@ class AgentTests(unittest.TestCase):
         self.run_helper("dwm-agent", "link-skills")
         self.assertEqual((custom / "SKILL.md").read_text(), "personal skill")
         self.assertEqual(os.readlink(link), str(self.work / "missing-user-target"))
-        self.assertTrue((self.home / ".claude/skills/dwm-s/SKILL.md").is_file())
 
     def test_managed_system_link_follows_package_removal(self):
         skills = self.home / ".agents/skills"
@@ -70,7 +69,7 @@ class AgentTests(unittest.TestCase):
     def test_launch_preserves_prompt_as_one_argument_and_approvals(self):
         capture = '#!/usr/bin/python3\nimport json,os,sys\nopen(os.environ["ARGS"], "w").write(json.dumps(sys.argv[1:]))\n'
         prompt = 'Inspect only; $(touch SHOULD_NOT_EXIST) "quoted"\nnext line'
-        for name in ("codex", "opencode", "gemini", "claude", "cursor-agent", "hermes"):
+        for name in ("opencode",):
             with self.subTest(agent=name):
                 self.fake(name, capture)
                 self.run_helper("dwm-agent", "default", name)
@@ -172,7 +171,7 @@ class AgentTests(unittest.TestCase):
         self.assertFalse((self.work / "args").exists())
 
     def test_recovery_closes_waiting_notification(self):
-        self.fake("dwm-agent", "#!/bin/sh\necho codex\n")
+        self.fake("dwm-agent", "#!/bin/sh\necho opencode\n")
         self.fake("gdbus", '#!/bin/sh\nprintf "%s\\n" "$@" > "$ARGS"\n')
         self.fake("notify-send", '#!/usr/bin/python3\nimport time\nprint(42, flush=True)\ntime.sleep(30)\n')
         process = subprocess.Popen([str(REPO / "scripts/dwm-hang-event"), "hung",
@@ -204,7 +203,7 @@ class AgentTests(unittest.TestCase):
         journal.write_text("\n".join(json.dumps(item) for item in entries) + "\n")
         self.env["JOURNAL"] = str(journal)
         self.fake("journalctl", '#!/bin/sh\ncat "$JOURNAL"\n')
-        self.fake("dwm-agent", "#!/bin/sh\necho codex\n")
+        self.fake("dwm-agent", "#!/bin/sh\necho opencode\n")
         self.fake("notify-send", '#!/bin/sh\necho notified >> "$ARGS"\necho ignore\n')
         self.run_helper("dwm-crash-watch", "--journal")
         self.assertEqual((self.work / "args").read_text().splitlines(), ["notified"])
@@ -379,10 +378,10 @@ int main(void) {
         subprocess.run([str(binary)], check=True, timeout=5)
 
     def test_setup_preserves_alert_preferences(self):
-        self.fake("codex", "#!/bin/sh\nexit 0\n")
+        self.fake("opencode", "#!/bin/sh\nexit 0\n")
         self.run_helper("dwm-agent", "set", "crash-notifications", "off")
         self.run_helper("dwm-agent", "set", "hang-detection", "on")
-        subprocess.run([str(REPO / "scripts/dwm-agent"), "setup", "codex"],
+        subprocess.run([str(REPO / "scripts/dwm-agent"), "setup", "opencode"],
                        env=self.env, input="\n\n", text=True, capture_output=True,
                        check=True, timeout=10)
         status = self.run_helper("dwm-agent", "status").stdout
@@ -390,10 +389,10 @@ int main(void) {
         self.assertIn("hang-detection\ton", status)
 
     def test_launch_repairs_partial_skills_and_survives_missing_source(self):
-        self.fake("codex", '#!/bin/sh\necho launched\n')
-        self.run_helper("dwm-agent", "default", "codex")
+        self.fake("opencode", '#!/bin/sh\necho launched\n')
+        self.run_helper("dwm-agent", "default", "opencode")
         self.run_helper("dwm-agent", "link-skills")
-        missing = self.home / ".hermes/skills/dwm-s"
+        missing = self.home / ".agents/skills/dwm-s-debug"
         missing.unlink()
         self.assertIn("skills\tmissing", self.run_helper("dwm-agent", "status").stdout)
         self.assertIn("launched", self.run_helper("dwm-agent", "--inline").stdout)
@@ -401,44 +400,27 @@ int main(void) {
         shutil.rmtree(self.source)
         self.assertIn("launched", self.run_helper("dwm-agent", "--inline").stdout)
 
-    def test_gemini_vertex_selector_is_not_a_credential(self):
-        self.fake("gemini", '#!/bin/sh\necho 1.0.0\n')
-        for key in ("GEMINI_API_KEY", "GOOGLE_API_KEY", "GOOGLE_GENAI_USE_VERTEXAI"):
-            self.env.pop(key, None)
-        cases = [({}, "no"), ({"GOOGLE_GENAI_USE_VERTEXAI": "false"}, "no"),
-                 ({"GOOGLE_GENAI_USE_VERTEXAI": "true"}, "unknown"),
-                 ({"GOOGLE_API_KEY": "fixture"}, "no"),
-                 ({"GOOGLE_GENAI_USE_VERTEXAI": "true", "GOOGLE_API_KEY": "fixture"}, "yes"),
-                 ({"GEMINI_API_KEY": "fixture"}, "yes")]
-        for variables, expected in cases:
-            with self.subTest(variables=variables):
-                env = {**self.env, **variables}
-                result = subprocess.run([str(REPO / "scripts/dwm-agent"), "list"],
-                                        env=env, text=True, capture_output=True, check=True, timeout=10)
-                row = next(line.split("\t") for line in result.stdout.splitlines()
-                           if line.startswith("agent\tgemini\t"))
-                self.assertEqual(row[5], expected)
+    def test_removed_agents_are_rejected(self):
+        for name in ("codex", "gemini", "claude", "cursor-agent", "hermes"):
+            with self.subTest(agent=name):
+                result = self.run_helper("dwm-agent", "default", name, check=False)
+                self.assertNotEqual(result.returncode, 0)
 
-    def test_installer_preserves_configured_global_runtime(self):
+    def test_installer_installs_only_opencode(self):
         self.fake("id", "#!/bin/sh\necho 1000\n")
         self.fake("mise", '''#!/bin/sh
 case "$1" in
-ls) echo '[{"version":"20","installed":false}]' ;;
 use) echo "$*" >> "$ARGS" ;;
 esac
 ''')
-        self.fake("gemini", "#!/bin/sh\nexit 0\n")
-        self.fake("hermes", "#!/bin/sh\nexit 0\n")
-        for agent in ("gemini", "hermes"):
-            self.run_helper("dwm-install-ai-agent", agent)
-        calls = (self.work / "args").read_text()
-        self.assertNotIn("node@lts", calls)
-        self.assertNotIn("use -g uv", calls)
-        self.assertIn("npm:@google/gemini-cli", calls)
-        self.assertIn("pipx:hermes-agent", calls)
+        self.fake("opencode", "#!/bin/sh\nexit 0\n")
+        self.run_helper("dwm-install-ai-agent", "opencode")
+        self.assertEqual((self.work / "args").read_text().strip(), "use -g opencode")
+        result = self.run_helper("dwm-install-ai-agent", "codex", check=False)
+        self.assertNotEqual(result.returncode, 0)
 
     def test_new_hang_supersedes_old_and_rejects_stale_actions(self):
-        self.fake("dwm-agent", "#!/bin/sh\necho codex\n")
+        self.fake("dwm-agent", "#!/bin/sh\necho opencode\n")
         self.fake("gdbus", "#!/bin/sh\nexit 0\n")
         self.fake("xprop", '#!/bin/sh\necho stale-kill > "$ARGS"\n')
         self.fake("notify-send", '''#!/usr/bin/python3

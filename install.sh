@@ -28,8 +28,7 @@ Options:
   --skip-herdr           Do not install Herdr.
   --install-ai-agent NAME
                          Install an AI agent for "Diagnose with AI"
-                         (codex, opencode, gemini, claude, cursor-agent or
-                         hermes) with mise. Repeatable.
+                         (opencode) with mise. Repeatable.
   --enable-fedora-gaming-repos
                          Approve the Gamescope COPR and RPM Fusion nonfree.
   --dry-run              Print the resolved plan and exit before changes.
@@ -100,9 +99,9 @@ while (($# > 0)); do
 		;;
 	--install-ai-agent)
 		case ${2:-} in
-		codex | opencode | gemini | claude | cursor-agent | hermes) AI_AGENTS+=("$2") ;;
+		opencode) AI_AGENTS+=("$2") ;;
 		*)
-			err "--install-ai-agent needs codex, opencode, gemini, claude, cursor-agent or hermes"
+			err "--install-ai-agent needs opencode"
 			exit 1
 			;;
 		esac

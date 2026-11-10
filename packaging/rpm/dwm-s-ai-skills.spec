@@ -8,8 +8,7 @@ Source0:        %{name}-%{version}.tar.gz
 BuildArch:      noarch
 
 %description
-Agent skills that teach AI coding agents (Codex, OpenCode, Gemini CLI and
-others that read ~/.agents/skills) how dwm-s is put together: where the
+Agent skills that teach OpenCode how dwm-s is put together: where the
 runtime configuration lives, which helpers own which settings, and how to
 diagnose crashes, hung windows and broken desktop parts without guessing.
 

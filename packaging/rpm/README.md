@@ -6,8 +6,8 @@ can be updated with dnf without updating the whole desktop.
 - Installs to `/usr/share/dwm-s/agents/skills/`.
 - `dwm-agent link-skills` (run by `make install-user` and `dwm-agent setup`)
   links each skill into `~/.agents/skills`, preferring this system copy over
-  the copy in `~/.local/share/dwm-s/config/agents/skills`. Codex,
-  OpenCode and Gemini CLI read skills from there.
+  the copy in `~/.local/share/dwm-s/config/agents/skills`. OpenCode reads
+  skills from there.
 - After installing or removing the package, the links are switched the next
   time `dwm-agent` opens an agent, or right away with `dwm-agent link-skills`.
 - The package never writes to home directories. Only links already targeting one of the

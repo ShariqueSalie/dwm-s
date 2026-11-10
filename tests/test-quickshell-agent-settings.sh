@@ -113,11 +113,9 @@ list_env() {
 		MISE_DATA_DIR="$work/mise" PATH="$work/bin:/usr/bin:/bin" "$agent" "$@"
 }
 list_output=$(list_env list)
-test "$(printf '%s\n' "$list_output" | wc -l)" -eq 6
+test "$(printf '%s\n' "$list_output" | wc -l)" -eq 1
 printf '%s\n' "$list_output" | awk -F '\t' 'NF != 7 || $1 != "agent" { exit 1 }'
-for name in codex opencode gemini claude cursor-agent hermes; do
-	printf '%s\n' "$list_output" | awk -F '\t' -v name="$name" '$2 == name { found = 1 } END { exit !found }'
-done
+printf '%s\n' "$list_output" | awk -F '\t' -v name=opencode '$2 == name { found = 1 } END { exit !found }'
 printf '%s\n' "$list_output" | awk -F '\t' '$7 != "no" { exit 1 }'
 
 printf '#!/bin/sh\necho opencode 1.2.3\n' >"$work/bin/opencode"

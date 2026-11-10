@@ -4,7 +4,7 @@
 # skill so every agent follows the same steps.
 set -euo pipefail
 
-AGENTS=(codex opencode gemini claude cursor-agent hermes)
+AGENTS=(opencode)
 
 config_dir=${XDG_CONFIG_HOME:-$HOME/.config}/dwm-s
 data_dir=${XDG_DATA_HOME:-$HOME/.local/share}/dwm-s
@@ -14,20 +14,19 @@ crash_off_toggle=$config_dir/crash-notifications-off
 # The dwm-s-ai-skills package can ship newer skills than the desktop.
 skills_source=$data_dir/config/agents/skills
 [[ -d /usr/share/dwm-s/agents/skills ]] && skills_source=/usr/share/dwm-s/agents/skills
-# Codex, OpenCode and Gemini CLI read skills from ~/.agents/skills; Claude
-# Code, Cursor CLI and Hermes mainly from their own folders.
+# OpenCode reads skills from ~/.agents/skills.
 skills_target=$HOME/.agents/skills
-skills_targets=("$skills_target" "$HOME/.claude/skills" "$HOME/.cursor/skills" "$HOME/.hermes/skills")
+skills_targets=("$skills_target")
 mise_shims=${MISE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mise}/shims
 
 usage() {
 	cat <<'EOF'
 Usage: dwm-agent [--inline] [--prompt TEXT]
-       dwm-agent default [codex|opencode|gemini|claude|cursor-agent|hermes]
-       dwm-agent setup [codex|opencode|gemini|claude|cursor-agent|hermes]
+       dwm-agent default [opencode]
+       dwm-agent setup [opencode]
        dwm-agent list
-       dwm-agent install <codex|opencode|gemini|claude|cursor-agent|hermes>
-       dwm-agent login [codex|opencode|gemini|claude|cursor-agent|hermes]
+       dwm-agent install <opencode>
+       dwm-agent login [opencode]
        dwm-agent link-skills
        dwm-agent status
        dwm-agent set <crash-notifications|hang-detection> <on|off>
@@ -49,12 +48,7 @@ known_agent() {
 
 agent_name() {
 	case $1 in
-	codex) printf 'Codex' ;;
 	opencode) printf 'OpenCode' ;;
-	gemini) printf 'Gemini CLI' ;;
-	claude) printf 'Claude Code' ;;
-	cursor-agent) printf 'Cursor CLI' ;;
-	hermes) printf 'Hermes Agent' ;;
 	esac
 }
 
@@ -104,88 +98,25 @@ agent_version() {
 	probe "$1" --version 2>/dev/null | head -n 1 | grep -oE '[0-9]+(\.[0-9]+)+' | head -n 1 || true
 }
 
-# Whether the agent has credentials. Each agent keeps them differently:
-#   codex     `codex login status` exits 0 when logged in
-#   opencode  provider credentials in ~/.local/share/opencode/auth.json
-#   gemini    Google login in ~/.gemini/oauth_creds.json, or an API key or
-#             Vertex AI settings in the environment
-#   claude    `claude auth status` exits 0 when logged in
-#   cursor    `cursor-agent status` prints "Logged in as ..."
-#   hermes    `hermes auth list` lists "<provider> (N credentials):" blocks
-# yes for exit 0, unknown when the probe timed out, otherwise no.
-probe_result() {
-	case $1 in
-	0) echo yes ;;
-	124 | 137) echo unknown ;;
-	*) echo no ;;
-	esac
-}
-
+# OpenCode keeps provider credentials in ~/.local/share/opencode/auth.json.
 agent_signed_in() {
-	local count output status=0
+	local count
 	use_mise_path
 	case $1 in
-	codex)
-		probe codex login status >/dev/null 2>&1 && status=0 || status=$?
-		probe_result "$status"
-		;;
 	opencode)
 		count=$(jq -r 'length' "${XDG_DATA_HOME:-$HOME/.local/share}/opencode/auth.json" 2>/dev/null) || count=0
 		if [[ $count =~ ^[0-9]+$ ]] && ((count > 0)); then echo yes; else echo no; fi
-		;;
-	gemini)
-		if [[ ${GOOGLE_GENAI_USE_VERTEXAI:-} == true ]]; then
-			# A selector is not a credential. ADC cannot be verified without
-			# contacting Google, so keep Sign in available for that case.
-			if [[ -n ${GOOGLE_API_KEY:-} ]]; then echo yes; else echo unknown; fi
-		elif [[ -s $HOME/.gemini/oauth_creds.json || -n ${GEMINI_API_KEY:-} ]]; then
-			echo yes
-		else
-			echo no
-		fi
-		;;
-	claude)
-		probe claude auth status >/dev/null 2>&1 && status=0 || status=$?
-		probe_result "$status"
-		;;
-	# Read the whole output first: `hermes auth list` exits nonzero even when
-	# it lists credentials, which pipefail would count as a failed check.
-	cursor-agent)
-		output=$(probe cursor-agent status 2>/dev/null) || status=$?
-		((${status:-0} == 124 || ${status:-0} == 137)) && {
-			echo unknown
-			return
-		}
-		if grep -q 'Logged in as' <<<"$output"; then echo yes; else echo no; fi
-		;;
-	hermes)
-		output=$(probe hermes auth list 2>/dev/null) || status=$?
-		((${status:-0} == 124 || ${status:-0} == 137)) && {
-			echo unknown
-			return
-		}
-		if grep -qE '\([0-9]+ credentials?\)' <<<"$output"; then echo yes; else echo no; fi
 		;;
 	*) echo unknown ;;
 	esac
 }
 
-# Each agent's own login. Codex and OpenCode open the default browser; Gemini
-# CLI asks how to sign in on its first interactive start.
+# OpenCode opens the default browser for its own login.
 login_agent() {
 	local agent=$1
 	use_mise_path
 	case $agent in
-	codex) codex login ;;
 	opencode) opencode auth login ;;
-	gemini)
-		printf 'Gemini CLI signs in on its first start. Pick "Login with Google",\n'
-		printf 'finish in the browser, then type /quit.\n'
-		gemini
-		;;
-	claude) claude auth login ;;
-	cursor-agent) cursor-agent login ;;
-	hermes) hermes setup ;;
 	esac
 }
 
@@ -404,34 +335,9 @@ exit "$status"
 	skills_linked || (link_skills) >/dev/null 2>&1 || true
 
 	case $agent in
-	codex)
-		command=(codex)
-		[[ -n $prompt ]] && command+=(-- "$prompt")
-		;;
 	opencode)
 		command=(opencode)
 		[[ -n $prompt ]] && command+=(--prompt "$prompt")
-		;;
-	gemini)
-		command=(gemini)
-		[[ -n $prompt ]] && command+=(--prompt-interactive "$prompt")
-		;;
-	claude)
-		command=(claude)
-		[[ -n $prompt ]] && command+=(-- "$prompt")
-		;;
-	cursor-agent)
-		# Naming the agent subcommand keeps a one-word prompt such as
-		# "login" from running that subcommand instead.
-		command=(cursor-agent)
-		[[ -n $prompt ]] && command+=(agent -- "$prompt")
-		;;
-	hermes)
-		if [[ -n $prompt ]]; then
-			command=(env -u HERMES_SESSION_SOURCE hermes chat --tui "--query=$prompt")
-		else
-			command=(hermes)
-		fi
 		;;
 	esac
 

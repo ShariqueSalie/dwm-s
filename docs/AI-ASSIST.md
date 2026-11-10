@@ -12,12 +12,12 @@ The runtime integration is adapted from Somnius's ai-assist branch at
 Open Settings > AI assistant or run:
 
 ```sh
-dwm-agent setup codex
+dwm-agent setup opencode
 dwm-agent status
 ```
 
-Supported choices are `codex`, `opencode`, `gemini`, `claude`, `cursor-agent`,
-and `hermes`. You need your own agent account or provider configuration.
+The supported choice is `opencode`. You need your own agent account or
+provider configuration.
 The desktop never supplies credentials. Sign-in uses the agent's own terminal
 or browser flow. Reopen Settings or press Refresh after it finishes.
 
@@ -30,9 +30,8 @@ plan without installing. Agent versions resolve through mise when requested;
 they are not pinned desktop dependencies.
 
 Skills live in `${XDG_DATA_HOME:-$HOME/.local/share}/dwm-s/config/agents/skills/`.
-Desktop installation links them into `~/.agents/skills`, `~/.claude/skills`,
-`~/.cursor/skills`, and `~/.hermes/skills`. Existing files, directories, and
-custom symlinks are preserved. Links already targeting the managed desktop or
+Desktop installation links them into `~/.agents/skills`. Existing files,
+directories, and custom symlinks are preserved. Links already targeting the managed desktop or
 system skill trees follow package installation/removal. Run `dwm-agent link-skills` to retry missing links.
 A separately installed `/usr/share/dwm-s/agents/skills` tree takes priority.
 An optional [noarch RPM recipe](../packaging/rpm/README.md) lets packagers ship
@@ -98,9 +97,8 @@ agent discovering these skills; retain unrelated skill directories. Existing
 custom skills are never replaced by desktop setup.
 
 Optional agent downloads use your existing mise and its registry verification;
-they are not pinned or checksum-reviewed by dwm-s. Existing global Node and
-uv selections are preserved. Repeating setup preserves the current alert
-preferences when you accept its defaults. Setup and sign-in terminals retain
+they are not pinned or checksum-reviewed by dwm-s. Repeating setup preserves
+the current alert preferences when you accept its defaults. Setup and sign-in terminals retain
 helper errors until you press Enter. Diagnosis launch errors use the same
 acknowledgement behavior, including when the selected agent is missing.
 
@@ -108,4 +106,4 @@ Agent CLI releases and authentication behavior can change independently of the
 desktop. A missing or timed-out status probe is not proof that credentials are
 invalid. Use the agent's own sign-in command to verify uncertain state. Validation
 uses mocked agent commands; it does not authenticate or send diagnosis requests
-to all six providers.
+to the provider.
