@@ -557,6 +557,21 @@ detect_display_manager() {
 	done
 }
 
+ensure_display_manager_boot() {
+	local dm=$1
+	local unit="${dm}.service"
+
+	if ! systemctl is-enabled "$unit" &>/dev/null; then
+		info "Enabling display manager: $unit"
+		sudo systemctl enable "$unit"
+	fi
+	if [ "$(systemctl get-default)" != "graphical.target" ]; then
+		info "Setting the default boot target to graphical.target."
+		sudo systemctl set-default graphical.target
+	fi
+	ok "Display manager will start automatically at boot."
+}
+
 install_lightdm_config() {
 	local lightdm_config="/etc/lightdm/lightdm.conf"
 	local lightdm_seat_section="SeatDefaults"
@@ -768,6 +783,10 @@ else
 	sudo systemctl enable lightdm.service
 	currentdm="lightdm"
 	ok "LightDM installed and enabled."
+fi
+
+if [ -n "$currentdm" ]; then
+	ensure_display_manager_boot "$currentdm"
 fi
 
 # ── LightDM greeter config ───────────────────────────────
