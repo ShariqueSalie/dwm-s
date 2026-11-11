@@ -1,6 +1,6 @@
 # dwm-s SDDM greeter
 
-The repository ships a small SDDM theme so systems that use SDDM get a branded
+The repository ships a small SDDM theme so systems that use SDDM get a plain
 login screen with the selected wallpaper.
 
 Install it with root:
