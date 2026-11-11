@@ -32,4 +32,3 @@ install:
 	install -Dm644 "$$tmp"                           $(LIGHTDM_CONF)
 	install -Dm644 slick-greeter.conf                $(LIGHTDM_DIR)/slick-greeter.conf
 	install -Dm644 wallpaper.jpg                     $(PIXMAPS_DIR)/dwm-s.jpg
-	install -Dm644 ../dwm-s.png                  $(PIXMAPS_DIR)/dwm-s-logo.png

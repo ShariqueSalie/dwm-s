@@ -594,8 +594,7 @@ install_lightdm_config() {
 		sudo restorecon \
 			"$lightdm_config" \
 			/etc/lightdm/slick-greeter.conf \
-			/usr/share/pixmaps/dwm-s.jpg \
-			/usr/share/pixmaps/dwm-s-logo.png
+			/usr/share/pixmaps/dwm-s.jpg
 	fi
 }
 
