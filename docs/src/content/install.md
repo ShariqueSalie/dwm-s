@@ -491,7 +491,7 @@ separate operation in Settings; follow its recorded transaction guidance.
 
 ## Starting dwm
 
-**Display manager** (SDDM, GDM, LightDM): log out and select **dwm** from the session list.
+**Display manager** (LightDM or GDM): log out and select **dwm** from the session list.
 
 When the interactive installer runs inside an active X11 session, it offers
 the `dwm-display-setup` wizard after installation. The wizard previews the

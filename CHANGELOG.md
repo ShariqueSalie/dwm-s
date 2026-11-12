@@ -6,6 +6,11 @@ versions from `config.mk`.
 
 ## [Unreleased]
 
+### Removed
+
+- Remove the unused SDDM greeter theme and its installer support. LightDM
+  remains the supported display-manager greeter.
+
 ### Fixed
 
 - Show the correct panel icon for running applications whose window class is
