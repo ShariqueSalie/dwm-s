@@ -1,0 +1,10 @@
+[SddmGreeterTheme]
+Name=dwm-s
+Description=dwm-s login screen
+Author=dwm-s
+Type=sddm-theme
+Version=1.0
+MainScript=Main.qml
+ConfigFile=theme.conf
+Theme-Id=dwm-s
+Theme-API=2.0

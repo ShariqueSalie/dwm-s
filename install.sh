@@ -543,9 +543,13 @@ detect_display_manager() {
 		echo "gdm"
 		return
 		;;
+	sddm.service)
+		echo "sddm"
+		return
+		;;
 	esac
 
-	for unit in lightdm gdm; do
+	for unit in lightdm gdm sddm; do
 		if command -v "$unit" &>/dev/null; then
 			echo "$unit"
 			return
@@ -591,6 +595,17 @@ install_lightdm_config() {
 			"$lightdm_config" \
 			/etc/lightdm/slick-greeter.conf \
 			/usr/share/pixmaps/dwm-s.jpg
+	fi
+}
+
+install_sddm_config() {
+	local sddm_config="/etc/sddm.conf.d/20-dwm-s.conf"
+	local sddm_theme_dir="/usr/share/sddm/themes/dwm-s"
+
+	sudo make -C "$REPO_DIR/sddm" install
+	if command -v restorecon &>/dev/null; then
+		sudo restorecon "$sddm_config"
+		sudo restorecon -R "$sddm_theme_dir"
 	fi
 }
 
@@ -778,6 +793,13 @@ if [[ $currentdm == "lightdm" ]]; then
 	info "Deploying LightDM Slick Greeter config..."
 	install_lightdm_config
 	ok "LightDM config deployed."
+fi
+
+# ── SDDM greeter config ──────────────────────────────────
+if [[ $currentdm == "sddm" ]]; then
+	info "Deploying dwm-s SDDM theme..."
+	install_sddm_config
+	ok "SDDM theme deployed."
 fi
 
 # ── Build & Install ──────────────────────────────────────
