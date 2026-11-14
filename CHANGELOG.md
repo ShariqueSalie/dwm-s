@@ -6,6 +6,11 @@ versions from `config.mk`.
 
 ## [Unreleased]
 
+### Changed
+
+- Use the Nerd Font S-circle glyph for the panel's Control Center button
+  instead of the raster logo, so it scales with the configured font.
+
 ### Removed
 
 - Remove the unused SDDM greeter theme and its installer support. LightDM

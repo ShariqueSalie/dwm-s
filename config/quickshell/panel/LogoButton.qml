@@ -11,26 +11,10 @@ PanelPill {
     Layout.preferredHeight: Theme.pillHeight
     hovered: logoMouse.containsMouse
 
-    Image {
-        id: logoImage
-
+    IconText {
         anchors.centerIn: parent
-        width: Theme.scaledSize(24)
-        height: Theme.scaledSize(25.2)
-        source: Qt.resolvedUrl("../assets/ctt_logo.png")
-        fillMode: Image.PreserveAspectFit
-        asynchronous: true
-        smooth: true
-        mipmap: true
-    }
-
-    UiText {
-        anchors.centerIn: parent
-        visible: logoImage.status === Image.Error
-        text: "CTT"
-        color: Theme.accent
-        font.pixelSize: Theme.tinyFontSize
-        font.bold: true
+        text: "󰰣"
+        font.pixelSize: Theme.scaledSize(20)
     }
 
     MouseArea {
