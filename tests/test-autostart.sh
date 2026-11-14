@@ -585,7 +585,7 @@ EOF
 		END { exit !(imported && reloaded && started && imported < reloaded && reloaded < started) }
 	' "$state/systemctl.log"
 	awk -F '\t' '
-		index(":" $1 ":", ":X-DWM:") && index(":" $1 ":", ":dwm:") { found = 1 }
+		index(":" $1 ":", ":X-DWM:") && index(":" $1 ":", ":dwm-s:") { found = 1 }
 		END { exit !found }
 	' "$state/systemctl.log"
 }

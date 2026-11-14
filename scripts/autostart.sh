@@ -427,15 +427,27 @@ if [ -n "$xsettings_helper" ]; then
 fi
 
 desktop_tokens=${XDG_CURRENT_DESKTOP:-}
-case :$desktop_tokens: in
-*:dwm:*) ;;
-*) desktop_tokens="${desktop_tokens:+$desktop_tokens:}dwm" ;;
-esac
-case :$desktop_tokens: in
+normalized_tokens=
+set -f
+old_ifs=$IFS
+IFS=:
+for token in $desktop_tokens; do
+	case $token in
+	'' | dwm | dwm-s) continue ;;
+	esac
+	case ":$normalized_tokens:" in
+	*":$token:"*) continue ;;
+	esac
+	normalized_tokens="${normalized_tokens:+$normalized_tokens:}$token"
+done
+IFS=$old_ifs
+set +f
+normalized_tokens="${normalized_tokens:+$normalized_tokens:}dwm-s"
+case ":$normalized_tokens:" in
 *:X-DWM:*) ;;
-*) desktop_tokens="X-DWM:$desktop_tokens" ;;
+*) normalized_tokens="X-DWM:$normalized_tokens" ;;
 esac
-XDG_CURRENT_DESKTOP=$desktop_tokens
+XDG_CURRENT_DESKTOP=$normalized_tokens
 export XDG_CURRENT_DESKTOP
 export DESKTOP_SESSION="${DESKTOP_SESSION:-dwm}"
 export XDG_SESSION_TYPE=x11

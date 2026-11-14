@@ -10,6 +10,8 @@ versions from `config.mk`.
 
 - Use the Nerd Font S-circle glyph for the panel's Control Center button
   instead of the raster logo, so it scales with the configured font.
+- Report the desktop environment identifier as `X-DWM:dwm-s` and replace the
+  legacy `dwm` token with `dwm-s`.
 
 ### Removed
 
