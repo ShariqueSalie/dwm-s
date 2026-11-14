@@ -6,17 +6,18 @@ versions from `config.mk`.
 
 ## [Unreleased]
 
-### Added
-
-- Restore the SDDM greeter theme and installer support for systems that use
-  SDDM, including the plain login wallpaper.
-
 ### Changed
 
 - Use the Nerd Font S-circle glyph for the panel's Control Center button
   instead of the raster logo, so it scales with the configured font.
 - Report the desktop environment identifier as `X-DWM:dwm-s` and replace the
   legacy `dwm` token with `dwm-s`.
+- Use the plain Nord wallpaper for the LightDM greeter.
+
+### Removed
+
+- Remove the unused SDDM greeter theme and its installer support. LightDM
+  remains the supported display-manager greeter.
 
 ### Fixed
 
