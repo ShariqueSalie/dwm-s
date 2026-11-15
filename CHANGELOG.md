@@ -16,6 +16,9 @@ versions from `config.mk`.
 - Report the desktop environment identifier as `X-DWM:dwm-s` and replace the
   legacy `dwm` token with `dwm-s`.
 - Use the plain Nord wallpaper for the LightDM greeter.
+- Add `install.sh --hostname NAME` and an interactive hostname prompt, keeping
+  `/etc/hosts` in sync with the new name.
+- Install the Zed editor from Flathub in the recommended and full profiles.
 
 ### Removed
 

@@ -24,6 +24,7 @@ Options:
                          Defaults to DWM_INSTALL_PROFILE or full.
   --non-interactive      Use unattended defaults and do not prompt.
   --yes                  Accept the interactive install summary.
+  --hostname NAME        Set the system hostname (optional).
   --install-herdr        Install verified Herdr as an optional workspace.
   --skip-herdr           Do not install Herdr.
   --install-ai-agent NAME
@@ -56,11 +57,13 @@ MESLO_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v${MESLO_VE
 MESLO_SHA256="13b502ac8c2bd9d3161018064560e23cd42b175bb730780a270975265a19ad57"
 NORDIC_THEME_URL="https://github.com/EliverLara/Nordic.git"
 NORDIC_THEME_REF="master"
+ZED_FLATPAK_ID="dev.zed.Zed"
 ARCH="$(uname -m)"
 FEDORA_GAMING_COPR="christitustech/copr-fedora"
 INSTALL_PROFILE="${DWM_INSTALL_PROFILE:-full}"
 HERDR_INSTALL_MODE="${DWM_INSTALL_HERDR:-false}"
 AI_AGENTS=()
+HOSTNAME_CHOICE=""
 NON_INTERACTIVE=false
 ASSUME_YES=false
 FEDORA_GAMING_REPOS_APPROVED=false
@@ -87,6 +90,22 @@ while (($# > 0)); do
 		;;
 	--yes)
 		ASSUME_YES=true
+		shift
+		;;
+	--hostname)
+		if (($# < 2)); then
+			err "--hostname requires a value."
+			exit 1
+		fi
+		HOSTNAME_CHOICE=$2
+		shift 2
+		;;
+	--hostname=*)
+		HOSTNAME_CHOICE=${1#*=}
+		if [[ -z $HOSTNAME_CHOICE ]]; then
+			err "--hostname requires a value."
+			exit 1
+		fi
 		shift
 		;;
 	--install-herdr)
@@ -193,6 +212,40 @@ install_herdr_profile() {
 
 fedora_gaming_profile() {
 	[[ $DISTRO_ID == "fedora" && $INSTALL_PROFILE == "full" && $ARCH == "x86_64" ]]
+}
+
+validate_hostname() {
+	local name=$1
+
+	# hostnamectl sets the static hostname, which must be a single DNS label.
+	if [[ ! $name =~ ^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$ ]]; then
+		err "Invalid hostname: $name"
+		err "Use 1-63 letters, digits, or hyphens; no dots, and no leading or trailing hyphen."
+		return 1
+	fi
+}
+
+apply_hostname() {
+	local name=$1
+	local current
+
+	current=$(hostname 2>/dev/null || true)
+	if [[ $current == "$name" ]]; then
+		ok "Hostname is already set to $name."
+		return 0
+	fi
+	info "Setting hostname to $name..."
+	if ! sudo hostnamectl set-hostname "$name"; then
+		warn "Could not set hostname to $name."
+		return 1
+	fi
+	# Keep /etc/hosts in sync so sudo does not stall resolving the new name.
+	if grep -qE '^127\.0\.1\.1[[:space:]]' /etc/hosts 2>/dev/null; then
+		sudo sed -i -E "s/^127\.0\.1\.1[[:space:]].*/127.0.1.1\t$name/" /etc/hosts
+	else
+		printf '127.0.1.1\t%s\n' "$name" | sudo tee -a /etc/hosts >/dev/null
+	fi
+	ok "Hostname set to $name."
 }
 
 confirm_fedora_gaming_repositories() {
@@ -328,11 +381,17 @@ print_install_summary() {
 	printf '  Package manager: %s\n' "$PKG_CMD"
 	printf '  Profile: %s\n' "$INSTALL_PROFILE"
 	printf '  Mode: %s\n' "$([[ $NON_INTERACTIVE == true ]] && echo non-interactive || echo interactive)"
+	if [[ -n ${HOSTNAME_CHOICE:-} ]]; then
+		printf '  Hostname: %s\n' "$HOSTNAME_CHOICE"
+	else
+		printf '  Hostname: unchanged (use --hostname NAME to set)\n'
+	fi
 	print_summary_profile "Required packages" required
 	printf '  Time synchronization: enable/start timesyncd unless another provider or a mask is present\n'
 	if install_recommended_profile; then
 		print_summary_profile "Recommended packages" recommended
 		printf '  Gear Lever: user-scoped Flathub install (%s)\n' 'it.mijorus.gearlever'
+		printf '  Zed editor: user-scoped Flathub install (%s)\n' "$ZED_FLATPAK_ID"
 	else
 		printf '  Recommended packages: skipped\n'
 	fi
@@ -451,6 +510,33 @@ install_nordic_gtk_theme() {
 	sudo find "$target" -type f -exec chmod 0644 {} +
 	rm -rf "$tmp_dir"
 	ok "Nordic GTK theme installed system-wide."
+}
+
+install_zed() {
+	if command -v zed &>/dev/null || command -v zeditor &>/dev/null; then
+		ok "Zed is already installed."
+		return 0
+	fi
+	if flatpak info "$ZED_FLATPAK_ID" &>/dev/null; then
+		ok "Zed Flatpak is already installed."
+		return 0
+	fi
+	if ! command -v flatpak &>/dev/null; then
+		warn "flatpak is unavailable; skipping Zed install."
+		return 1
+	fi
+	# Always use the user installation so the install stays scoped to this account.
+	if ! flatpak remote-add --if-not-exists --user flathub \
+		https://flathub.org/repo/flathub.flatpakrepo; then
+		warn "Could not add Flathub; skipping Zed install."
+		return 1
+	fi
+	info "Installing Zed from Flathub..."
+	if ! flatpak install -y --user flathub "$ZED_FLATPAK_ID"; then
+		warn "Zed install failed; retry with: flatpak install --user flathub $ZED_FLATPAK_ID"
+		return 1
+	fi
+	ok "Zed is installed."
 }
 
 install_supported_terminal() {
@@ -603,8 +689,28 @@ info "Distribution: $DISTRO_NAME"
 info "Family: $DISTRO_FAMILY"
 info "Package manager: $PKG_CMD"
 info "Install profile: $INSTALL_PROFILE"
+if [[ -n ${HOSTNAME_CHOICE:-} ]]; then
+	validate_hostname "$HOSTNAME_CHOICE" || exit 1
+fi
 confirm_install_summary
 confirm_fedora_gaming_repositories
+
+# ── Hostname ─────────────────────────────────────────────
+if [[ -n ${HOSTNAME_CHOICE:-} ]]; then
+	apply_hostname "$HOSTNAME_CHOICE" || true
+elif [[ $NON_INTERACTIVE != true ]]; then
+	printf 'Change the system hostname from "%s"? [y/N] ' "$(hostname 2>/dev/null || echo unknown)"
+	read -r hostname_answer
+	case "$hostname_answer" in
+	y | Y | yes | YES)
+		printf 'New hostname: '
+		read -r HOSTNAME_CHOICE
+		if [[ -n $HOSTNAME_CHOICE ]] && validate_hostname "$HOSTNAME_CHOICE"; then
+			apply_hostname "$HOSTNAME_CHOICE" || true
+		fi
+		;;
+	esac
+fi
 
 if [[ $NON_INTERACTIVE != true ]]; then
 	"$REPO_DIR/scripts/configure-build.sh"
@@ -716,6 +822,12 @@ else
 			terminal="$(detect_terminal)"
 		fi
 	fi
+fi
+
+# ── Zed editor ───────────────────────────────────────────
+if install_recommended_profile; then
+	info "Installing the Zed editor..."
+	install_zed || true
 fi
 
 # ── Herdr terminal workspace ─────────────────────────────
