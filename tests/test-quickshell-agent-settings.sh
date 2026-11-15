@@ -14,7 +14,7 @@ agent=$repo/scripts/dwm-agent
 test "$(grep -c 'AgentSettingsModel {' "$shell_qml")" -eq 1
 grep -Fq 'settingsVisible: settingsModel.visible && settingsModel.selectedSectionId === "agent"' "$shell_qml"
 grep -Fq 'agentModel: agentModel' "$shell_qml"
-grep -Fq '{ "id": "agent", "label": "AI assistant",' "$settings_model"
+grep -Fq '{ "id": "agent", "label": "Security", "description": "Crash and hang alerts" }' "$settings_model"
 grep -Fq 'required property var agentModel' "$settings_window"
 grep -Fq 'AgentSettingsPane {' "$settings_window"
 grep -Fq 'root.settingsModel.selectedSectionId === "agent"' "$settings_window"
@@ -37,27 +37,16 @@ if grep -Eq 'Timer|repeat:' "$agent_model"; then
 	exit 1
 fi
 
-# One card per listed agent with state badges and per-agent actions.
-grep -Fq 'SectionLabel { label: "Agents" }' "$agent_pane"
-grep -Fq 'model: root.agentModel.agents' "$agent_pane"
-grep -Fq '"Installed" : "Not installed"' "$agent_pane"
-grep -Fq '"Signed in"' "$agent_pane"
-grep -Fq '"Not signed in"' "$agent_pane"
-grep -Fq 'label: "Default"' "$agent_pane"
-grep -Fq 'label: "Install..."' "$agent_pane"
-grep -Fq 'visible: !agentCard.modelData.installed' "$agent_pane"
-grep -Fq 'root.agentModel.openTerminal("setup", agentCard.modelData.name)' "$agent_pane"
-grep -Fq 'label: "Sign in..."' "$agent_pane"
-grep -Fq 'visible: agentCard.modelData.installed && !agentCard.signedIn' "$agent_pane"
-grep -Fq 'root.agentModel.openTerminal("login", agentCard.modelData.name)' "$agent_pane"
-grep -Fq 'label: "Make default"' "$agent_pane"
-grep -Fq 'visible: agentCard.modelData.installed && !agentCard.modelData.isDefault' "$agent_pane"
-grep -Fq 'root.agentModel.makeDefault(agentCard.modelData.name)' "$agent_pane"
-grep -Fq 'Press Refresh when they finish' "$agent_pane"
-if grep -Fq 'label: "Set up..."' "$agent_pane"; then
-	printf 'The generic Set up button was replaced by per-agent Install.\n' >&2
+# Agents and Skills stay out of Settings; the alert switches remain.
+if grep -Eq 'SectionLabel \{ label: "(Agents|Skills)" \}' "$agent_pane"; then
+	printf 'Agents and Skills must not be exposed in the Security pane.\n' >&2
 	exit 1
 fi
+if grep -Eq 'root\.agentModel\.(agents|skills)' "$agent_pane"; then
+	printf 'The Security pane must not render agent or skills state.\n' >&2
+	exit 1
+fi
+grep -Fq 'SectionLabel { label: "Alerts" }' "$agent_pane"
 grep -Fq 'title: "Crash notifications"' "$agent_pane"
 grep -Fq 'title: "Hang detection"' "$agent_pane"
 grep -Fq 'dwm checks every few seconds that windows still answer and tells you when one stops for 10 seconds. ' "$agent_pane"
@@ -129,4 +118,4 @@ list_env list | awk -F '\t' '$2 != "opencode" && $7 != "no" { exit 1 }'
 grep -Fq 'root.terminalOpened();' "$repo/config/quickshell/settings/AgentSettingsModel.qml"
 grep -Fq 'onTerminalOpened: settingsModel.close()' "$repo/config/quickshell/shell.qml"
 
-printf 'Quickshell AI assistant settings contract: PASS\n'
+printf 'Quickshell Security settings contract: PASS\n'

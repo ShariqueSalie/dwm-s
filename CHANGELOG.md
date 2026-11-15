@@ -11,6 +11,8 @@ versions from `config.mk`.
 - Use the Nerd Font S-circle glyph for the panel's Control Center button
   instead of the raster logo, so it scales with the configured font.
 - Use the same S-circle glyph for the dwm-s provider icon in Update Center.
+- Rename the Settings AI assistant section to Security and remove its Agents
+  and Skills blocks; crash and hang alerts remain available there.
 - Report the desktop environment identifier as `X-DWM:dwm-s` and replace the
   legacy `dwm` token with `dwm-s`.
 - Use the plain Nord wallpaper for the LightDM greeter.

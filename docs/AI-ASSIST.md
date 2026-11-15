@@ -9,7 +9,7 @@ The runtime integration is adapted from Somnius's ai-assist branch at
 
 ## Setup
 
-Open Settings > AI assistant or run:
+Configure an agent from a terminal:
 
 ```sh
 dwm-agent setup opencode

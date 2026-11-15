@@ -217,7 +217,8 @@ private system information.
 
 Packaged customization and diagnosis skills, optional crash/hang diagnosis, and
 agent setup are documented in [AI assistance](docs/AI-ASSIST.md). Open Settings >
-AI assistant or run `dwm-agent setup`. Diagnosis preserves normal agent approvals.
+Security to manage crash and hang alerts, or run `dwm-agent setup`. Diagnosis
+preserves normal agent approvals.
 
 ## Contributing
 
