@@ -7,7 +7,7 @@ row=$repo/config/quickshell/updatecenter/ProviderRow.qml
 window=$repo/config/quickshell/updatecenter/UpdateCenterWindow.qml
 model=$repo/config/quickshell/updatecenter/UpdateCenterModel.qml
 
-for asset in dwm-update-center.png fedora.svg dwm-s.png flatpak.svg mise.svg other.svg; do
+for asset in dwm-update-center.png fedora.svg flatpak.svg mise.svg other.svg; do
 	test -s "$assets/$asset"
 done
 test ! -e "$assets/PROVENANCE.md"
@@ -31,7 +31,6 @@ test -f "$window"
 
 for mapping in \
 	'fedora:fedora.svg' \
-	'dwm-s:dwm-s.png' \
 	'flatpak:flatpak.svg' \
 	'mise:mise.svg' \
 	'other:other.svg'; do
@@ -42,6 +41,12 @@ done
 
 grep -Fq 'readonly property var providerIcons:' "$row"
 grep -Fq 'return root.providerIcons[providerId] || root.providerIcons.other;' "$row"
+grep -Fq 'visible: root.provider.id === "dwm-s"' "$row"
+grep -Fq 'text: "󰰣"' "$row"
+if grep -Fq '"dwm-s": "../assets/update-center/dwm-s.png"' "$row"; then
+	printf '%s\n' 'The dwm-s provider icon must use the S-circle glyph.' >&2
+	exit 1
+fi
 if grep -Eq 'color: "#111827"|border[.]color: "#94a3b8"' "$row"; then
 	printf '%s\n' 'Update Center provider icons must render without a background tile or border.' >&2
 	exit 1

@@ -21,7 +21,6 @@ Rectangle {
     readonly property string relativeCheckAge: root.formatCheckAge(root.provider.lastSuccess, root.nowSeconds)
     readonly property var providerIcons: ({
         "fedora": "../assets/update-center/fedora.svg",
-        "dwm-s": "../assets/update-center/dwm-s.png",
         "flatpak": "../assets/update-center/flatpak.svg",
         "mise": "../assets/update-center/mise.svg",
         "other": "../assets/update-center/other.svg"
@@ -169,9 +168,17 @@ Rectangle {
                 Accessible.role: Accessible.Graphic
                 Accessible.name: root.provider.name + " logo"
 
+                IconText {
+                    anchors.centerIn: parent
+                    visible: root.provider.id === "dwm-s"
+                    text: "󰰣"
+                    font.pixelSize: Theme.scaledSize(20)
+                }
+
                 Image {
                     anchors.fill: parent
                     anchors.margins: Theme.spacingSm
+                    visible: root.provider.id !== "dwm-s"
                     source: root.iconFor(root.provider.id)
                     fillMode: Image.PreserveAspectFit
                     smooth: true
