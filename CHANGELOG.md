@@ -22,6 +22,9 @@ versions from `config.mk`.
 
 ### Removed
 
+- Remove the Herdr workspace entry from the command-line dependency checker and
+  the System Health dependency diagnostics. Herdr itself remains optional and
+  unchanged.
 - Remove the default Looking Glass VM (`Super`+`W`), ChatGPT (`Super`+`A`),
   Gemini (`Super`+`Shift`+`A`), and X/Twitter new-post (`Super`+`Shift`+`X`)
   hotkeys.

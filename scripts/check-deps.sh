@@ -201,13 +201,6 @@ if [ $TERM_FOUND -eq 0 ]; then
 	MISSING=$((MISSING + 1))
 	MISSING_PACKAGES=$((MISSING_PACKAGES + 1))
 fi
-if command -v herdr &>/dev/null; then
-	printf "  ${GREEN}✓${NC} Herdr workspace\n"
-elif [ -x "$HOME/.local/bin/herdr" ]; then
-	printf "  ${GREEN}✓${NC} Herdr workspace ($HOME/.local/bin/herdr)\n"
-else
-	printf "  ${YELLOW}○${NC} Herdr workspace ${YELLOW}(optional; plain terminals remain available)${NC}\n"
-fi
 echo ""
 
 # ── Optional but recommended ────────────────────────────
