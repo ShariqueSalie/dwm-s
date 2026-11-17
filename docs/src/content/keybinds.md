@@ -25,7 +25,6 @@ Bindings are defined in `config/hotkeys.toml` and reload instantly on save — n
 | `Super` + `E` | File manager |
 | `Super` + `V` | Clipboard history (capture and disk persistence are separate opt-ins) |
 | `Super` + `B` | Browser |
-| `Super` + `W` | WhatsApp web app |
 | `Super` + `Shift` + `W` | Randomize wallpaper |
 | `Super` + `/` | Keybind viewer |
 | `Super` + `F1` | Control Center |
@@ -52,12 +51,9 @@ JPEG. The lightweight capture flow intentionally has no annotation toolbar.
 
 ## Applications and Web Apps
 
-| Keys | Action |
-|------|--------|
-| `Super` + `W` | WhatsApp web app |
-
-`Super` + `W` opens WhatsApp as a standalone web app window using the default
-browser. Existing user hotkey files are preserved on upgrade.
+No web-app hotkeys are bound by default. Add your own in `hotkeys.toml`; the
+`$webapp` variable points to `webapp-launch`, which opens a URL in a dedicated
+browser window.
 
 ## Window Management
 

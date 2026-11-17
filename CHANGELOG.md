@@ -8,7 +8,6 @@ versions from `config.mk`.
 
 ### Changed
 
-- Bind `Super`+`W` to WhatsApp instead of the optional Looking Glass VM client.
 - Use the Nerd Font S-circle glyph for the panel's Control Center button
   instead of the raster logo, so it scales with the configured font.
 - Use the same S-circle glyph for the dwm-s provider icon in Update Center.
@@ -23,8 +22,9 @@ versions from `config.mk`.
 
 ### Removed
 
-- Remove the default ChatGPT (`Super`+`A`), Gemini (`Super`+`Shift`+`A`), and
-  X/Twitter new-post (`Super`+`Shift`+`X`) web-app hotkeys.
+- Remove the default Looking Glass VM (`Super`+`W`), ChatGPT (`Super`+`A`),
+  Gemini (`Super`+`Shift`+`A`), and X/Twitter new-post (`Super`+`Shift`+`X`)
+  hotkeys.
 - Remove the unused SDDM greeter theme and its installer support. LightDM
   remains the supported display-manager greeter.
 
