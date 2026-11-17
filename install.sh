@@ -454,7 +454,9 @@ install_meslo_nerd_font() {
 	local tmp_dir
 	local archive
 
-	if fc-list 2>/dev/null | command grep -Eqi 'MesloLGS (NF|Nerd Font)'; then
+	# Consume all font-list output: grep -q can exit early and trip pipefail
+	# with SIGPIPE, making an installed font appear missing.
+	if fc-list 2>/dev/null | awk 'tolower($0) ~ /meslolgs (nf|nerd font)/ { found = 1 } END { exit !found }'; then
 		ok "MesloLGS Nerd Font is already installed."
 		return
 	fi
@@ -475,10 +477,21 @@ install_meslo_nerd_font() {
 		return 1
 	fi
 
-	mkdir -p "$font_dir"
-	unzip -j -q -o "$archive" '*.ttf' -d "$font_dir"
+	if ! mkdir -p "$font_dir"; then
+		rm -rf "$tmp_dir"
+		err "Could not create the Meslo font directory."
+		return 1
+	fi
+	if ! unzip -j -q -o "$archive" '*.ttf' -d "$font_dir"; then
+		rm -rf "$tmp_dir"
+		err "Could not extract Meslo Nerd Font."
+		return 1
+	fi
 	rm -rf "$tmp_dir"
-	fc-cache -f "$font_dir" >/dev/null 2>&1
+	if ! fc-cache -f "$font_dir" >/dev/null 2>&1; then
+		warn "Meslo Nerd Font installed, but the font cache refresh failed."
+		return 0
+	fi
 	ok "MesloLGS Nerd Font installed."
 }
 
@@ -797,8 +810,11 @@ if install_recommended_profile; then
 	info "Installing fonts..."
 	FONT_DIR="$HOME/.local/share/fonts"
 	mkdir -p "$FONT_DIR"
-	install_meslo_nerd_font
-	ok "Fonts installed."
+	if install_meslo_nerd_font; then
+		ok "Fonts installed."
+	else
+		warn "Meslo Nerd Font installation failed; icon glyphs may be missing."
+	fi
 fi
 
 # ── Terminal emulator ────────────────────────────────────

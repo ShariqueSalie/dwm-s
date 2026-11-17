@@ -62,11 +62,11 @@ package_available() {
 		case "$package_arch" in
 		i686 | x86_64 | aarch64)
 			dnf -q repoquery --available --qf '%{name}.%{arch}' "$1" 2>/dev/null |
-				command grep -Fxq "$1"
+				awk -v expected="$1" '$0 == expected { found = 1 } END { exit !found }'
 			;;
 		*)
 			dnf -q repoquery --available --qf '%{name}' "$1" 2>/dev/null |
-				command grep -Fxq "$1"
+				awk -v expected="$1" '$0 == expected { found = 1 } END { exit !found }'
 			;;
 		esac
 		;;

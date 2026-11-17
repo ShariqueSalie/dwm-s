@@ -30,5 +30,8 @@ install:
 		cp -a $(LIGHTDM_CONF) $(LIGHTDM_CONF).dwm-s.$$(date +%Y%m%d%H%M%S).bak; \
 	fi; \
 	install -Dm644 "$$tmp"                           $(LIGHTDM_CONF)
+	if [ -f $(LIGHTDM_DIR)/slick-greeter.conf ] && ! cmp -s slick-greeter.conf $(LIGHTDM_DIR)/slick-greeter.conf; then \
+		cp -a $(LIGHTDM_DIR)/slick-greeter.conf $(LIGHTDM_DIR)/slick-greeter.conf.dwm-s.$$(date +%Y%m%d%H%M%S).bak; \
+	fi; \
 	install -Dm644 slick-greeter.conf                $(LIGHTDM_DIR)/slick-greeter.conf
 	install -Dm644 wallpaper.jpg                     $(PIXMAPS_DIR)/dwm-s.jpg

@@ -30,6 +30,12 @@ versions from `config.mk`.
 
 ### Fixed
 
+- Keep a timestamped backup of an existing LightDM Slick Greeter configuration
+  before the installer replaces it.
+- Treat Meslo Nerd Font download and checksum failures as non-fatal, and detect
+  an installed Meslo font reliably under `pipefail`, so the installer neither
+  aborts late nor re-downloads a font that is already present.
+- Avoid `grep -q`/`SIGPIPE` false negatives in the package availability check.
 - Show the correct panel icon for running applications whose window class is
   not an icon name, such as Firefox (`org.mozilla.firefox`). The panel now
   falls back to the matching desktop entry's icon, and unknown applications

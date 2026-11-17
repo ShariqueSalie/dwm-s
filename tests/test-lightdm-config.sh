@@ -30,4 +30,23 @@ cmp -s "$work/fedora.expected" "$fedora_stage/etc/lightdm/lightdm.conf"
 grep -Fqx 'xft-dpi=96' "$fedora_stage/etc/lightdm/slick-greeter.conf"
 grep -Fqx 'activate-numlock=false' "$fedora_stage/etc/lightdm/slick-greeter.conf"
 
+# A second install must keep the existing greeter settings in a backup.
+printf 'local greeter setting=true\n' >>"$fedora_stage/etc/lightdm/slick-greeter.conf"
+cp "$fedora_stage/etc/lightdm/slick-greeter.conf" "$work/greeter.expected"
+make -C "$repo/lightdm" --no-print-directory \
+	DESTDIR="$fedora_stage" \
+	LIGHTDM_SEAT_SECTION='Seat:*' \
+	LIGHTDM_GREETER_SESSION=slick-greeter \
+	LIGHTDM_SESSION_WRAPPER= \
+	LIGHTDM_LOGIND_CHECK=true \
+	install >/dev/null
+greeter_backup=$(
+	find "$fedora_stage/etc/lightdm" -maxdepth 1 \
+		-name 'slick-greeter.conf.dwm-s.*.bak' -print -quit
+)
+test -n "$greeter_backup"
+cmp -s "$work/greeter.expected" "$greeter_backup"
+cmp -s "$repo/lightdm/slick-greeter.conf" \
+	"$fedora_stage/etc/lightdm/slick-greeter.conf"
+
 printf 'LightDM config rendering: PASS\n'

@@ -73,6 +73,9 @@ if grep -Eq 'sudo chown (-R|--recursive)' "$REPO_DIR/install.sh"; then
 	printf 'Installer uses a broad recursive ownership repair.\n' >&2
 	exit 1
 fi
+grep -Fq 'if install_meslo_nerd_font; then' "$REPO_DIR/install.sh"
+grep -Fq "awk 'tolower(\$0) ~ /meslolgs (nf|nerd font)/" "$REPO_DIR/install.sh"
+grep -Fq 'awk -v expected="$1"' "$REPO_DIR/scripts/dwm-utils.sh"
 MAKE_DATABASE=$(make -qp -C "$REPO_DIR" 2>/dev/null || true)
 if awk '$1 == "install-system:" || $1 == "install:" { for (i = 2; i <= NF; i++) if ($i == "all") found = 1 } END { exit !found }' \
 	<<<"$MAKE_DATABASE"; then
