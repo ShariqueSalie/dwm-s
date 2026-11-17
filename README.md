@@ -8,11 +8,7 @@ part themselves.
 **dwm-s is a Fedora-only distribution.** Fedora Linux is the sole supported
 platform for installation, runtime behavior, package resolution, testing, and
 release qualification. Use either the existing-system installer on Fedora Linux.
-Fedora 45 images use Thunar while the optional COPR/Path repository is
-unavailable. Thunar is the fresh-account default on Fedora 44 too, even with
-Path installed. Recommended and full installs provide Thunar; core installs
-seed a folder default only if Thunar is already installed. Existing user-selected
-MIME preferences remain preserved.
+Existing user-selected MIME preferences remain preserved.
 
 ## What You Get
 
