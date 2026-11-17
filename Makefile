@@ -128,6 +128,15 @@ dwm: check-build-deps ${OBJ}
 dwm-clipboard-observer: clipboard-observer.c config.mk Makefile
 	${CC} ${CPPFLAGS} ${CFLAGS} -o $@ clipboard-observer.c ${LDFLAGS} $$( ${PKG_CONFIG} --cflags --libs ${CLIPBOARD_MODULES} )
 
+# Compile test-only C sources so the CodeQL manual build tracer extracts them.
+# They are not part of `all`, so a normal build leaves them unanalyzed.
+codeql-test-sources:
+	@objects=$$(mktemp -d); \
+	trap 'rm -rf "$$objects"' EXIT HUP INT TERM; \
+	for source in tests/*.c tests/fixtures/*.c; do \
+		${CC} ${CPPFLAGS} ${CFLAGS} -c "$$source" -o "$$objects/$$(basename "$$source").o"; \
+	done
+
 check-clipboard-observer: dwm-clipboard-observer
 	$(call run_managed_test,python3 tests/test-clipboard-observer.py)
 

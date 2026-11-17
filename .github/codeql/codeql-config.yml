@@ -1,0 +1,9 @@
+name: "dwm-s CodeQL configuration"
+
+# config.def.h is the default template that is copied to config.h at build
+# time. It is a header fragment, not a standalone translation unit: it refers
+# to dwm types and functions defined in dwm.c. Neither the manual traced build
+# (which compiles config.h) nor default setup's no-build inference can extract
+# it, so exclude it here. The generated config.h carries the same code.
+paths-ignore:
+  - config.def.h
