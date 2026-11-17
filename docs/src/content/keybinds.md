@@ -25,7 +25,7 @@ Bindings are defined in `config/hotkeys.toml` and reload instantly on save — n
 | `Super` + `E` | File manager |
 | `Super` + `V` | Clipboard history (capture and disk persistence are separate opt-ins) |
 | `Super` + `B` | Browser |
-| `Super` + `W` | Looking Glass VM client (when installed) |
+| `Super` + `W` | WhatsApp web app |
 | `Super` + `Shift` + `W` | Randomize wallpaper |
 | `Super` + `/` | Keybind viewer |
 | `Super` + `F1` | Control Center |
@@ -54,16 +54,10 @@ JPEG. The lightweight capture flow intentionally has no annotation toolbar.
 
 | Keys | Action |
 |------|--------|
-| `Super` + `A` | ChatGPT |
-| `Super` + `Shift` + `A` | Gemini |
-| `Super` + `Shift` + `X` | X/Twitter — new post |
+| `Super` + `W` | WhatsApp web app |
 
-`Super` + `A` opens an installed ChatGPT desktop application when one is
-available and falls back to the ChatGPT web app otherwise. The application
-launcher hides the ChatGPT web entry while a native desktop entry is installed.
-Existing systems with the former stock web-app binding receive the same
-native-first behavior through the updated `webapp-launch` helper. Upgrades do
-not edit customized hotkey files.
+`Super` + `W` opens WhatsApp as a standalone web app window using the default
+browser. Existing user hotkey files are preserved on upgrade.
 
 ## Window Management
 
