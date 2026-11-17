@@ -18,7 +18,7 @@ Existing user-selected MIME preferences remain preserved.
 | **Everyday essentials** | A polished panel with a keyboard layout switcher, application launcher, system tray, Control Center, Settings, notifications, screenshots, audio, brightness, and power controls. |
 | **Easy discovery** | A searchable window overview across tags, an interactive keybind viewer, guided display setup, built-in diagnostics, workstation self-heal, and clear unsupported-feature reporting. |
 | **Personal configuration** | Visual layout, per-tag gap and scale controls, optional floating titlebars, plus live-reloading hotkeys, themes, and window rules, with local configuration preserved across upgrades. |
-| **Two installation paths** | A ready-to-install Fedora image or an installer for an existing Fedora system. |
+| **Two installation paths** | A ready-to-install Fedora installer for an existing Fedora system. |
 
 > dwm-s is an X11 desktop. A Wayland-native session is not currently part
 > of the project scope.
