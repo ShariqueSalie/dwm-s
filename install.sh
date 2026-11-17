@@ -24,7 +24,6 @@ Options:
                          Defaults to DWM_INSTALL_PROFILE or full.
   --non-interactive      Use unattended defaults and do not prompt.
   --yes                  Accept the interactive install summary.
-  --hostname NAME        Set the system hostname (optional).
   --install-herdr        Install verified Herdr as an optional workspace.
   --skip-herdr           Do not install Herdr.
   --install-ai-agent NAME
@@ -63,7 +62,6 @@ FEDORA_GAMING_COPR="christitustech/copr-fedora"
 INSTALL_PROFILE="${DWM_INSTALL_PROFILE:-full}"
 HERDR_INSTALL_MODE="${DWM_INSTALL_HERDR:-false}"
 AI_AGENTS=()
-HOSTNAME_CHOICE=""
 NON_INTERACTIVE=false
 ASSUME_YES=false
 FEDORA_GAMING_REPOS_APPROVED=false
@@ -90,22 +88,6 @@ while (($# > 0)); do
 		;;
 	--yes)
 		ASSUME_YES=true
-		shift
-		;;
-	--hostname)
-		if (($# < 2)); then
-			err "--hostname requires a value."
-			exit 1
-		fi
-		HOSTNAME_CHOICE=$2
-		shift 2
-		;;
-	--hostname=*)
-		HOSTNAME_CHOICE=${1#*=}
-		if [[ -z $HOSTNAME_CHOICE ]]; then
-			err "--hostname requires a value."
-			exit 1
-		fi
 		shift
 		;;
 	--install-herdr)
@@ -212,40 +194,6 @@ install_herdr_profile() {
 
 fedora_gaming_profile() {
 	[[ $DISTRO_ID == "fedora" && $INSTALL_PROFILE == "full" && $ARCH == "x86_64" ]]
-}
-
-validate_hostname() {
-	local name=$1
-
-	# hostnamectl sets the static hostname, which must be a single DNS label.
-	if [[ ! $name =~ ^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$ ]]; then
-		err "Invalid hostname: $name"
-		err "Use 1-63 letters, digits, or hyphens; no dots, and no leading or trailing hyphen."
-		return 1
-	fi
-}
-
-apply_hostname() {
-	local name=$1
-	local current
-
-	current=$(hostname 2>/dev/null || true)
-	if [[ $current == "$name" ]]; then
-		ok "Hostname is already set to $name."
-		return 0
-	fi
-	info "Setting hostname to $name..."
-	if ! sudo hostnamectl set-hostname "$name"; then
-		warn "Could not set hostname to $name."
-		return 1
-	fi
-	# Keep /etc/hosts in sync so sudo does not stall resolving the new name.
-	if grep -qE '^127\.0\.1\.1[[:space:]]' /etc/hosts 2>/dev/null; then
-		sudo sed -i -E "s/^127\.0\.1\.1[[:space:]].*/127.0.1.1\t$name/" /etc/hosts
-	else
-		printf '127.0.1.1\t%s\n' "$name" | sudo tee -a /etc/hosts >/dev/null
-	fi
-	ok "Hostname set to $name."
 }
 
 confirm_fedora_gaming_repositories() {
@@ -381,11 +329,6 @@ print_install_summary() {
 	printf '  Package manager: %s\n' "$PKG_CMD"
 	printf '  Profile: %s\n' "$INSTALL_PROFILE"
 	printf '  Mode: %s\n' "$([[ $NON_INTERACTIVE == true ]] && echo non-interactive || echo interactive)"
-	if [[ -n ${HOSTNAME_CHOICE:-} ]]; then
-		printf '  Hostname: %s\n' "$HOSTNAME_CHOICE"
-	else
-		printf '  Hostname: unchanged (use --hostname NAME to set)\n'
-	fi
 	print_summary_profile "Required packages" required
 	printf '  Time synchronization: enable/start timesyncd unless another provider or a mask is present\n'
 	if install_recommended_profile; then
@@ -689,28 +632,8 @@ info "Distribution: $DISTRO_NAME"
 info "Family: $DISTRO_FAMILY"
 info "Package manager: $PKG_CMD"
 info "Install profile: $INSTALL_PROFILE"
-if [[ -n ${HOSTNAME_CHOICE:-} ]]; then
-	validate_hostname "$HOSTNAME_CHOICE" || exit 1
-fi
 confirm_install_summary
 confirm_fedora_gaming_repositories
-
-# ── Hostname ─────────────────────────────────────────────
-if [[ -n ${HOSTNAME_CHOICE:-} ]]; then
-	apply_hostname "$HOSTNAME_CHOICE" || true
-elif [[ $NON_INTERACTIVE != true ]]; then
-	printf 'Change the system hostname from "%s"? [y/N] ' "$(hostname 2>/dev/null || echo unknown)"
-	read -r hostname_answer
-	case "$hostname_answer" in
-	y | Y | yes | YES)
-		printf 'New hostname: '
-		read -r HOSTNAME_CHOICE
-		if [[ -n $HOSTNAME_CHOICE ]] && validate_hostname "$HOSTNAME_CHOICE"; then
-			apply_hostname "$HOSTNAME_CHOICE" || true
-		fi
-		;;
-	esac
-fi
 
 if [[ $NON_INTERACTIVE != true ]]; then
 	"$REPO_DIR/scripts/configure-build.sh"
